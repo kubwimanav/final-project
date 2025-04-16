@@ -14,6 +14,7 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
+import ReportItemForm from "./components/ReportItemForm";
 
 function App() {
   const [activeTab, setActiveTab] = useState("all");
@@ -22,9 +23,14 @@ function App() {
   const [showReportLostModal, setShowReportLostModal] = useState(false);
   const [showReportFoundModal, setShowReportFoundModal] = useState(false);
 
+  const handlemadal = () => {
+    setShowReportFoundModal(!showReportFoundModal);
+  };
   return (
     <div className="font-sans">
       {/* Header */}
+
+      {showReportFoundModal && <ReportItemForm handlemadal={ handlemadal} />}
       <header className="bg-blue-500 text-white py-4 shadow-md">
         <div className="container mx-auto px-4 flex justify-between items-center flex-col md:flex-row">
           <div className="flex items-center text-2xl font-bold">
@@ -289,7 +295,7 @@ function App() {
             </button>
             <button
               className="bg-transparent text-white px-6 py-3 rounded font-medium border-2 border-white hover:bg-white hover:bg-opacity-10 transition-colors"
-              onClick={() => setShowReportFoundModal(true)}
+              onClick={handlemadal}
             >
               Report Found Item
             </button>
@@ -654,78 +660,6 @@ function RegisterForm({ onClose }) {
   );
 }
 
-function ReportItemForm({ type, onClose }) {
-  return (
-    <form>
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">Item Name</label>
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          placeholder="What is the item?"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">Category</label>
-        <select className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
-          <option value="">Select a category</option>
-          <option value="electronics">Electronics</option>
-          <option value="accessories">Accessories</option>
-          <option value="books">Books & Notes</option>
-          <option value="cards">ID Cards & Documents</option>
-          <option value="keys">Keys</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">Location</label>
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          placeholder={`Where was the item ${
-            type === "lost" ? "lost" : "found"
-          }?`}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">Date</label>
-        <input
-          type="date"
-          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-medium">Description</label>
-        <textarea
-          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          rows="3"
-          placeholder="Any distinguishing features or details..."
-        ></textarea>
-      </div>
-      <div className="mb-6">
-        <label className="block mb-2 font-medium">Photo Upload</label>
-        <input
-          type="file"
-          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-        />
-      </div>
-      <div className="flex justify-end gap-3">
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition-colors"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-        >
-          Submit Report
-        </button>
-      </div>
-    </form>
-  );
-}
+
 
 export default App;
