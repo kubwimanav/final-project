@@ -1,0 +1,153 @@
+/* AddItem.css */
+.add-item-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.add-item-container h2 {
+  color: #2c3e50;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.item-type-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.item-type-selector button {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item-type-selector button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.item-type-selector button:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.item-type-selector button.active {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.submission-success {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #d4edda;
+  border-radius: 8px;
+  color: #155724;
+  margin-bottom: 20px;
+}
+
+.submission-success h3 {
+  margin-bottom: 10px;
+}
+
+.item-form {
+  background-color: #f8f9fa;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.image-preview {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 4px;
+}
+
+.form-actions {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.submit-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Input file styling */
+input[type="file"] {
+  padding: 8px 0;
+}
+
+/* Required field indicator */
+.form-group label::after {
+  content: "*";
+  color: #e74c3c;
+  margin-left: 4px;
+}
+
+/* Optional fields */
+#image + label::after {
+  display: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .item-form {
+    padding: 20px 15px;
+  }
+  
+  .item-type-selector button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    width: 100%;
+  }
+}
