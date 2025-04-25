@@ -1,7 +1,6 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
-import AdminDashboard from './DashBoard/DashBoard';
 import LayoutHome from './components/LayoutHome';
 import './App.css';
 
@@ -13,7 +12,6 @@ function App() {
     <BrowserRouter>
       <Routes>
          <Route path="/" element={<LayoutHome/>} />
-            <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );

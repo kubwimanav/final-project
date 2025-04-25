@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/Home.css";
+import keyboard from "../assets/keyboard.jpg"; 
+import comput from "../assets/comput.jpg"; 
 
 const Home = () => {
 const [searchQuery, setSearchQuery] = useState("");
@@ -27,7 +29,7 @@ const handleSearchSubmit = (e) => {
       name: "Student ID Card",
       location: "Library, 2nd Floor",
       date: "2025-04-15",
-      image: "/images/id-card.jpg",
+      image: keyboard,
       category: "identification",
     },
     {
@@ -36,7 +38,7 @@ const handleSearchSubmit = (e) => {
       name: "Blue Water Bottle",
       location: "Faculty of Science Building",
       date: "2025-04-17",
-      image: "/images/bottle.jpg",
+      image: comput,
       category: "personal",
     },
     {
@@ -45,7 +47,7 @@ const handleSearchSubmit = (e) => {
       name: "Laptop Charger",
       location: "Cafeteria",
       date: "2025-04-18",
-      image: "/images/charger.jpg",
+      image: comput,
       category: "electronics",
     },
     {
@@ -54,7 +56,43 @@ const handleSearchSubmit = (e) => {
       name: "Psychology Textbook",
       location: "Faculty of Social Sciences",
       date: "2025-04-16",
-      image: "/images/textbook.jpg",
+      image: comput,
+      category: "books",
+    },
+    {
+      id: 1,
+      type: "found",
+      name: "Student ID Card",
+      location: "Library, 2nd Floor",
+      date: "2025-04-15",
+      image: keyboard,
+      category: "identification",
+    },
+    {
+      id: 2,
+      type: "lost",
+      name: "Blue Water Bottle",
+      location: "Faculty of Science Building",
+      date: "2025-04-17",
+      image: comput,
+      category: "personal",
+    },
+    {
+      id: 3,
+      type: "found",
+      name: "Laptop Charger",
+      location: "Cafeteria",
+      date: "2025-04-18",
+      image: comput,
+      category: "electronics",
+    },
+    {
+      id: 4,
+      type: "lost",
+      name: "Psychology Textbook",
+      location: "Faculty of Social Sciences",
+      date: "2025-04-16",
+      image: comput,
       category: "books",
     },
   ];
@@ -70,7 +108,7 @@ const handleSearchSubmit = (e) => {
 
             <div className="system-explanation">
               <p>
-                Our Lost and Found System provides a centralized platform for UKM students, staff, and visitors to report and search for lost<br/> 
+                Our Lost and Found System provides a centralized platform for UKM students, staff, and visitors to report and search for lost
                 items. Simply register with your UKM email, then you can report
                 lost items or items you've found on campus. When reporting,
                 include detailed descriptions, location information
@@ -122,9 +160,9 @@ const handleSearchSubmit = (e) => {
       </section>
 
       <section className="recent-items">
-        <div className="section-container">
+        <div className="section-recent-items">
           <div className="section-header">
-            <h2 className="section-title">Recent Items</h2>
+            <h2 className="section-titl">Recent Items</h2>
             <a href="/all-items" className="view-all">
               View All Items
             </a>
@@ -275,23 +313,7 @@ const handleSearchSubmit = (e) => {
         </div>
       </section>
 
-      <section className="cta-section">
-        <div className="cta-container">
-          <h2>Ready to find what you've lost?</h2>
-          <p>
-            Join thousands of UKM students and staff who have successfully
-            recovered their belongings.
-          </p>
-          <div className="cta-buttons">
-            <a href="/register" className="btn btn-primary">
-              Register Now
-            </a>
-            <a href="/how-it-works" className="btn btn-secondary">
-              Learn More
-            </a>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 };

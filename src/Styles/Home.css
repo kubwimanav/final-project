@@ -1,10 +1,12 @@
 .home-section {
  
-  padding: 5rem 15rem 5rem 15rem;
-  background-image: url("../assets/bg6.jpeg");
+ padding: 5rem 15rem 5rem 15rem;
+  background: linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url('../assets/comput.jpg');
   background-size: cover;
+  background-position: center;
+  text-align: center;
+  position: relative;
   flex: 1;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
 }
 .content-container{
@@ -12,9 +14,11 @@
   flex-direction: column;
   align-items: center;
 }
-.content-container h1 {
-  font-size: 2.8rem;
-  
+.content-container h2 {
+ font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.1px;
 }
 
 .system-explanation {
@@ -27,7 +31,8 @@
 
 .system-explanation p {
   line-height: 1.8;
-  font-size: 1.1rem;
+  width: 100%;
+  font-size: 1rem;
   text-align: left;
 }
 
@@ -40,13 +45,14 @@
   width: 100%;
   display: flex;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
+  border-radius: 9px;
   overflow: hidden;
 }
 
 .search-container input {
   flex: 1;
-  padding: 15px 20px;
+  background-color:white;
+  padding: 12px 20px;
   font-size: 1rem;
   border:5px;
   outline: none;
@@ -73,6 +79,17 @@
 .how-it-works {
   padding: 5rem 1.5rem;
   background: linear-gradient(to bottom, #f5f7fa, #ffffff);
+}
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #003366;
+}
+.section-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
 .steps-container {
@@ -129,21 +146,32 @@
   background-color: #f5f7fa;
 }
 
-.items-container {
+.section-recent-items{
   display: flex;
-  /* flex-wrap: wrap; */
+  flex-direction: column;
+  gap: 30px;
+}
+
+.section-header{
+  display: flex;
+  gap: 40rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.items-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   justify-content: center;
 }
 
 .item-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  width: 260px;
-  position: relative;
-  transition: transform 0.3s ease;
+      position: relative;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 2px 2px  black ;
 }
 
 .item-card:hover {
@@ -172,15 +200,14 @@
 }
 
 .item-image-container {
-  height: 160px;
-  overflow: hidden;
+  width: 20rem;
+  height: 15rem;
 }
 
 .item-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
 .item-card:hover .item-image {
@@ -188,18 +215,24 @@
 }
 
 .item-details {
-  padding: 1.2rem;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
 }
 
 .item-details h3 {
   margin-bottom: 0.8rem;
-  color: #003366;
+  color: black;
+  font-weight: bold;
   font-size: 1.1rem;
 }
 
 .item-location, .item-date {
   display: flex;
   align-items: center;
+  font-weight: bold;
   color: #666;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
@@ -208,6 +241,7 @@
 .item-location i, .item-date i {
   margin-right: 0.5rem;
   color: #003366;
+  font-weight: bold;
 }
 
 .item-link {
@@ -329,37 +363,6 @@
   margin-top: 2rem;
 }
 
-/* Call to Action Section */
-.cta-section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(rgba(0, 51, 102, 0.9), rgba(0, 34, 68, 0.95)), url('/images/campus-evening.jpg');
-  background-size: cover;
-  background-position: center;
-  color: #ffffff;
-  text-align: center;
-}
-
-.cta-container {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.cta-container h2 {
-  font-size: 2.2rem;
-  margin-bottom: 1rem;
-}
-
-.cta-container p {
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-  opacity: 0.9;
-}
-
-.cta-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
 
 /* Responsive Design */
 /* Responsive styles */
