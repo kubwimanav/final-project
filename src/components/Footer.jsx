@@ -36,6 +36,8 @@ const Footer = () => {
         <div className="wave1"></div>
       </div>
 
+      
+
       {/* Footer */}
       <footer className="footer">
         <div className="footer-container">

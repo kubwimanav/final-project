@@ -60,7 +60,7 @@ const handleSearchSubmit = (e) => {
       category: "books",
     },
     {
-      id: 1,
+      id: 5,
       type: "found",
       name: "Student ID Card",
       location: "Library, 2nd Floor",
@@ -69,7 +69,7 @@ const handleSearchSubmit = (e) => {
       category: "identification",
     },
     {
-      id: 2,
+      id: 6,
       type: "lost",
       name: "Blue Water Bottle",
       location: "Faculty of Science Building",
@@ -78,7 +78,7 @@ const handleSearchSubmit = (e) => {
       category: "personal",
     },
     {
-      id: 3,
+      id: 7,
       type: "found",
       name: "Laptop Charger",
       location: "Cafeteria",
@@ -87,7 +87,7 @@ const handleSearchSubmit = (e) => {
       category: "electronics",
     },
     {
-      id: 4,
+      id: 8,
       type: "lost",
       name: "Psychology Textbook",
       location: "Faculty of Social Sciences",
@@ -200,7 +200,7 @@ const handleSearchSubmit = (e) => {
         </div>
       </section>
 
-      <section className="testimonials">
+      {/* <section className="testimonials">
         <div className="section-container">
           <h2 className="section-title">Success Stories</h2>
           <div className="testimonials-container">
@@ -268,7 +268,7 @@ const handleSearchSubmit = (e) => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="faq-section">
         <div className="section-container">

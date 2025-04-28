@@ -475,14 +475,51 @@
 }
 
 @media screen and (max-width: 480px) {
+  .home-section {
+ padding: 3rem 0.2rem 5rem 0.2rem;
+ 
+}
   .section-title {
     font-size: 1.8rem;
   }
   
-  .hero-content h1 {
-    font-size: 1.8rem;
-  }
+.content-container h2 {
+ font-size: 1rem;
+}
+  .system-explanation p {
+  font-size: 0.9rem;
+}
+.search-container {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.search-container form {
+  width: 100%;
+  display: flex;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.search-container input {
+  flex: 1;
+  background-color:white;
+  padding: 10px 10px;
+  font-size: 1rem;
+  border:5px;
+  outline: none;
+  color: #333;
+}
+
+.search-container button {
+  padding: 0 20px;
+  background-color: #006699;
+  color: white;
+  border: 10px;
+  font-size: 0.5rem;
   
+}
   .stat-box h3 {
     font-size: 2rem;
   }
@@ -490,4 +527,9 @@
   .item-card {
     width: 100%;
   }
+  .items-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  
+}
 }

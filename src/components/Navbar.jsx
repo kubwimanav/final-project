@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../Styles/Navbar.css"; 
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import "../Styles/Navbar.css";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -7,35 +8,16 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
 
-  // Check if user is scrolled down
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search functionality
     console.log("Searching for:", searchQuery);
-    // You would typically redirect to search results page or filter current page
   };
 
   const handleLogout = () => {
-    // Implement logout functionality
     setIsLoggedIn(false);
     console.log("User logged out");
   };
@@ -44,12 +26,12 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="navbar-container">
         <div className="navbar-logo">
-          <a href="/">
+          <Link to="/">
+            {" "}
+            {/* Replace anchor tag with Link */}
             <span className="logo-text">FoundeLost</span>
-          </a>
+          </Link>
         </div>
-
-       
 
         <div className="hamburger-menu" onClick={toggleMenu}>
           <div className={`hamburger-bar ${menuOpen ? "open" : ""}`}></div>
@@ -60,56 +42,76 @@ const Navbar = () => {
         <div className={`navbar-links ${menuOpen ? "active" : ""}`}>
           <ul>
             <li>
-              <a href="/" className="nav-link">
+              <Link to="/" className="nav-link">
+                {" "}
+                {/* Replace anchor tag with Link */}
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/lost-items" className="nav-link">
+              <Link to="/lost" className="nav-link">
+                {" "}
+                {/* Replace anchor tag with Link */}
                 Lost Items
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/found-items" className="nav-link">
+              <Link to="/found" className="nav-link">
+                {" "}
+                {/* Replace anchor tag with Link */}
                 Found Items
-              </a>
+              </Link>
             </li>
             <li className="dropdown">
-              <a href="#" className="nav-link dropdown-toggle">
+              <span className="nav-link dropdown-toggle">
+                {" "}
+                {/* Use span for dropdown toggle */}
                 Report
-              </a>
+              </span>
               <div className="dropdown-content">
-                <a href="/report-lost">Report Lost Item</a>
-                <a href="/report-found">Report Found Item</a>
+                <Link to="/lost">Report Lost Item</Link>{" "}
+                {/* Replace anchor tag with Link */}
+                <Link to="/found">Report Found Item</Link>{" "}
+                {/* Replace anchor tag with Link */}
               </div>
             </li>
 
             {isLoggedIn ? (
               <li className="dropdown user-dropdown">
-                <a href="#" className="nav-link dropdown-toggle user-toggle">
+                <span className="nav-link dropdown-toggle user-toggle">
+                  {" "}
+                  {/* Use span for dropdown toggle */}
                   <i className="user-icon">👤</i>
                   <span>My Account</span>
-                </a>
+                </span>
                 <div className="dropdown-content user-dropdown-content">
-                  <a href="/profile">My Profile</a>
-                  <a href="/my-items">My Items</a>
-                  <a href="/settings">Settings</a>
-                  <a href="#" onClick={handleLogout}>
+                  <Link to="/profile">My Profile</Link>{" "}
+                  {/* Replace anchor tag with Link */}
+                  <Link to="/my-items">My Items</Link>{" "}
+                  {/* Replace anchor tag with Link */}
+                  <Link to="/settings">Settings</Link>{" "}
+                  {/* Replace anchor tag with Link */}
+                  <span onClick={handleLogout} className="logout-link">
                     Logout
-                  </a>
+                  </span>{" "}
+                  {/* Use span for logout action */}
                 </div>
               </li>
             ) : (
               <>
                 <li className="auth-link">
-                  <a href="/login" className="nav-link login-btn">
+                  <Link to="/login" className="nav-link login-btn">
+                    {" "}
+                    {/* Replace anchor tag with Link */}
                     Login
-                  </a>
+                  </Link>
                 </li>
                 <li className="auth-link">
-                  <a href="/register" className="nav-link register-btn">
+                  <Link to="/register" className="nav-link register-btn">
+                    {" "}
+                    {/* Replace anchor tag with Link */}
                     Register
-                  </a>
+                  </Link>
                 </li>
               </>
             )}

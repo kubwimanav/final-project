@@ -1,6 +1,6 @@
 import { Route } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
-import { Navigate, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Routes } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Home from './Home';
@@ -35,7 +35,7 @@ const logout = () => {
       <div className="app">
         <Navbar  />
         <div className="content">
-        <Home/>
+        <Outlet/>
         </div>
         <Footer />
       </div>
