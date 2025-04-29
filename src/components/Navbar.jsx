@@ -69,7 +69,7 @@ const Navbar = () => {
                 Report
               </span>
               <div className="dropdown-content">
-                <Link to="/lost">Report Lost Item</Link>{" "}
+                <Link to="/lostform">Report Lost Item</Link>{" "}
                 {/* Replace anchor tag with Link */}
                 <Link to="/found">Report Found Item</Link>{" "}
                 {/* Replace anchor tag with Link */}
@@ -107,7 +107,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="auth-link">
-                  <Link to="/register" className="nav-link register-btn">
+                  <Link to="/signup" className="nav-link register-btn">
                     {" "}
                     {/* Replace anchor tag with Link */}
                     Register
