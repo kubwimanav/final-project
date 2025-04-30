@@ -108,7 +108,8 @@ const handleSearchSubmit = (e) => {
 
             <div className="system-explanation">
               <p>
-                Our Lost and Found System provides a centralized platform for UKM students, staff, and visitors to report and search for lost
+                Our Lost and Found System provides a centralized platform for
+                UKM students, staff, and visitors to report and search for lost
                 items. Simply register with your UKM email, then you can report
                 lost items or items you've found on campus. When reporting,
                 include detailed descriptions, location information
@@ -127,9 +128,11 @@ const handleSearchSubmit = (e) => {
               </form>
             </div>
           </div>
+          <div className="lost-items-wave-container">
+            <div className="lost-items-wave"></div>
+          </div>
         </div>
       </div>
-
 
       <section className="how-it-works">
         <div className="section-container">
@@ -312,8 +315,6 @@ const handleSearchSubmit = (e) => {
           </div>
         </div>
       </section>
-
-      
     </div>
   );
 };

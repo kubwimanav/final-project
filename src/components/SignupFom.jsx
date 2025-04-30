@@ -57,6 +57,16 @@ const SignupForm = () => {
 
   return (
     <div className="signup-container">
+      <div className="brand-container">
+        <div className="brand-logo">
+          <div className="soccer-ball-icon"></div>
+          <h3>Digital Lost and Found System</h3>
+        </div>
+        <p>Already have an account?</p>
+        <Link to="/login" className="signin-link">
+          <button className="signin-button">Sign In</button>
+        </Link>
+      </div>
       <div className="signup-form-container">
         <h1>Hello!</h1>
         <p className="signup-subtitle">Please signup to continue</p>
@@ -207,17 +217,6 @@ const SignupForm = () => {
             I'm already a member! <a href="#">Sign In</a>
           </p>
         </form>
-      </div>
-
-      <div className="brand-container">
-        <div className="brand-logo">
-          <div className="soccer-ball-icon"></div>
-          <h2>Soccer Ball</h2>
-        </div>
-        <p>Already have an account?</p>
-        <Link to="/login" className="signin-link">
-          <button className="signin-button">Sign In</button>
-        </Link>
       </div>
     </div>
   );
