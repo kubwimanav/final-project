@@ -1,6 +1,5 @@
 .home-section {
- 
- padding: 5rem 15rem 5rem 15rem;
+  padding: 5rem 15rem 5rem 15rem;
   background: linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url('../assets/comput.jpg');
   background-size: cover;
   background-position: center;
