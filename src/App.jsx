@@ -23,9 +23,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="lost" element={<LostItems />} />
           <Route path="found" element={<FoundItems />} />
-          <Route path="login" element={<LogIn />} />
           <Route path="lostform" element={<LostItemForm />} />
         </Route>
+        <Route path="login" element={<LogIn />} />
         <Route path="signup" element={<SignupForm />} />
       </Routes>
     </BrowserRouter>
