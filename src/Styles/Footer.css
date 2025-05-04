@@ -72,30 +72,6 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Wave section */
-.wave-section {
-  position: relative;
-  height: 10px;
-  background: transparent;
-  margin-bottom: -2px; /* Remove gap between waves and footer */
-  overflow: hidden;
-}
-
-
-.wave1 {
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0) 9%,
-    rgba(255, 255, 255, 0.2) 50%,
-    #003366 100%
-  );
-  clip-path: path(
-    "M0,80 C240,40 480,120 720,80 C960,40 1200,80 1440,60 C1680,40 1920,80 2160,70 C2400,60 2640,40 2880,30 C3120,20 3360,40 3600,50 C3840,60 4080,50 4320,60 L4320,100 L0,100 Z"
-  );
-  opacity: 0.7;
-}
-
-
 
 /* Footer Styles */
 .footer {

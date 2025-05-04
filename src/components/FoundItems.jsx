@@ -62,6 +62,7 @@ export default function FoundItems() {
           Found something? Lost something? We're here to help reconnect people
           with their belongings.
         </p>
+        <button className="lostbutton">Report Found Item</button>
         <div className="lost-items-wave-container">
           <div className="lost-items-wave"></div>
         </div>

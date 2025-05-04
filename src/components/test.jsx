@@ -12,11 +12,29 @@ const Footer = () => {
 
   return (
     <>
-      
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-container">
+          <h2>Ready to find what you've lost?</h2>
+          <p>
+            Join thousands of UKM students and staff who have successfully
+            recovered their belongings.
+          </p>
+          <div className="cta-buttons">
+            <a href="/register" className="btn btn-primary">
+              Register Now
+            </a>
+            <a href="/how-it-works" className="btn btn-secondary">
+              Learn More
+            </a>
+          </div>
+        </div>
+      </section>
 
-   
-
-      
+      {/* Wave Section */}
+      <div className="wave-section">
+        <div className="wave1"></div>
+      </div>
 
       {/* Footer */}
       <footer className="footer">
@@ -90,3 +108,8 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+
+
+

@@ -33,7 +33,19 @@
   max-width: 600px;
   margin: 0 auto;
 }
-
+.lostbutton{
+  background-color: #ffffff;
+  color: #003366;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-top: 25px;
+}
 .lost-items-wave-container {
   position: absolute;
   bottom: 0;

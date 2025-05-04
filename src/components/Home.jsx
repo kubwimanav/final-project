@@ -315,6 +315,25 @@ const handleSearchSubmit = (e) => {
           </div>
         </div>
       </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-container">
+          <h2>Ready to find what you've lost?</h2>
+          <p>
+            Join thousands of UKM students and staff who have successfully
+            recovered their belongings.
+          </p>
+          <div className="cta-buttons">
+            <a href="/register" className="btn btn-primary">
+              Register Now
+            </a>
+            <a href="/how-it-works" className="btn btn-secondary">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
