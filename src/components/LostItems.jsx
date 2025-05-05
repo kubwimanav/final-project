@@ -1,8 +1,12 @@
 // LostItemsPage.jsx
-import React from "react";
-import "../Styles/LostItems.css"; // Adjust the path as necessary
-import bg6 from "../assets/comput.jpg"; // Adjust the path as necessary
+import React, { useState } from "react";
+import "../Styles/LostItems.css";
+import bg6 from "../assets/comput.jpg";
+import ReportItemForm from "./ReportItemForm"; // Import the new component
+
 export default function LostItems() {
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
   const lostItems = [
     {
       id: 1,
@@ -54,6 +58,26 @@ export default function LostItems() {
     },
   ];
 
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  };
+
+  const handleReportSubmit = (formData) => {
+    // Here you would typically send this data to your backend
+    console.log("Report submitted:", formData);
+
+    // You could add the new item to your list if appropriate
+    // For now, just log it and close the modal
+    closeReportModal();
+
+    // Optional: Add success message
+    alert("Your lost item report has been submitted successfully!");
+  };
+
   return (
     <div className="lost-items-container">
       <header className="lost-items-header">
@@ -62,7 +86,9 @@ export default function LostItems() {
           Found something? Lost something? We're here to help reconnect people
           with their belongings.
         </p>
-        <button className="lostbutton">Report Lost Item</button>
+        <button className="lostbutton" onClick={openReportModal}>
+          Report Lost Item
+        </button>
         <div className="lost-items-wave-container">
           <div className="lost-items-wave"></div>
         </div>
@@ -82,13 +108,22 @@ export default function LostItems() {
                   <span className="lost-item-date">Found on {item.date}</span>
                 </div>
                 <div className="lost-item-details-btn-container">
-                  <button className="lost-item-details-btn">View Details</button>
+                  <button className="lost-item-details-btn">
+                    View Details
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Report Item Form Modal */}
+      <ReportItemForm
+        isOpen={isReportModalOpen}
+        onClose={closeReportModal}
+        onSubmit={handleReportSubmit}
+      />
     </div>
   );
 }

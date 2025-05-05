@@ -13,8 +13,10 @@ import LostItems from "./components/LostItems";
 import FoundItems from "./components/FoundItems";
 import Home from "./components/Home";
 import LogIn from "./components/Login";
-import LostItemForm from "./components/LostItemForm";
 import SignupForm from "./components/SignupFom";
+import ReportItemForm from "./components/ReportItemForm";
+import { LayoutDashboard } from "lucide-react";
+import Layoutdash from "./DashBoard/Layoutdash";
 function App() {
   return (
     <BrowserRouter>
@@ -23,10 +25,11 @@ function App() {
           <Route index element={<Home />} />
           <Route path="lost" element={<LostItems />} />
           <Route path="found" element={<FoundItems />} />
-          <Route path="lostform" element={<LostItemForm />} />
+          <Route path="lostform" element={<ReportItemForm />} />
         </Route>
         <Route path="login" element={<LogIn />} />
         <Route path="signup" element={<SignupForm />} />
+        <Route path="dash" element={<Layoutdash />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import "../Styles/Home.css";
-import keyboard from "../assets/keyboard.jpg"; 
-import comput from "../assets/comput.jpg"; 
+import keyboard from "../assets/keyboard.jpg";
+import comput from "../assets/comput.jpg";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-const handleSearchChange = (e) => {
-  setSearchQuery(e.target.value);
-};
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
-const handleSearchSubmit = (e) => {
-  e.preventDefault();
-  console.log("Searching for:", searchQuery);
-};
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log("Searching for:", searchQuery);
+  };
   const stats = {
     itemsFound: 532,
     itemsReturned: 489,
@@ -96,8 +97,6 @@ const handleSearchSubmit = (e) => {
       category: "books",
     },
   ];
-
-
 
   return (
     <div>
@@ -325,9 +324,9 @@ const handleSearchSubmit = (e) => {
             recovered their belongings.
           </p>
           <div className="cta-buttons">
-            <a href="/register" className="btn btn-primary">
+            <Link to={"/login"} className="btn btn-primary">
               Register Now
-            </a>
+            </Link>
             <a href="/how-it-works" className="btn btn-secondary">
               Contact Us
             </a>
