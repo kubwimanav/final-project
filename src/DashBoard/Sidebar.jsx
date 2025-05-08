@@ -15,9 +15,7 @@ function Sidebar({ isOpen, activeMenu, setActiveMenu }) {
 
   return (
     <aside className={`sidebar ${isOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-      <div className="sidebar-header">
-        <h2>FoundeLost</h2>
-      </div>
+
       <div className="sidebar-menu">
         {menuItems.map((item) => (
           <div 

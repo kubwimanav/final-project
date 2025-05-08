@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import "../Styles/Login.css";
-import { Link } from "react-router-dom";
-
-function Login() {
+import { useState } from "react";
+import comput from "../assets/image1.jpg";
+export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,25 +20,45 @@ function Login() {
     console.log("Form submitted:", formData);
   };
 
+  // Mock Link component since we can't import react-router-dom
+  const Link = ({ to, children, className }) => (
+    <a href={to} className={className}>
+      {children}
+    </a>
+  );
+
   return (
-    <div className="login-page-wrapper">
-      <div className="Login-container">
-        <div className="Login-brand-container">
-          <div className="brand-logo">
-            <div className="soccer-ball-icon"></div>
-            <h3>Digital Lost and Found System</h3>
+    <div className="flex justify-center items-center min-h-screen w-full bg-[#f5f5f5] font-sans p-5 box-border">
+      <div className="flex justify-between w-4/5 max-w-[700px] min-h-[60px] my-8 mx-auto rounded-xl bg-white shadow-md overflow-hidden">
+        {/* Left side - Brand container */}
+        <div
+          className="bg-[#003366] bg-opacity-85 bg-cover bg-center w-1/2 flex flex-col items-center justify-center rounded-l-xl text-white p-10 text-center"
+          style={{
+            backgroundImage:
+              `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
+          }}
+        >
+          <div className="mb-8 flex flex-col items-center">
+            <div className="w-20 h-20 bg-white rounded-full mb-4"></div>
+            <h3 className="mt-4 text-2xl font-semibold">
+              Digital Lost and Found System
+            </h3>
           </div>
           <p>Don't have an account?</p>
-          <Link to="/signup" className="signin-link">
-            <button className="signin-button">Sign Up</button>
+          <Link to="/register" className="no-underline">
+            <button className="bg-transparent border-2 border-white text-white py-2 px-8 rounded mt-4 text-base cursor-pointer transition-all duration-300 hover:bg-white hover:text-[#003366]">
+              Sign Up
+            </button>
           </Link>
         </div>
-        <div className="signup-form-container">
-          <h1>Welcome Back!</h1>
-          <p className="signup-subtitle">Please login to continue</p>
 
-          <form onSubmit={handleSubmit} className="Login-form">
-            <div className="form-group">
+        {/* Right side - Form container */}
+        <div className="w-[55%] p-10 flex flex-col justify-center">
+          <h1 className="text-gray-800 mb-2 text-4xl">Welcome Back!</h1>
+          <p className="text-gray-500 mb-8">Please login to continue</p>
+
+          <div className="flex flex-col gap-6 w-full">
+            <div className="w-full">
               <input
                 type="email"
                 id="email"
@@ -49,9 +67,10 @@ function Login() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                className="w-full p-4 border border-gray-300 rounded text-base focus:outline-none focus:border-[#003366]"
               />
             </div>
-            <div className="form-group">
+            <div className="w-full">
               <input
                 type="password"
                 id="password"
@@ -60,19 +79,26 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                className="w-full p-4 border border-gray-300 rounded text-base focus:outline-none focus:border-[#003366]"
               />
             </div>
-            <div className="forgot-password">
-              <Link to="/forgot-password">Forgot password?</Link>
+            <div className="text-right -mt-2">
+              <Link
+                to="/forgot-password"
+                className="text-[#003366] no-underline text-sm hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
-            <button type="submit" className="signup-button">
+            <button
+              onClick={handleSubmit}
+              className="bg-[#003366] text-white border-none py-4 px-4 rounded text-base cursor-pointer transition-all duration-300 hover:bg-[#004c99] mt-4"
+            >
               Login
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default Login;

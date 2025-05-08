@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import "../Styles/Home.css";
 import keyboard from "../assets/keyboard.jpg";
 import comput from "../assets/comput.jpg";
+import homei from "../assets/image1.jpg";
 import { Link } from "react-router-dom";
+import "../styles/Home.css"; 
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,6 +16,7 @@ const Home = () => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
   };
+
   const stats = {
     itemsFound: 532,
     itemsReturned: 489,
@@ -100,99 +102,161 @@ const Home = () => {
 
   return (
     <div>
-      <div className="home-section">
-        <div className="hero-section">
-          <div className="content-container">
-            <h2>Digital Lost and Found System</h2>
+      {/* Hero Section */}
+      <div
+        className="relative py-20 px-4 md:px-16 lg:px-60 text-center text-white flex-1"
+        style={{
+          background: `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${homei})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="flex flex-col items-center">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-white tracking-tight">
+            Digital Lost and Found System
+          </h2>
 
-            <div className="system-explanation">
-              <p>
-                Our Lost and Found System provides a centralized platform for
-                UKM students, staff, and visitors to report and search for lost
-                items. Simply register with your UKM email, then you can report
-                lost items or items you've found on campus. When reporting,
-                include detailed descriptions, location information
-              </p>
-            </div>
+          <div className="rounded-lg py-8 px-6 mb-10 backdrop-blur-sm">
+            <p className="leading-7 w-full text-base md:text-base text-left">
+              Our Lost and Found System provides a centralized platform for UKM
+              students, staff, and visitors to report and search for lost items.
+              Simply register with your UKM email, then you can report lost
+              items or items you've found on campus. When reporting, include
+              detailed descriptions, location information
+            </p>
+          </div>
 
-            <div className="search-container">
-              <form onSubmit={handleSearchSubmit}>
-                <input
-                  type="text"
-                  placeholder="Search for lost or found items..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-                <button type="submit">Search</button>
-              </form>
-            </div>
+          <div className="w-full md:w-3/5 mx-auto">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex shadow-lg rounded-lg overflow-hidden"
+            >
+              <input
+                type="text"
+                placeholder="Search for lost or found items..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="flex-1 bg-white py-3 px-5 text-base outline-none text-gray-700"
+              />
+              <button
+                type="submit"
+                className="bg-[#006699] hover:bg-[#00557a] text-white px-6 py-3 font-bold text-base transition-colors duration-200"
+              >
+                Search
+              </button>
+            </form>
           </div>
-          <div className="lost-items-wave-container">
-            <div className="lost-items-wave"></div>
-          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
+          <svg
+            className="relative block w-full h-16"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+              fill="#f1f5f9"
+            ></path>
+          </svg>
         </div>
       </div>
 
-      <section className="how-it-works">
-        <div className="section-container">
-          <h2 className="section-title">How It Works</h2>
-          <div className="steps-container">
-            <div className="step">
-              <div className="step-icon">1</div>
-              <h3>Register</h3>
-              <p>Sign up using your UKM email to access all features</p>
+      {/* How It Works Section */}
+      <section className="py-20 px-6 bg-gradient-to-b from-[#f5f7fa] to-white">
+        <div className="flex flex-col items-center gap-8">
+          <h2 className="text-2xl font-bold text-[#003366]">How It Works</h2>
+          <div className="flex flex-wrap justify-center gap-8">
+            <div className="flex-1 min-w-[220px] max-w-[280px] text-center p-8 bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-5px]">
+              <div className="w-[60px] h-[60px] bg-[#003366] text-[#ffd700] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                1
+              </div>
+              <h3 className="text-xl mb-3 text-[#003366]">Register</h3>
+              <p className="text-gray-600 text-sm">
+                Sign up using your UKM email to access all features
+              </p>
             </div>
-            <div className="step">
-              <div className="step-icon">2</div>
-              <h3>Report</h3>
-              <p>Submit details about lost or found items with photos</p>
+            <div className="flex-1 min-w-[220px] max-w-[280px] text-center p-8 bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-5px]">
+              <div className="w-[60px] h-[60px] bg-[#003366] text-[#ffd700] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                2
+              </div>
+              <h3 className="text-xl mb-3 text-[#003366]">Report</h3>
+              <p className="text-gray-600 text-sm">
+                Submit details about lost or found items with photos
+              </p>
             </div>
-            <div className="step">
-              <div className="step-icon">3</div>
-              <h3>Connect</h3>
-              <p>Get notified when a matching item is found or claimed</p>
+            <div className="flex-1 min-w-[220px] max-w-[280px] text-center p-8 bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-5px]">
+              <div className="w-[60px] h-[60px] bg-[#003366] text-[#ffd700] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                3
+              </div>
+              <h3 className="text-xl mb-3 text-[#003366]">Connect</h3>
+              <p className="text-gray-600 text-sm">
+                Get notified when a matching item is found or claimed
+              </p>
             </div>
-            <div className="step">
-              <div className="step-icon">4</div>
-              <h3>Retrieve</h3>
-              <p>Verify ownership and safely retrieve your belongings</p>
+            <div className="flex-1 min-w-[220px] max-w-[280px] text-center p-8 bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-5px]">
+              <div className="w-[60px] h-[60px] bg-[#003366] text-[#ffd700] rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+                4
+              </div>
+              <h3 className="text-xl mb-3 text-[#003366]">Retrieve</h3>
+              <p className="text-gray-600 text-sm">
+                Verify ownership and safely retrieve your belongings
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="recent-items">
-        <div className="section-recent-items">
-          <div className="section-header">
-            <h2 className="section-titl">Recent Items</h2>
-            <a href="/all-items" className="view-all">
+      {/* Recent Items Section */}
+      <section className="py-20 px-6 bg-[#f5f7fa]">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <h2 className="text-2xl font-bold text-[#003366]">Recent Items</h2>
+            <a
+              href="/all-items"
+              className="text-[#003366] hover:text-[#0055b3] font-medium"
+            >
               View All Items
             </a>
           </div>
 
-          <div className="items-container">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {recentItems.map((item) => (
-              <div className="item-card" key={item.id}>
-                <div className={`item-badge ${item.type}`}>
+              <div
+                key={item.id}
+                className="relative w-full rounded-lg overflow-hidden shadow-md transition-transform hover:translate-y-[-5px]"
+              >
+                <div
+                  className={`absolute top-4 right-4 py-1 px-3 rounded-full text-xs font-bold z-10 ${
+                    item.type === "found" ? "bg-[#4caf50]" : "bg-[#ff5722]"
+                  } text-white`}
+                >
                   {item.type === "found" ? "Found" : "Lost"}
                 </div>
-                <div className="item-image-container">
+                <div className="w-full h-60">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="item-image"
+                    className="w-full h-full object-cover transition-transform hover:scale-105"
                   />
                 </div>
-                <div className="item-details">
-                  <h3>{item.name}</h3>
-                  <p className="item-location">
-                    <i className="icon-location"></i> {item.location}
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <h3 className="mb-3 text-lg font-bold text-black">
+                    {item.name}
+                  </h3>
+                  <p className="flex items-center font-medium text-gray-600 text-sm mb-2">
+                    <span className="mr-2 text-[#003366] font-bold">📍</span>{" "}
+                    {item.location}
                   </p>
-                  <p className="item-date">
-                    <i className="icon-calendar"></i>{" "}
+                  <p className="flex items-center font-medium text-gray-600 text-sm mb-2">
+                    <span className="mr-2 text-[#003366] font-bold">📅</span>{" "}
                     {new Date(item.date).toLocaleDateString()}
                   </p>
-                  <a href={`/items/${item.id}`} className="item-link">
+                  <a
+                    href={`/items/${item.id}`}
+                    className="inline-block mt-3 text-sm text-[#003366] hover:text-[#0055b3] hover:underline font-medium"
+                  >
                     View Details
                   </a>
                 </div>
@@ -202,113 +266,57 @@ const Home = () => {
         </div>
       </section>
 
-      {/* <section className="testimonials">
-        <div className="section-container">
-          <h2 className="section-title">Success Stories</h2>
-          <div className="testimonials-container">
-            <div className="testimonial">
-              <div className="testimonial-content">
-                <p>
-                  "I lost my student ID card during finals week and was
-                  panicking. Someone found it and uploaded it to FoundeLost. I
-                  got it back within hours!"
-                </p>
-              </div>
-              <div className="testimonial-author">
-                <img
-                  src="/images/student1.jpg"
-                  alt="Student"
-                  className="author-image"
-                />
-                <div className="author-info">
-                  <h4>Nurul Huda</h4>
-                  <p>Computer Science Student</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial">
-              <div className="testimonial-content">
-                <p>
-                  "Found a laptop in the library and wasn't sure what to do.
-                  Used this platform to report it and the owner contacted me the
-                  same day. So efficient!"
-                </p>
-              </div>
-              <div className="testimonial-author">
-                <img
-                  src="/images/student2.jpg"
-                  alt="Student"
-                  className="author-image"
-                />
-                <div className="author-info">
-                  <h4>Ahmad Faisal</h4>
-                  <p>Engineering Faculty</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial">
-              <div className="testimonial-content">
-                <p>
-                  "As a staff member, I've seen how this system has dramatically
-                  improved the return rate of lost items on campus. It's been a
-                  fantastic addition to UKM."
-                </p>
-              </div>
-              <div className="testimonial-author">
-                <img
-                  src="/images/staff.jpg"
-                  alt="Staff"
-                  className="author-image"
-                />
-                <div className="author-info">
-                  <h4>Dr. Rahmah Aziz</h4>
-                  <p>Administrative Staff</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      <section className="faq-section">
-        <div className="section-container">
-          <h2 className="section-title">Frequently Asked Questions</h2>
-          <div className="faq-container">
-            <div className="faq-item">
-              <h3>How long are items kept before disposal?</h3>
-              <p>
+      {/* FAQ Section */}
+      <section className="py-20 px-6 bg-[#f5f7fa]">
+        <div className="flex flex-col items-center gap-8">
+          <h2 className="text-2xl font-bold text-[#003366]">
+            Frequently Asked Questions
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-6xl">
+            <div className="bg-white rounded-lg p-6 shadow-md">
+              <h3 className="text-lg text-[#003366] mb-3">
+                How long are items kept before disposal?
+              </h3>
+              <p className="text-gray-600">
                 Items are kept for 30 days before they are considered for
                 disposal or donation, according to university policy.
               </p>
             </div>
-            <div className="faq-item">
-              <h3>How do I prove an item belongs to me?</h3>
-              <p>
+            <div className="bg-white rounded-lg p-6 shadow-md">
+              <h3 className="text-lg text-[#003366] mb-3">
+                How do I prove an item belongs to me?
+              </h3>
+              <p className="text-gray-600">
                 You will need to correctly answer security questions set by the
                 finder and may need to provide specific details about the item
                 that only the owner would know.
               </p>
             </div>
-            <div className="faq-item">
-              <h3>Who can use this platform?</h3>
-              <p>
+            <div className="bg-white rounded-lg p-6 shadow-md">
+              <h3 className="text-lg text-[#003366] mb-3">
+                Who can use this platform?
+              </h3>
+              <p className="text-gray-600">
                 This platform is primarily for UKM students, faculty, and staff.
                 Registration requires a valid UKM email address.
               </p>
             </div>
-            <div className="faq-item">
-              <h3>What information should I include when reporting?</h3>
-              <p>
+            <div className="bg-white rounded-lg p-6 shadow-md">
+              <h3 className="text-lg text-[#003366] mb-3">
+                What information should I include when reporting?
+              </h3>
+              <p className="text-gray-600">
                 Include clear photos, detailed description, location where the
                 item was lost/found, date and time, and any identifying
                 features.
               </p>
             </div>
           </div>
-          <div className="faq-more">
-            <a href="/faq" className="btn btn-outline">
+          <div className="text-center mt-8">
+            <a
+              href="/faq"
+              className="inline-block py-2 px-6 border border-[#003366] rounded-md text-[#003366] hover:bg-[#003366] hover:text-white transition-colors"
+            >
               View All FAQs
             </a>
           </div>
@@ -316,18 +324,26 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="cta-section">
-        <div className="cta-container">
-          <h2>Ready to find what you've lost?</h2>
-          <p>
+      <section className="py-16 px-6 bg-[#003366] text-white text-center">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">
+            Ready to find what you've lost?
+          </h2>
+          <p className="mb-8">
             Join thousands of UKM students and staff who have successfully
             recovered their belongings.
           </p>
-          <div className="cta-buttons">
-            <Link to={"/login"} className="btn btn-primary">
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              to="/login"
+              className="py-3 px-6 bg-[#006699] hover:bg-[#00557a] text-white font-bold rounded-md text-base"
+            >
               Register Now
             </Link>
-            <a href="/how-it-works" className="btn btn-secondary">
+            <a
+              href="/how-it-works"
+              className="py-3 px-6 border border-white text-white font-bold rounded-md hover:bg-white hover:text-[#003366] transition-colors text-base"
+            >
               Contact Us
             </a>
           </div>

@@ -9,14 +9,12 @@ import {
 } from "react-router-dom";
 import LayoutHome from "./components/LayoutHome";
 import "./App.css";
-import LostItems from "./components/LostItems";
-import FoundItems from "./components/FoundItems";
 import Home from "./components/Home";
-import LogIn from "./components/Login";
-import SignupForm from "./components/SignupFom";
-import ReportItemForm from "./components/ReportItemForm";
-import { LayoutDashboard } from "lucide-react";
-import Layoutdash from "./DashBoard/Layoutdash";
+import LostItems from "./components/LostItems";
+import FoundItem from "./components/FoundItem";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+
 function App() {
   return (
     <BrowserRouter>
@@ -24,12 +22,10 @@ function App() {
         <Route path="/" element={<LayoutHome />}>
           <Route index element={<Home />} />
           <Route path="lost" element={<LostItems />} />
-          <Route path="found" element={<FoundItems />} />
-          <Route path="lostform" element={<ReportItemForm />} />
+          <Route path="found" element={<FoundItem />} />
         </Route>
-        <Route path="login" element={<LogIn />} />
-        <Route path="signup" element={<SignupForm />} />
-        <Route path="dash" element={<Layoutdash />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Signup />} />
       </Routes>
     </BrowserRouter>
   );
@@ -37,12 +33,4 @@ function App() {
 
 export default App;
 
-// App.css
 
-/* components/Home.css */
-
-/* components/Login.js */
-
-/* components/Register.js */
-
-/* components/Auth.css */
