@@ -3,7 +3,6 @@ import keyboard from "../assets/keyboard.jpg";
 import comput from "../assets/comput.jpg";
 import homei from "../assets/image1.jpg";
 import { Link } from "react-router-dom";
-import "../styles/Home.css"; 
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");

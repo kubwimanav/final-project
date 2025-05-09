@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { MdArrowDropDown } from "react-icons/md";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -95,32 +95,29 @@ const Navbar = () => {
             </li>
             <li>
               <Link
+                to="/lost"
+                className="text-white px-4 py-2 block md:inline-block hover:bg-white/10 rounded text-base transition-colors duration-200"
+                onClick={() => setMenuOpen(false)}
+              >
+                Lost Items
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/found"
                 className="text-white px-4 py-2 block md:inline-block hover:bg-white/10 rounded text-base transition-colors duration-200"
                 onClick={() => setMenuOpen(false)}
               >
-                Found Items
+                Contact Us
               </Link>
             </li>
 
             {/* Report Dropdown */}
             <li className="relative group">
+              
               <button className="text-white px-4 py-2 flex items-center hover:bg-white/10 rounded text-base transition-colors duration-200">
                 Report
-                <svg
-                  className="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-200"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
+                <MdArrowDropDown className="w-5 h-5 ml-1" />
               </button>
               <div
                 className="absolute left-0 mt-0 w-48 bg-white rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50
