@@ -1,522 +1,412 @@
 import { useState } from "react";
-import {
-  Users,
-  UserPlus,
-  Download,
-  Eye,
-  Edit,
-  Trash2,
-  ChevronLeft,
-  ChevronRight,
-  Check,
-} from "lucide-react";
+import { Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
 
-export default function UserManagementPage() {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedRole, setSelectedRole] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const itemsPerPage = 3;
-
-  // Sample user data
-  const allUsers = [
+export default function UserManagement() {
+  // Sample user data - in a real app, this would come from an API
+  const [users, setUsers] = useState([
     {
       id: 1,
       name: "John Doe",
-      role: "Patient",
-      email: "john@example.com",
-      status: "Active",
-      registered: "12-Apr-2025",
+      email: "john.doe@example.com",
+      phoneNumber: "+1 (555) 123-4567",
+      initials: "J",
     },
     {
       id: 2,
       name: "Jane Smith",
-      role: "Patient",
-      email: "jane@example.com",
-      status: "Inactive",
-      registered: "10-Apr-2025",
+      email: "jane.smith@example.com",
+      phoneNumber: "+1 (555) 987-6543",
+      initials: "J",
     },
     {
       id: 3,
       name: "Robert Johnson",
-      role: "Patient",
-      email: "robert@example.com",
-      status: "Pending",
-      registered: "05-Apr-2025",
+      email: "robert.j@example.com",
+      phoneNumber: "+1 (555) 234-5678",
+      initials: "R",
     },
     {
       id: 4,
-      name: "Emily Davis",
-      role: "Admin",
-      email: "emily@example.com",
-      status: "Active",
-      registered: "01-Apr-2025",
+      name: "Sarah Williams",
+      email: "sarah.w@example.com",
+      phoneNumber: "+1 (555) 345-6789",
+      initials: "S",
     },
     {
       id: 5,
-      name: "Michael Wilson",
-      role: "Editor",
-      email: "michael@example.com",
-      status: "Active",
-      registered: "25-Mar-2025",
+      name: "Michael Brown",
+      email: "michael.b@example.com",
+      phoneNumber: "+1 (555) 456-7890",
+      initials: "M",
     },
     {
       id: 6,
-      name: "Sarah Brown",
-      role: "Admin",
-      email: "sarah@example.com",
-      status: "Active",
-      registered: "20-Mar-2025",
+      name: "Emily Davis",
+      email: "emily.d@example.com",
+      phoneNumber: "+1 (555) 567-8901",
+      initials: "E",
     },
     {
       id: 7,
-      name: "David Lee",
-      role: "Viewer",
-      email: "david@example.com",
-      status: "Inactive",
-      registered: "15-Mar-2025",
+      name: "David Miller",
+      email: "david.m@example.com",
+      phoneNumber: "+1 (555) 678-9012",
+      initials: "D",
     },
     {
       id: 8,
-      name: "Lisa Miller",
-      role: "Editor",
-      email: "lisa@example.com",
-      status: "Pending",
-      registered: "10-Mar-2025",
+      name: "Lisa Wilson",
+      email: "lisa.w@example.com",
+      phoneNumber: "+1 (555) 789-0123",
+      initials: "L",
     },
     {
       id: 9,
-      name: "James Wilson",
-      role: "Admin",
-      email: "james@example.com",
-      status: "Active",
-      registered: "05-Mar-2025",
+      name: "Kevin Jones",
+      email: "kevin.j@example.com",
+      phoneNumber: "+1 (555) 890-1234",
+      initials: "K",
     },
     {
       id: 10,
-      name: "Jennifer Garcia",
-      role: "Viewer",
-      email: "jennifer@example.com",
-      status: "Inactive",
-      registered: "01-Mar-2025",
+      name: "Amanda Taylor",
+      email: "amanda.t@example.com",
+      phoneNumber: "+1 (555) 901-2345",
+      initials: "A",
     },
     {
       id: 11,
-      name: "Thomas Martinez",
-      role: "Editor",
-      email: "thomas@example.com",
-      status: "Active",
-      registered: "25-Feb-2025",
+      name: "Brian Clark",
+      email: "brian.c@example.com",
+      phoneNumber: "+1 (555) 012-3456",
+      initials: "B",
     },
     {
       id: 12,
-      name: "Jessica Robinson",
-      role: "Admin",
-      email: "jessica@example.com",
-      status: "Pending",
-      registered: "20-Feb-2025",
+      name: "Nicole Lewis",
+      email: "nicole.l@example.com",
+      phoneNumber: "+1 (555) 123-4567",
+      initials: "N",
     },
-  ];
+  ]);
 
-  // Available roles and statuses for dropdowns
-  const roles = ["All Roles", "Admin", "Editor", "Viewer"];
-  const statuses = ["All Status", "Active", "Inactive", "Pending"];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const usersPerPage = 3;
 
-  // Filter users based on selected role and status
-  const filteredUsers = allUsers.filter((user) => {
-    const roleMatch =
-      selectedRole === "" ||
-      selectedRole === "All Roles" ||
-      user.role === selectedRole;
-    const statusMatch =
-      selectedStatus === "" ||
-      selectedStatus === "All Status" ||
-      user.status === selectedStatus;
-    return roleMatch && statusMatch;
-  });
-
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedUsers = filteredUsers.slice(
-    startIndex,
-    startIndex + itemsPerPage
+  // Filter users based on search term
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.phoneNumber.includes(searchTerm)
   );
 
-  // Handle checkbox selection
-  const toggleUserSelection = (userId) => {
-    setSelectedUsers((prev) => {
-      if (prev.includes(userId)) {
-        return prev.filter((id) => id !== userId);
-      } else {
-        return [...prev, userId];
+  // Delete user handler
+  const handleDeleteUser = (userId) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      setUsers(users.filter((user) => user.id !== userId));
+    }
+  };
+
+  // Pagination logic
+  const totalFilteredUsers = filteredUsers.length;
+  const totalPages = Math.ceil(totalFilteredUsers / usersPerPage);
+
+  // Ensure current page is valid after filtering/deletion
+  if (currentPage > totalPages && totalPages > 0) {
+    setCurrentPage(totalPages);
+  }
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  // Calculate visible page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 4;
+
+    if (totalPages <= maxPagesToShow) {
+      // If we have fewer pages than max, show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
       }
-    });
-  };
-
-  // Handle select all for current page
-  const toggleSelectAll = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
-
-    if (newSelectAll) {
-      // Add all ids from current page
-      const currentPageIds = paginatedUsers.map((user) => user.id);
-      setSelectedUsers((prev) => {
-        const existingIds = prev.filter((id) => !currentPageIds.includes(id));
-        return [...existingIds, ...currentPageIds];
-      });
     } else {
-      // Remove all ids from current page
-      setSelectedUsers((prev) =>
-        prev.filter((id) => !paginatedUsers.some((user) => user.id === id))
-      );
-    }
-  };
+      // Always include page 1
+      pageNumbers.push(1);
 
-  // Check if all users on current page are selected
-  const areAllCurrentUsersSelected = () => {
-    return paginatedUsers.every((user) => selectedUsers.includes(user.id));
-  };
+      // Calculate start and end of middle pages
+      let middleStart = Math.max(2, currentPage - 1);
+      let middleEnd = Math.min(currentPage + 1, totalPages - 1);
 
-  // Update selectAll state when page changes or when selections change
-  useState(() => {
-    setSelectAll(areAllCurrentUsersSelected());
-  }, [currentPage, selectedUsers]);
+      // Adjust if we're at the start
+      if (currentPage <= 2) {
+        middleEnd = 3;
+      }
 
-  // Helper function to render status badge
-  const renderStatusBadge = (status) => {
-    let bgColor = "bg-gray-100 text-gray-800";
+      // Adjust if we're at the end
+      if (currentPage >= totalPages - 1) {
+        middleStart = totalPages - 2;
+      }
 
-    if (status === "Active") {
-      bgColor = "bg-green-100 text-green-800";
-    } else if (status === "Inactive") {
-      bgColor = "bg-red-100 text-red-800";
-    } else if (status === "Pending") {
-      bgColor = "bg-yellow-100 text-yellow-800";
-    }
+      // Add ellipsis after page 1 if needed
+      if (middleStart > 2) {
+        pageNumbers.push("...");
+      }
 
-    return (
-      <span
-        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${bgColor}`}
-      >
-        {status}
-      </span>
-    );
-  };
+      // Add middle pages
+      for (let i = middleStart; i <= middleEnd; i++) {
+        pageNumbers.push(i);
+      }
 
-  // Generate pagination buttons
-  const renderPaginationButtons = () => {
-    const buttons = [];
-    const maxVisibleButtons = 5;
-    let startPage = Math.max(
-      1,
-      currentPage - Math.floor(maxVisibleButtons / 2)
-    );
-    let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+      // Add ellipsis before last page if needed
+      if (middleEnd < totalPages - 1) {
+        pageNumbers.push("...");
+      }
 
-    if (endPage - startPage + 1 < maxVisibleButtons) {
-      startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+      // Always include the last page
+      pageNumbers.push(totalPages);
     }
 
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
-        <button
-          key={i}
-          className={`px-3 py-1 border rounded-md ${
-            currentPage === i
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "hover:bg-gray-50 text-gray-600"
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    return buttons;
+    return pageNumbers;
   };
-
-  // Custom checkbox component
-  const Checkbox = ({ checked, onChange }) => (
-    <div
-      className={`h-5 w-5 border rounded flex items-center justify-center cursor-pointer ${
-        checked ? "bg-blue-500 border-blue-500" : "bg-white border-gray-300"
-      }`}
-      onClick={onChange}
-    >
-      {checked && <Check size={12} className="text-white" />}
-    </div>
-  );
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      {/* First Section: Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {/* Card 1: Total Users */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Total Users</h3>
-              <p className="text-2sm font-bold mt-1">{allUsers.length}</p>
-              <p className="text-sm mt-2 text-green-500">
-                +12.5% from last month
-              </p>
-            </div>
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <Users className="text-blue-500" size={24} />
-            </div>
-          </div>
-        </div>
+    <div className="w-full px-4 py-8 mx-auto max-w-7xl">
+      <h1 className="text-2xl font-bold mb-6">User Management</h1>
 
-        {/* Card 2: Active Users */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Active Users
-              </h3>
-              <p className="text-2sm font-bold mt-1">
-                {allUsers.filter((u) => u.status === "Active").length}
-              </p>
-              <p className="text-sm mt-2 text-green-500">
-                +8.2% from last month
-              </p>
-            </div>
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <UserPlus className="text-green-500" size={24} />
-            </div>
+      {/* Search and controls */}
+      <div className="flex flex-col md:flex-row md:justify-between mb-4 gap-4">
+        <div className="relative w-full md:w-auto">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <Search className="w-4 h-4 text-gray-500" />
           </div>
+          <input
+            type="text"
+            placeholder="Search users..."
+            className="w-full md:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // Reset to first page on search
+            }}
+          />
         </div>
-
-        {/* Card 3: Inactive Users */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Inactive Users
-              </h3>
-              <p className="text-2sm font-bold mt-1">
-                {allUsers.filter((u) => u.status === "Inactive").length}
-              </p>
-              <p className="text-sm mt-2 text-green-500">-3.1% from last month</p>
-            </div>
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <Users className="text-yellow-500" size={24} />
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4: Pending Users */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Pending Users
-              </h3>
-              <p className="text-2sm font-bold mt-1">
-                {allUsers.filter((u) => u.status === "Pending").length}
-              </p>
-              <p className="text-sm mt-2 text-green-500">
-                +5.8% from last month
-              </p>
-            </div>
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <Users className="text-red-500" size={24} />
-            </div>
-          </div>
-        </div>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full md:w-auto">
+          Add New User
+        </button>
       </div>
 
-      {/* Second Section: Controls */}
-      <div className="bg-white p-4 rounded-lg shadow mb-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-3">
-            {/* Role dropdown - without icon */}
-            <select
-              className="px-3 py-2 text-sm bg-gray-100 rounded-md border border-gray-200"
-              value={selectedRole}
-              onChange={(e) => {
-                setSelectedRole(e.target.value);
-                setCurrentPage(1); // Reset to first page when filter changes
-              }}
-            >
-              {roles.map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-            </select>
-
-            {/* Status dropdown - without icon */}
-            <select
-              className="px-3 py-2 text-sm bg-gray-100 rounded-md border border-gray-200"
-              value={selectedStatus}
-              onChange={(e) => {
-                setSelectedStatus(e.target.value);
-                setCurrentPage(1); // Reset to first page when filter changes
-              }}
-            >
-              {statuses.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-
-            {/* Date picker - without icon */}
-            <input
-              type="date"
-              className="px-3 py-2 text-sm bg-gray-100 rounded-md border border-gray-200"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-blue-500 text-white hover:bg-blue-600 rounded-md transition-colors">
-              <UserPlus size={16} />
-              <span>Add User</span>
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-md transition-colors">
-              <Download size={16} />
-              <span>Export</span>
-            </button>
-          </div>
+      {/* Show message when no results */}
+      {currentUsers.length === 0 && (
+        <div className="text-center py-8 bg-white rounded-lg shadow">
+          <p className="text-gray-500">
+            {filteredUsers.length === 0
+              ? "No users found matching your search."
+              : "No users available."}
+          </p>
         </div>
-      </div>
+      )}
 
-      {/* Third Section: Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-4 py-3 text-left">
-                <div className="flex items-center">
-                  <Checkbox checked={selectAll} onChange={toggleSelectAll} />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Name
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Role
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Status
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Date
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {paginatedUsers.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <Checkbox
-                      checked={selectedUsers.includes(user.id)}
-                      onChange={() => toggleUserSelection(user.id)}
-                    />
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-8 w-8">
-                      <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
-                        {user.name.charAt(0)}
+      {/* Responsive container with scrolling */}
+      {currentUsers.length > 0 && (
+        <div className="overflow-x-auto shadow rounded-lg">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
+                >
+                  Email
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell"
+                >
+                  Phone Number
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentUsers.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{user.id}</div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3">
+                        {user.initials}
                       </div>
-                    </div>
-                    <div className="ml-3">
                       <div className="text-sm font-medium text-gray-900">
                         {user.name}
+                        <div className="md:hidden text-xs text-gray-500 mt-1">
+                          {user.email}
+                        </div>
+                        <div className="lg:hidden text-xs text-gray-500 mt-1 md:block">
+                          {user.phoneNumber}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{user.role}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {renderStatusBadge(user.status)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {user.registered}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex justify-end gap-2">
-                    <button className="p-1 text-blue-600 hover:text-blue-900">
-                      <Eye size={16} />
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
+                    <div className="text-sm text-gray-500">{user.email}</div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 hidden lg:table-cell">
+                    {user.phoneNumber}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button
+                      onClick={() => handleDeleteUser(user.id)}
+                      className="text-red-600 hover:text-red-800"
+                      aria-label="Delete user"
+                    >
+                      <Trash2 className="w-5 h-5" />
                     </button>
-                    <button className="p-1 text-green-600 hover:text-green-900">
-                      <Edit size={16} />
-                    </button>
-                    <button className="p-1 text-red-600 hover:text-red-900">
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
-        {/* Pagination */}
-        <div className="px-6 py-3 flex items-center justify-between border-t border-gray-200">
-          <div className="text-sm text-gray-700">
-            Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
-            <span className="font-medium">
-              {Math.min(startIndex + itemsPerPage, filteredUsers.length)}
-            </span>{" "}
-            of <span className="font-medium">{filteredUsers.length}</span>{" "}
-            results
+      {/* Pagination - only show if we have users */}
+      {filteredUsers.length > 0 && (
+        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 mt-4 rounded-lg shadow-sm">
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm text-gray-700">
+                Showing{" "}
+                <span className="font-medium">{indexOfFirstUser + 1}</span> to{" "}
+                <span className="font-medium">
+                  {Math.min(indexOfLastUser, totalFilteredUsers)}
+                </span>{" "}
+                of <span className="font-medium">{totalFilteredUsers}</span>{" "}
+                results
+              </p>
+            </div>
+            <div className="flex space-x-1">
+              <button
+                onClick={prevPage}
+                disabled={currentPage === 1}
+                className={`relative inline-flex items-center px-2 py-2 rounded-md border ${
+                  currentPage === 1
+                    ? "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"
+                    : "border-gray-300 bg-white text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                <span className="sr-only">Previous</span>
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+
+              {totalPages > 0 &&
+                getPageNumbers().map((page, index) =>
+                  page === "..." ? (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="px-4 py-2 text-gray-700"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={`page-${page}`}
+                      onClick={() => goToPage(page)}
+                      className={`relative inline-flex items-center px-4 py-2 border ${
+                        currentPage === page
+                          ? "bg-blue-500 text-white border-blue-500"
+                          : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                      } text-sm font-medium rounded-md`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+              <button
+                onClick={nextPage}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className={`relative inline-flex items-center px-2 py-2 rounded-md border ${
+                  currentPage === totalPages || totalPages === 0
+                    ? "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"
+                    : "border-gray-300 bg-white text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                <span className="sr-only">Next</span>
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
-          <div className="flex gap-2">
+
+          {/* Mobile pagination */}
+          <div className="flex flex-1 justify-between sm:hidden">
             <button
-              className="px-3 py-1 border rounded-md hover:bg-gray-50 text-gray-600 disabled:opacity-50"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              onClick={prevPage}
               disabled={currentPage === 1}
+              className={`relative inline-flex items-center px-4 py-2 border rounded-md text-sm ${
+                currentPage === 1
+                  ? "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"
+                  : "border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+              }`}
             >
-              <ChevronLeft size={16} />
+              Previous
             </button>
-
-            {renderPaginationButtons()}
-
+            <span className="text-sm text-gray-500 self-center">
+              Page {currentPage} of {totalPages || 1}
+            </span>
             <button
-              className="px-3 py-1 border rounded-md hover:bg-gray-50 text-gray-600 disabled:opacity-50"
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-              }
-              disabled={currentPage === totalPages}
+              onClick={nextPage}
+              disabled={currentPage === totalPages || totalPages === 0}
+              className={`ml-3 relative inline-flex items-center px-4 py-2 border rounded-md text-sm ${
+                currentPage === totalPages || totalPages === 0
+                  ? "border-gray-200 bg-gray-50 text-gray-300 cursor-not-allowed"
+                  : "border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+              }`}
             >
-              <ChevronRight size={16} />
+              Next
             </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

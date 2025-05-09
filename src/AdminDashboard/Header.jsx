@@ -11,7 +11,7 @@ const Header = () => {
       <div className="flex items-center">
         <GiRoyalLove className="text-blue-500 h-6 w-6" />
         <span className="ml-2 font-semibold text-gray-800 text-lg">
-          JackalCare
+          Digital Lost & Found System
         </span>
       </div>
 

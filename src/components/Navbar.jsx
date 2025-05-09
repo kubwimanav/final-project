@@ -95,13 +95,14 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                to="/lost"
+                to="/found"
                 className="text-white px-4 py-2 block md:inline-block hover:bg-white/10 rounded text-base transition-colors duration-200"
                 onClick={() => setMenuOpen(false)}
               >
-                Lost Items
+                FoundItems
               </Link>
             </li>
+          
             <li>
               <Link
                 to="/found"
@@ -114,7 +115,6 @@ const Navbar = () => {
 
             {/* Report Dropdown */}
             <li className="relative group">
-              
               <button className="text-white px-4 py-2 flex items-center hover:bg-white/10 rounded text-base transition-colors duration-200">
                 Report
                 <MdArrowDropDown className="w-5 h-5 ml-1" />

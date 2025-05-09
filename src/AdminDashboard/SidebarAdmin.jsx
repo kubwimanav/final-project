@@ -16,38 +16,27 @@ const SidebarAdmin= ({ isOpen }) => {
       icon: <IoMdClock className="h-5 w-5 mr-3" />,
     },
     {
-      name: "Users Management",
+      name: "Users",
       path: "user",
       icon: <FaUsers className="h-5 w-5 mr-3" />,
     },
 
     {
-      name: "Doctors & Institutions",
-      path: "doctorinstitution",
+      name: "Messages",
+      path: "contact",
       icon: <FaUserDoctor className="h-5 w-5 mr-3" />,
     },
     {
-      name: "Appointment",
-      path: "adminappointment",
+      name: "Found Items",
+      path: "founditem",
       icon: <MdOutlineAppSettingsAlt className="h-5 w-5 mr-3" />,
     },
 
     {
-      name: "Payments",
-      path: "payment",
+      name: "Lost Items",
+      path: "lostitem",
       icon: <MdPayment className="h-5 w-5 mr-3" />,
     },
-    {
-      name: "Reports & Analytics",
-      path: "report",
-      icon: <FaChartLine className="h-5 w-5 mr-3" />,
-    },
-    {
-      name: "Support/Feedback",
-      path: "support",
-      icon: <MdSupportAgent  className="h-5 w-5 mr-3" />,
-    },
-
     {
       name: "Settings",
       path: "adminsetting",
@@ -57,7 +46,7 @@ const SidebarAdmin= ({ isOpen }) => {
 
   return (
     <aside
-      className={`bg-white w-64 shadow-md flex-shrink-0 transition-all duration-300 ease-in-out ${
+      className={`bg-white w-50 shadow-md flex-shrink-0 transition-all duration-300 ease-in-out ${
         isOpen ? "translate-x-0" : "-translate-x-64"
       }`}
     >

@@ -18,6 +18,9 @@ import AdminDashboardLayout from "./AdminDashboard/AdminDashboardLayout";
 import AdminDashHome from "./AdminDashboard/AdminDashHome";
 import UserManagement from "./AdminDashboard/UserManagement";
 import SettingAdmin from "./AdminDashboard/SettingAdmin";
+import ContactMessageDashboard from "./AdminDashboard/ContactMessage";
+import LostitemDash from "./AdminDashboard/LostitemDash";
+import FounItemsDash from "./AdminDashboard/FounItemsDash";
 
 
 
@@ -35,6 +38,9 @@ function App() {
           <Route path="adminhome" element={<AdminDashHome />} />
           <Route path="user" element={<UserManagement />} />
           <Route path="adminsetting" element={<SettingAdmin />} />
+          <Route path="contact" element={<ContactMessageDashboard />} />
+          <Route path="founditem" element={<FounItemsDash />} />
+          <Route path="lostitem" element={<LostitemDash />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Signup />} />
