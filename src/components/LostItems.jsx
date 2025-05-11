@@ -1,55 +1,192 @@
-import comput from "../assets/image1.jpg";
-import keyboard from "../assets/keyboard.jpg";
-import ReportItemForm from "./ReportLostItemForm";
 import { useState } from "react";
+import comput from "../assets/image1.jpg";
+import ReportItemForm from "./ReportLostItemForm";
+// Pagination component
+const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
+  const pageNumbers = [];
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-export default function FoundItem() {
+  // Generate page numbers array
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <div className="flex justify-center mt-8">
+      <nav>
+        <ul className="flex space-x-1">
+          {/* Previous button */}
+          <li>
+            <button
+              onClick={() => currentPage > 1 && paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              &laquo;
+            </button>
+          </li>
+
+          {/* Page numbers */}
+          {pageNumbers.map((number) => {
+            // Show current page, first, last and pages +/- 1 from current
+            if (
+              number === 1 ||
+              number === totalPages ||
+              (number >= currentPage - 1 && number <= currentPage + 1)
+            ) {
+              return (
+                <li key={number}>
+                  <button
+                    onClick={() => paginate(number)}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === number
+                        ? "bg-[#003366] text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                </li>
+              );
+            }
+
+            // Show ellipsis for gaps
+            if (number === currentPage - 2 || number === currentPage + 2) {
+              return (
+                <li key={`ellipsis-${number}`}>
+                  <span className="px-3 py-1">...</span>
+                </li>
+              );
+            }
+
+            return null;
+          })}
+
+          {/* Next button */}
+          <li>
+            <button
+              onClick={() =>
+                currentPage < totalPages && paginate(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              &raquo;
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
+};
+
+export default function LostItems() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
 
   const lostItems = [
     {
       id: 1,
-      category: "BACKPACK",
-      title: "BLUE BACKPACK",
-      description: "Found on April 23, 2025 at the main entrance",
-      imageUrl: keyboard,
+      title: "Blue Backpack",
+      date: "April 23, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
     },
     {
       id: 2,
-      category: "ELECTRONICS",
-      title: "IPHONE 17 PRO",
-      description: "Found on April 25, 2025 in the library",
-      imageUrl: "/api/placeholder/600/400",
+      title: "iPhone 17 Pro",
+      date: "April 25, 2025",
+      status: "Unclaimed",
+      imageUrl: comput,
     },
     {
       id: 3,
-      category: "ACCESSORIES",
-      title: "CAR KEYS",
-      description: "Found on April 22, 2025 in parking lot B",
-      imageUrl: "/api/placeholder/600/400",
+      title: "Car Keys",
+      date: "April 22, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
     },
     {
       id: 4,
-      category: "ACCESSORIES",
-      title: "READING GLASSES",
-      description: "Found on April 20, 2025 in classroom 302",
-      imageUrl: "/api/placeholder/600/400",
+      title: "Reading Glasses",
+      date: "April 20, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
     },
     {
       id: 5,
-      category: "ACCESSORIES",
-      title: "SILVER WATCH",
-      description: "Found on April 19, 2025 near the cafeteria",
-      imageUrl: "/api/placeholder/600/400",
+      title: "Silver Watch",
+      date: "April 19, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
     },
     {
       id: 6,
-      category: "PERSONAL",
-      title: "BLACK WALLET",
-      description: "Found on April 24, 2025 in the gym",
-      imageUrl: "/api/placeholder/600/400",
+      title: "Wallet",
+      date: "April 24, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 7,
+      title: "Laptop Charger",
+      date: "April 26, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 8,
+      title: "Umbrella",
+      date: "April 21, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 9,
+      title: "Water Bottle",
+      date: "April 18, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 10,
+      title: "Student ID Card",
+      date: "April 17, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 11,
+      title: "Wireless Earbuds",
+      date: "April 16, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 12,
+      title: "Textbook",
+      date: "April 15, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
     },
   ];
+
+  // Get current items
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = lostItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const openReportModal = () => {
     setIsReportModalOpen(true);
@@ -66,8 +203,8 @@ export default function FoundItem() {
   };
 
   return (
-    <div className="font-sans bg-gray-100 w-full min-h-screen m-0 overflow-x-hidden pb-12">
-      {/* Header Section with Gradient Background */}
+    <div className="font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] bg-[#f5f5f5] w-full min-h-screen m-0 overflow-x-hidden pb-12">
+      {/* Header Section with Wave */}
       <header
         className="relative pt-16 pb-24 px-5 bg-[#003366] bg-opacity-85 bg-cover bg-center text-center text-white mb-16"
         style={{
@@ -83,7 +220,7 @@ export default function FoundItem() {
             with their belongings.
           </p>
           <button
-            className="mt-6 bg-white text-blue-900 py-2 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-1"
+            className="mt-6 bg-white text-[#003366] border-none py-2 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-1"
             onClick={openReportModal}
           >
             Report Lost Item
@@ -100,45 +237,51 @@ export default function FoundItem() {
           >
             <path
               d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-              fill="#f1f5f9"
+              fill="#f5f5f5"
             ></path>
           </svg>
         </div>
       </header>
 
       {/* Items Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-        {lostItems.map((item) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 max-w-[90%] mx-auto">
+        {currentItems.map((property) => (
           <div
-            key={item.id}
-            className="relative h-72 sm:h-64 md:h-80 overflow-hidden rounded-lg shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-xl group"
+            key={property.id}
+            className="h-64 w-full max-w-md mx-auto rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg bg-cover bg-center"
           >
-            {/* Image with proper aspect ratio */}
-            <div className="absolute inset-0">
+            <div className="w-full h-40 overflow-hidden">
               <img
-                src={item.imageUrl}
-                alt={item.title}
-                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                src={property.imageUrl}
+                alt="Property"
+                className="w-full h-full object-cover"
               />
             </div>
 
-            {/* Dark overlay gradient from bottom to top */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent">
-              <div className="absolute bottom-0 left-0 p-4 text-white w-full">
-                <p className="text-sm font-medium text-blue-300 mb-1 uppercase tracking-wider">
-                  {item.category}
-                </p>
-                <h3 className="text-2xl font-bold mb-1 uppercase">
-                  {item.title}
+            <div className="bg-white text-black flex flex-col justify-end">
+              <div className="p-4 mt-auto">
+                <h3 className="text-lg font-semibold mb-1 uppercase">
+                  {property.title}
                 </h3>
-                <p className="text-sm text-gray-300">{item.description}</p>
+                <div className="flex mb-2">
+                  <span className="text-sm">{property.date}</span>
+                </div>
+                <div className="text-xs opacity-75 mb-3">{property.status}</div>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Placeholder for ReportItemForm Modal */}
+      {/* Pagination Controls */}
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItems={lostItems.length}
+        currentPage={currentPage}
+        paginate={paginate}
+      />
+
+      {/* Report Item Form Modal */}
       <ReportItemForm
         isOpen={isReportModalOpen}
         onClose={closeReportModal}

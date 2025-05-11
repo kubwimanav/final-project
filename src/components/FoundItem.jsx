@@ -1,153 +1,97 @@
 import { useState } from "react";
 import comput from "../assets/image1.jpg";
+import ReportItemForm from "./ReportLostItemForm";
+// Pagination component
+const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
+  const pageNumbers = [];
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-const ReportItemForm = ({ isOpen, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    itemName: "",
-    itemDescription: "",
-    dateFound: "",
-    location: "",
-    contactInfo: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      itemName: "",
-      itemDescription: "",
-      dateFound: "",
-      location: "",
-      contactInfo: "",
-    });
-  };
-
-  if (!isOpen) return null;
+  // Generate page numbers array
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
-        <div className="bg-[#003366] text-white p-4">
-          <h2 className="text-xl font-bold">Report Found Item</h2>
-        </div>
-        <div className="p-6">
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="itemName"
-            >
-              Item Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="itemName"
-              name="itemName"
-              type="text"
-              value={formData.itemName}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="itemDescription"
-            >
-              Description
-            </label>
-            <textarea
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="itemDescription"
-              name="itemDescription"
-              rows="3"
-              value={formData.itemDescription}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="dateFound"
-            >
-              Date Found
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="dateFound"
-              name="dateFound"
-              type="date"
-              value={formData.dateFound}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="location"
-            >
-              Location
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="location"
-              name="location"
-              type="text"
-              value={formData.location}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="contactInfo"
-            >
-              Contact Information
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="contactInfo"
-              name="contactInfo"
-              type="text"
-              value={formData.contactInfo}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
+    <div className="flex justify-center mt-8">
+      <nav>
+        <ul className="flex space-x-1">
+          {/* Previous button */}
+          <li>
             <button
-              className="bg-[#003366] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button"
-              onClick={handleSubmit}
+              onClick={() => currentPage > 1 && paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
             >
-              Submit Report
+              &laquo;
             </button>
+          </li>
+
+          {/* Page numbers */}
+          {pageNumbers.map((number) => {
+            // Show current page, first, last and pages +/- 1 from current
+            if (
+              number === 1 ||
+              number === totalPages ||
+              (number >= currentPage - 1 && number <= currentPage + 1)
+            ) {
+              return (
+                <li key={number}>
+                  <button
+                    onClick={() => paginate(number)}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === number
+                        ? "bg-[#003366] text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                </li>
+              );
+            }
+
+            // Show ellipsis for gaps
+            if (number === currentPage - 2 || number === currentPage + 2) {
+              return (
+                <li key={`ellipsis-${number}`}>
+                  <span className="px-3 py-1">...</span>
+                </li>
+              );
+            }
+
+            return null;
+          })}
+
+          {/* Next button */}
+          <li>
             <button
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button"
-              onClick={onClose}
+              onClick={() =>
+                currentPage < totalPages && paginate(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
             >
-              Cancel
+              &raquo;
             </button>
-          </div>
-        </div>
-      </div>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 };
 
 export default function FoundItem() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
 
   const lostItems = [
     {
@@ -162,7 +106,7 @@ export default function FoundItem() {
       title: "iPhone 17 Pro",
       date: "April 25, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: comput,
     },
     {
       id: 3,
@@ -192,7 +136,57 @@ export default function FoundItem() {
       status: "Unclaimed",
       imageUrl: "/api/placeholder/400/320",
     },
+    {
+      id: 7,
+      title: "Laptop Charger",
+      date: "April 26, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 8,
+      title: "Umbrella",
+      date: "April 21, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 9,
+      title: "Water Bottle",
+      date: "April 18, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 10,
+      title: "Student ID Card",
+      date: "April 17, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 11,
+      title: "Wireless Earbuds",
+      date: "April 16, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 12,
+      title: "Textbook",
+      date: "April 15, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
   ];
+
+  // Get current items
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = lostItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const openReportModal = () => {
     setIsReportModalOpen(true);
@@ -229,7 +223,7 @@ export default function FoundItem() {
             className="mt-6 bg-white text-[#003366] border-none py-2 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-1"
             onClick={openReportModal}
           >
-            Report Lost Item
+            Report Found Item
           </button>
         </div>
 
@@ -251,32 +245,41 @@ export default function FoundItem() {
 
       {/* Items Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 max-w-[90%] mx-auto">
-        {lostItems.map((item) => (
+        {currentItems.map((property) => (
           <div
-            key={item.id}
-            className="relative h-64 w-full max-w-md mx-auto rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg bg-cover bg-center"
-            style={{ backgroundImage: `url(${item.imageUrl})` }}
+            key={property.id}
+            className="h-64 w-full max-w-md mx-auto rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg bg-cover bg-center"
           >
-            <div className="absolute inset-0 bg-[#242446] bg-opacity-85 text-white z-10 flex flex-col justify-end">
+            <div className="w-full h-40 overflow-hidden">
+              <img
+                src={property.imageUrl}
+                alt="Property"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="bg-white text-black flex flex-col justify-end">
               <div className="p-4 mt-auto">
-                <h3 className="text-lg font-semibold mb-2 text-center text-shadow">
-                  {item.title}
+                <h3 className="text-lg font-semibold mb-1 uppercase">
+                  {property.title}
                 </h3>
-                <div className="flex justify-center mb-3">
-                  <span className="italic opacity-90 text-xs">
-                    Found on {item.date}
-                  </span>
+                <div className="flex mb-2">
+                  <span className="text-sm">{property.date}</span>
                 </div>
-                <div className="flex justify-center w-full">
-                  <button className="bg-white text-gray-800 border-none py-1.5 px-7 rounded-lg font-semibold text-sm cursor-pointer transition-all duration-200 shadow-md hover:bg-gray-50 hover:-translate-y-0.5 hover:shadow-lg">
-                    View Details
-                  </button>
-                </div>
+                <div className="text-xs opacity-75 mb-3">{property.status}</div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItems={lostItems.length}
+        currentPage={currentPage}
+        paginate={paginate}
+      />
 
       {/* Report Item Form Modal */}
       <ReportItemForm
