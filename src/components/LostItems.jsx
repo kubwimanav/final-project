@@ -1,6 +1,14 @@
 import { useState } from "react";
 import comput from "../assets/image1.jpg";
 import ReportItemForm from "./ReportLostItemForm";
+import bluebag from "../assets/bluebag.jpg";
+import iphone from "../assets/iphone.jpg";  
+import carkey from "../assets/carkeys.jpg";
+import silverwatch from "../assets/silverwatch.jpg";
+import laptop from "../assets/laptop.jpg";
+import laptopcharger from "../assets/laptopcharger.jpg";
+import Wallet from "../assets/wallet.jpg";
+
 // Pagination component
 const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
   const pageNumbers = [];
@@ -99,49 +107,56 @@ export default function LostItems() {
       title: "Blue Backpack",
       date: "April 23, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: bluebag,
     },
     {
       id: 2,
       title: "iPhone 17 Pro",
       date: "April 25, 2025",
       status: "Unclaimed",
-      imageUrl: comput,
+      imageUrl: iphone,
     },
     {
       id: 3,
       title: "Car Keys",
       date: "April 22, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: carkey,
     },
     {
       id: 4,
       title: "Reading Glasses",
       date: "April 20, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: comput,
     },
     {
       id: 5,
       title: "Silver Watch",
       date: "April 19, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: silverwatch,
     },
     {
       id: 6,
       title: "Wallet",
       date: "April 24, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: Wallet,
     },
     {
       id: 7,
       title: "Laptop Charger",
       date: "April 26, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: laptopcharger,
+    },
+    {
+      id: 12,
+      title: "Laptop",
+      date: "April 15, 2025",
+      status: "Unclaimed",
+      imageUrl: laptop,
     },
     {
       id: 8,
@@ -168,13 +183,6 @@ export default function LostItems() {
       id: 11,
       title: "Wireless Earbuds",
       date: "April 16, 2025",
-      status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
-    },
-    {
-      id: 12,
-      title: "Textbook",
-      date: "April 15, 2025",
       status: "Unclaimed",
       imageUrl: "/api/placeholder/400/320",
     },

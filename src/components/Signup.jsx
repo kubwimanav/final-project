@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+
 import comput from "../assets/image1.jpg";
-import { Link } from "react-router-dom";
-const Signup = () => {
+
+const Link = ({ to, children, className }) => (
+  <a href={to} className={className}>
+    {children}
+  </a>
+);
+
+export default function Signup() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -53,14 +60,15 @@ const Signup = () => {
   }, []);
 
   return (
-    <div className="flex h-[95vh] mx-auto mt-4 max-w-[750px] rounded-lg bg-white shadow-md">
+    <div className="flex flex-col md:flex-row h-auto md:h-[95vh] mx-auto mt-4 max-w-[750px] rounded-lg bg-white shadow-md">
       {/* Brand side */}
-      <div  className="bg-[#003366] bg-opacity-85 bg-cover bg-center w-1/2 flex flex-col items-center justify-center rounded-l-xl text-white p-10 text-center"
-                style={{
-                  backgroundImage:
-                    `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
-                }}>
-        <div className="mb-10">
+      <div
+        className="bg-[#003366] bg-opacity-85 bg-cover bg-center w-full md:w-1/2 flex flex-col items-center justify-center rounded-t-lg md:rounded-l-xl md:rounded-tr-none text-white p-8 md:p-10 text-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
+        }}
+      >
+        <div className="mb-8 md:mb-10">
           <div className="w-[70px] h-[80px] mx-auto mb-4 bg-white rounded-full flex items-center justify-center relative">
             <div className="w-[60px] h-[60px] bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%2778b0a0%27%3E%3Cpath d=%27M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z%27/%3E%3C/svg%3E')] bg-contain bg-no-repeat bg-center"></div>
           </div>
@@ -69,19 +77,22 @@ const Signup = () => {
           </h3>
         </div>
         <p className="mb-5 text-base">Already have an account?</p>
-        <Link to={"/login"} className="px-8 py-2 bg-transparent text-white border-2 border-white rounded-full text-base transition-all hover:bg-white/10">
+        <Link
+          to={"/login"}
+          className="px-8 py-2 bg-transparent text-white border-2 border-white rounded-full text-base transition-all hover:bg-white/10"
+        >
           Sign In
         </Link>
       </div>
 
       {/* Form side */}
-      <div className="flex-1 px-10 py-5 flex flex-col">
+      <div className="flex-1 px-6 md:px-10 py-5 flex flex-col">
         <h1 className="text-3xl font-medium mb-1">Hello!</h1>
         <p className="text-gray-500 mb-1">Please signup to continue</p>
 
         <div className="w-full">
           {/* First row with first and last name */}
-          <div className="flex gap-5">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-5">
             <div className="flex-1 mb-1 relative">
               <input
                 type="text"
@@ -218,6 +229,4 @@ const Signup = () => {
       </div>
     </div>
   );
-};
-
-export default Signup;
+}

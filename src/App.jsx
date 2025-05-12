@@ -21,6 +21,7 @@ import SettingAdmin from "./AdminDashboard/SettingAdmin";
 import ContactMessageDashboard from "./AdminDashboard/ContactMessage";
 import LostitemDash from "./AdminDashboard/LostitemDash";
 import FounItemsDash from "./AdminDashboard/FounItemsDash";
+import Contactus from "./components/Contactus";
 
 
 
@@ -32,6 +33,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="lost" element={<LostItems />} />
           <Route path="found" element={<FoundItem />} />
+          <Route path="contact" element={<Contactus />} />
         </Route>
         <Route path="/admin" element={<AdminDashboardLayout />}>
           <Route index element={<AdminDashHome />} />

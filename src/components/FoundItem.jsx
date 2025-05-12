@@ -1,7 +1,14 @@
 import { useState } from "react";
 import comput from "../assets/image1.jpg";
+import Passport from "../assets/passport.jpg";
+import iphone from "../assets/iphone.jpg";
+import SilverWatch from "../assets/silverwatch.jpg";
+import driving from "../assets/driving.jpg";
+import laptop from "../assets/laptop.jpg";
+import laptopcharger from "../assets/laptopcharger.jpg";
+import wallet from "../assets/wallet.jpg";
+import bluebag from "../assets/bluebag.jpg";
 import ReportItemForm from "./ReportLostItemForm";
-// Pagination component
 const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
   const pageNumbers = [];
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -96,59 +103,59 @@ export default function FoundItem() {
   const lostItems = [
     {
       id: 1,
-      title: "Blue Backpack",
+      title: "Passport",
       date: "April 23, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: Passport,
     },
     {
       id: 2,
       title: "iPhone 17 Pro",
       date: "April 25, 2025",
       status: "Unclaimed",
-      imageUrl: comput,
+      imageUrl: iphone,
     },
     {
       id: 3,
-      title: "Car Keys",
+      title: "Silver Watch",
       date: "April 22, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: SilverWatch,
     },
     {
       id: 4,
-      title: "Reading Glasses",
+      title: "Driving License",
       date: "April 20, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: driving,
     },
     {
       id: 5,
-      title: "Silver Watch",
+      title: "Laptop",
       date: "April 19, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: laptop,
     },
     {
       id: 6,
       title: "Wallet",
       date: "April 24, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: wallet,
     },
     {
       id: 7,
       title: "Laptop Charger",
       date: "April 26, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: laptopcharger,
     },
     {
       id: 8,
-      title: "Umbrella",
+      title: "Blue Backpack",
       date: "April 21, 2025",
       status: "Unclaimed",
-      imageUrl: "/api/placeholder/400/320",
+      imageUrl: bluebag,
     },
     {
       id: 9,

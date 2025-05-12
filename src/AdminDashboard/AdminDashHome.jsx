@@ -81,7 +81,7 @@ function AdminDashHome() {
           {/* Card 1 */}
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Total Patients</span>
+              <span className="text-sm text-gray-500">Users</span>
               <span className="text-xm font-bold mt-1">5,248</span>
               <span className="text-sm text-green-500 mt-1">
                 +12.5% from last month
@@ -95,7 +95,7 @@ function AdminDashHome() {
           {/* Card 2 */}
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Total Doctors</span>
+              <span className="text-sm text-gray-500">LostItems</span>
               <span className="text-xm font-bold mt-1">1,427</span>
               <span className="text-sm text-green-500 mt-1">
                 +5.2% from last month
@@ -110,9 +110,9 @@ function AdminDashHome() {
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">
-                Today's Appointments
+                FoundIems
               </span>
-              <span className="text-sm font-bold mt-1">$24,583</span>
+              <span className="text-sm font-bold mt-1">24,583</span>
               <span className="text-sm text-green-500 mt-1">12 completed</span>
             </div>
             <div className="w-7 h-7 rounded-sm bg-[#F5F3FF] flex items-center justify-center text-[#8B5CF6] text-xl">
@@ -123,8 +123,8 @@ function AdminDashHome() {
           {/* Card 4 */}
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500">Total Revenue</span>
-              <span className="text-sm font-bold mt-1">$24,500</span>
+              <span className="text-sm text-gray-500">Messages</span>
+              <span className="text-sm font-bold mt-1">24</span>
               <span className="text-sm text-red-500 mt-1">
                 +8.4% from last month
               </span>

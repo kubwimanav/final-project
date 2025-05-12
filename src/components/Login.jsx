@@ -1,5 +1,6 @@
 import { useState } from "react";
 import comput from "../assets/image1.jpg";
+
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -29,13 +30,12 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen w-full bg-[#f5f5f5] font-sans p-5 box-border">
-      <div className="flex justify-between w-4/5 max-w-[700px] min-h-[60px] my-8 mx-auto rounded-xl bg-white shadow-md overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between w-full md:w-4/5 max-w-[700px] min-h-[60px] my-8 mx-auto rounded-xl bg-white shadow-md overflow-hidden">
         {/* Left side - Brand container */}
         <div
-          className="bg-[#003366] bg-opacity-85 bg-cover bg-center w-1/2 flex flex-col items-center justify-center rounded-l-xl text-white p-10 text-center"
+          className="bg-[#003366] bg-opacity-85 bg-cover bg-center w-full md:w-1/2 flex flex-col items-center justify-center rounded-t-xl md:rounded-l-xl md:rounded-tr-none text-white p-10 text-center"
           style={{
-            backgroundImage:
-              `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
+            backgroundImage: `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
           }}
         >
           <div className="mb-8 flex flex-col items-center">
@@ -53,7 +53,7 @@ export default function Login() {
         </div>
 
         {/* Right side - Form container */}
-        <div className="w-[55%] p-10 flex flex-col justify-center">
+        <div className="w-full md:w-[55%] p-10 flex flex-col justify-center">
           <h1 className="text-gray-800 mb-2 text-4xl">Welcome Back!</h1>
           <p className="text-gray-500 mb-8">Please login to continue</p>
 
@@ -67,7 +67,7 @@ export default function Login() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full p-4 border border-gray-300 rounded text-base focus:outline-none focus:border-[#003366]"
+                className="w-full p-3 border border-gray-300 rounded text-base focus:outline-none focus:border-[#003366]"
               />
             </div>
             <div className="w-full">
@@ -79,7 +79,7 @@ export default function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full p-4 border border-gray-300 rounded text-base focus:outline-none focus:border-[#003366]"
+                className="w-full p-3 border border-gray-300 rounded text-base focus:outline-none focus:border-[#003366]"
               />
             </div>
             <div className="text-right -mt-2">
@@ -92,7 +92,7 @@ export default function Login() {
             </div>
             <button
               onClick={handleSubmit}
-              className="bg-[#003366] text-white border-none py-4 px-4 rounded text-base cursor-pointer transition-all duration-300 hover:bg-[#004c99] mt-4"
+              className="bg-[#003366] text-white border-none p-3 rounded text-base cursor-pointer transition-all duration-300 hover:bg-[#004c99] mt-4"
             >
               Login
             </button>

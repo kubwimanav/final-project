@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import keyboard from "../assets/keyboard.jpg";
 import comput from "../assets/comput.jpg";
 import homei from "../assets/image1.jpg";
-import { Link } from "react-router-dom";
+import { Clock, MapPin } from "lucide-react";
+
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,11 +118,12 @@ const Home = () => {
 
           <div className="rounded-lg py-8 px-6 mb-10 backdrop-blur-sm">
             <p className="leading-7 w-full text-base md:text-base text-left">
-              Our Lost and Found System provides a centralized platform for UKM
-              students, staff, and visitors to report and search for lost items.
-              Simply register with your UKM email, then you can report lost
-              items or items you've found on campus. When reporting, include
-              detailed descriptions, location information
+              Our Lost and Found System provides a centralized platform for
+              Every one to report and search for lost items. Simply register on
+              Digital Lost and Found System with your email, then you can report
+              lost items or items you've found on Every Where. When reporting,
+              include detailed descriptions, Date, Few Personal Information,
+              location you Found or Lost item.
             </p>
           </div>
 
@@ -222,39 +224,46 @@ const Home = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {recentItems.map((item) => (
-              <div
-                key={item.id}
-                className="relative w-full rounded-lg overflow-hidden shadow-md transition-transform hover:translate-y-[-5px]"
-              >
+              <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-white border border-gray-100">
+                {/* Status Badge */}
                 <div
-                  className={`absolute top-4 right-4 py-1 px-3 rounded-full text-xs font-bold z-10 ${
-                    item.type === "found" ? "bg-[#4caf50]" : "bg-[#ff5722]"
-                  } text-white`}
+                  className={`absolute top-3 left-3 py-1 px-3 rounded-full text-xs font-semibold z-10 ${
+                    item.type === "found"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-orange-500 text-white"
+                  }`}
                 >
                   {item.type === "found" ? "Found" : "Lost"}
                 </div>
-                <div className="w-full h-60">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
-                  />
+
+                {/* Image Container with Overlay */}
+                <div className="relative w-full h-40 overflow-hidden">
+                  <img src={item.image} alt={item.name} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70" />
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="mb-3 text-lg font-bold text-black">
+
+                {/* Content Section */}
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">
                     {item.name}
                   </h3>
-                  <p className="flex items-center font-medium text-gray-600 text-sm mb-2">
-                    <span className="mr-2 text-[#003366] font-bold">📍</span>{" "}
-                    {item.location}
-                  </p>
-                  <p className="flex items-center font-medium text-gray-600 text-sm mb-2">
-                    <span className="mr-2 text-[#003366] font-bold">📅</span>{" "}
-                    {new Date(item.date).toLocaleDateString()}
-                  </p>
+
+                  <div className="space-y-2 mb-3">
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <MapPin size={16} className="mr-2 text-indigo-600" />
+                      {item.location}
+                    </div>
+
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <Clock size={16} className="mr-2 text-indigo-600" />
+                      {new Date(item.date).toLocaleDateString()}
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
                   <a
                     href={`/items/${item.id}`}
-                    className="inline-block mt-3 text-sm text-[#003366] hover:text-[#0055b3] hover:underline font-medium"
+                    className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200"
                   >
                     View Details
                   </a>
@@ -317,33 +326,6 @@ const Home = () => {
               className="inline-block py-2 px-6 border border-[#003366] rounded-md text-[#003366] hover:bg-[#003366] hover:text-white transition-colors"
             >
               View All FAQs
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-6 bg-[#003366] text-white text-center">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">
-            Ready to find what you've lost?
-          </h2>
-          <p className="mb-8">
-            Join thousands of UKM students and staff who have successfully
-            recovered their belongings.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              to="/login"
-              className="py-3 px-6 bg-[#006699] hover:bg-[#00557a] text-white font-bold rounded-md text-base"
-            >
-              Register Now
-            </Link>
-            <a
-              href="/how-it-works"
-              className="py-3 px-6 border border-white text-white font-bold rounded-md hover:bg-white hover:text-[#003366] transition-colors text-base"
-            >
-              Contact Us
             </a>
           </div>
         </div>

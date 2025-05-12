@@ -38,7 +38,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center">
           <Link to="/" className="flex items-center text-white no-underline">
-            <span className="text-2xl font-bold">FoundeLost</span>
+            <span className="text-2xl font-bold">DFL System</span>
           </Link>
         </div>
 
@@ -105,7 +105,7 @@ const Navbar = () => {
           
             <li>
               <Link
-                to="/found"
+                to="/contact"
                 className="text-white px-4 py-2 block md:inline-block hover:bg-white/10 rounded text-base transition-colors duration-200"
                 onClick={() => setMenuOpen(false)}
               >
