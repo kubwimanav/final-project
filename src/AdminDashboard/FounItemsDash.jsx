@@ -8,19 +8,26 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import bluebag from "../assets/bluebag.jpg";
+import iphone from "../assets/iphone.jpg";
+import carkey from "../assets/carkeys.jpg";
+import silverwatch from "../assets/silverwatch.jpg";
+import laptop from "../assets/laptop.jpg";
+import laptopcharger from "../assets/laptopcharger.jpg";
+import Wallet from "../assets/wallet.jpg";
 
 // Sample data for found items
 const foundItemsData = [
   {
     id: 1,
-    itemName: "Student ID Card",
+    itemName: "Sliver Watch",
     category: "Documents",
     location: "FTSM Building",
     dateFound: "2023-05-08",
     description: "Found at Computer Lab 3",
     foundBy: "John Doe",
     contact: "john@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: silverwatch,
   },
   {
     id: 2,
@@ -31,7 +38,7 @@ const foundItemsData = [
     description: "Found at Study Table B4",
     foundBy: "Jane Smith",
     contact: "jane@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: laptopcharger,
   },
   {
     id: 3,
@@ -42,51 +49,51 @@ const foundItemsData = [
     description: "Blue colored bottle found on table",
     foundBy: "Mike Johnson",
     contact: "mike@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: Wallet,
   },
   {
     id: 4,
-    itemName: "Textbook",
+    itemName: "Laptop",
     category: "Books",
     location: "Lecture Hall A",
     dateFound: "2023-05-05",
     description: "Calculus textbook found under seat",
     foundBy: "Sarah Lee",
     contact: "sarah@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: laptop,
   },
   {
     id: 5,
-    itemName: "Umbrella",
+    itemName: "Car key",
     category: "Personal Items",
     location: "Bus Stop",
     dateFound: "2023-05-04",
     description: "Black umbrella left at the bus stop",
     foundBy: "Ahmad Razali",
     contact: "ahmad@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: carkey,
   },
   {
     id: 6,
-    itemName: "Prescription Glasses",
+    itemName: "Iphone 17 Pro",
     category: "Personal Items",
     location: "Sports Complex",
     dateFound: "2023-05-03",
     description: "Found near basketball court",
     foundBy: "Mei Ling",
     contact: "mei@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: iphone,
   },
   {
     id: 7,
-    itemName: "Calculator",
+    itemName: "Blue Backpack",
     category: "Electronics",
     location: "Engineering Building",
     dateFound: "2023-05-02",
     description: "Scientific calculator found in Room 201",
     foundBy: "David Wong",
     contact: "david@ukm.edu.my",
-    image: "/api/placeholder/80/80",
+    image: bluebag,
   },
   {
     id: 8,
