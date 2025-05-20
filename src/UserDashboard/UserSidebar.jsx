@@ -62,7 +62,7 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
     >
       <nav className="p-4 h-full overflow-y-auto">
         <ul className="space-y-2">
-          {menuItems.map((item, index) => {
+          {menuItems.map((item,index) => {
             const isActive =
               currentPath === item.path ||
               (currentPath === "userhome" && item.path === "");
