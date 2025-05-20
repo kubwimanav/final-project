@@ -3,9 +3,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, BarChart2, FileText, Users, Settings } from "lucide-react";
 import { IoMdClock, IoMdSettings } from "react-icons/io";
 import { FaChartLine, FaUserDoctor, FaUsers } from "react-icons/fa6";
-import { MdOutlineAppSettingsAlt, MdPayment, MdSupportAgent } from "react-icons/md";
+import {
+  MdOutlineAppSettingsAlt,
+  MdPayment,
+  MdSupportAgent,
+} from "react-icons/md";
 
-const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
+const UserSidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -13,30 +17,26 @@ const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
   const menuItems = [
     {
       name: "Dashboard",
-      path: "/admin",
+      path: "userhome",
       icon: <IoMdClock className="h-5 w-5 mr-3" />,
-    },
-    {
-      name: "Users",
-      path: "user",
-      icon: <FaUsers className="h-5 w-5 mr-3" />,
     },
 
     {
-      name: "Messages",
-      path: "contact",
-      icon: <FaUserDoctor className="h-5 w-5 mr-3" />,
-    },
-    {
       name: "Found Items",
-      path: "founditem",
+      path: "userfounditem",
       icon: <MdOutlineAppSettingsAlt className="h-5 w-5 mr-3" />,
     },
 
     {
       name: "Lost Items",
-      path: "lostitem",
+      path: "userlostitem",
       icon: <MdPayment className="h-5 w-5 mr-3" />,
+    },
+
+    {
+      name: "Messages",
+      path: "usermessage",
+      icon: <FaUserDoctor className="h-5 w-5 mr-3" />,
     },
     {
       name: "Settings",
@@ -65,7 +65,7 @@ const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
           {menuItems.map((item, index) => {
             const isActive =
               currentPath === item.path ||
-              (currentPath === "/dashboard" && item.path === "/");
+              (currentPath === "userhome" && item.path === "");
 
             return (
               <li key={index}>
@@ -89,4 +89,4 @@ const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
   );
 };
 
-export default SidebarAdmin;
+export default UserSidebar;

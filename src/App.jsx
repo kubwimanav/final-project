@@ -22,6 +22,11 @@ import ContactMessageDashboard from "./AdminDashboard/ContactMessage";
 import LostitemDash from "./AdminDashboard/LostitemDash";
 import FounItemsDash from "./AdminDashboard/FounItemsDash";
 import Contactus from "./components/Contactus";
+import UserLayoutDashboard from "./UserDashboard/UserLayoutDashboard";
+import UserHome from "./UserDashboard/UserHome";
+import UserMessage from "./UserDashboard/UserMessage";
+import UserFoundItem from "./UserDashboard/UserFoundItem";
+import UserLostItem from "./UserDashboard/UserLostItem";
 
 
 
@@ -44,6 +49,16 @@ function App() {
           <Route path="founditem" element={<FounItemsDash />} />
           <Route path="lostitem" element={<LostitemDash />} />
         </Route>
+
+        <Route path="/userdash" element={<UserLayoutDashboard />}>
+          <Route index element={<UserHome/>} />
+          <Route path="userhome" element={<UserHome />} />
+          <Route path="adminsetting" element={<SettingAdmin />} />
+          <Route path="usermessage" element={<UserMessage/>} />
+          <Route path="userfounditem" element={<UserFoundItem />} />
+          <Route path="userlostitem" element={<UserLostItem />} />
+        </Route>
+
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Signup />} />
       </Routes>
