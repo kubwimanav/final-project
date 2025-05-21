@@ -3,9 +3,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, BarChart2, FileText, Users, Settings } from "lucide-react";
 import { IoMdClock, IoMdSettings } from "react-icons/io";
 import { FaChartLine, FaUserDoctor, FaUsers } from "react-icons/fa6";
-import { MdOutlineAppSettingsAlt, MdPayment, MdSupportAgent } from "react-icons/md";
+import {
+  MdOutlineAppSettingsAlt,
+  MdPayment,
+  MdSupportAgent,
+} from "react-icons/md";
 
-const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
+const SidebarAdmin = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -21,7 +25,6 @@ const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
       path: "user",
       icon: <FaUsers className="h-5 w-5 mr-3" />,
     },
-
     {
       name: "Messages",
       path: "contact",
@@ -32,7 +35,6 @@ const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
       path: "founditem",
       icon: <MdOutlineAppSettingsAlt className="h-5 w-5 mr-3" />,
     },
-
     {
       name: "Lost Items",
       path: "lostitem",
@@ -63,23 +65,24 @@ const SidebarAdmin= ({ isOpen, toggleSidebar } ) => {
       <nav className="p-4 h-full overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item, index) => {
+            // Check if current path includes this item's path for more reliable active state
             const isActive =
-              currentPath === item.path ||
-              (currentPath === "/dashboard" && item.path === "/");
+              (currentPath === "/admin" && item.path === "/admin") ||
+              (item.path !== "/admin" && currentPath.includes(item.path));
 
             return (
               <li key={index}>
-                <button
+                <div
                   onClick={() => handleNavClick(item.path)}
-                  className={`flex items-center px-4 py-2 rounded-md w-full text-left ${
+                  className={`flex items-center px-4 py-2 rounded-md w-full text-left cursor-pointer transition-colors duration-200 ${
                     isActive
                       ? "bg-[#EFF6FF] text-blue-600"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
                   {item.icon}
-                  {item.name}
-                </button>
+                  <span>{item.name}</span>
+                </div>
               </li>
             );
           })}
