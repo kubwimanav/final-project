@@ -38,9 +38,9 @@ export default function Contactus() {
   };
 
   return (
-    <div className="font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] bg-[#f5f5f5] w-full min-h-screen m-0 overflow-x-hidden pb-12">
+    <div className="font-sans bg-gray-100 w-full min-h-screen m-0 overflow-x-hidden">
       <header
-        className="relative pt-16 pb-24 px-5 bg-[#003366] bg-opacity-85 bg-cover bg-center text-center text-white mb-16"
+        className="relative pt-16 pb-24 px-5 bg-opacity-85 bg-cover bg-center text-center text-white mb-16"
         style={{
           background: `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
           backgroundSize: "cover",
@@ -71,35 +71,32 @@ export default function Contactus() {
         </div>
       </header>
 
-      <div className="flex flex-col">
-        {/* Google Map - Now at the top */}
-        <div className="w-full h-64 md:h-80 bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          {/* Placeholder for Google Map - In a real implementation, this would be a Google Maps iframe */}
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center relative">
-            {/* Simple map visualization placeholder */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%22100%25%22 height=%22100%25%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e0e0e0%22/%3E%3Cpath d=%22M0 0L100 100M100 0L0 100%22 stroke=%22%23d0d0d0%22 stroke-width=%222%22/%3E%3C/svg%3E')] opacity-30"></div>
-            <div className="z-10 bg-white p-3 rounded-full shadow-lg">
-              <MapPin size={32} className="text-[#003366]" />
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 bg-[#003366] text-white py-2 px-4 text-center">
-              University Campus, Main Building
-            </div>
-          </div>
-        </div>
+      {/* Google Map - Full width */}
 
-        {/* Combined Contact Info and Form */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex flex-col lg:flex-row gap-8">
+      <div className="w-full h-96 overflow-hidden mb-0">
+        <iframe
+          className="w-full h-full border-0"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00658865!3d40.71277585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sCity%20Hall%20Park!5e0!3m2!1sen!2sus!4v1593177301753!5m2!1sen!2sus"
+          allowFullScreen
+          loading="lazy"
+          title="Google Maps"
+        ></iframe>
+      </div>
+
+      {/* Contact Info and Form - Full width container with centered content */}
+      <div className="w-full bg-white shadow-md py-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row gap-8">
             {/* Contact Information */}
-            <div className="w-full lg:w-1/2">
-              <h2 className="text-2xl font-bold text-[#003366] mb-6">
+            <div className="w-full md:w-1/2">
+              <h2 className="text-2xl font-bold text-blue-900 mb-6">
                 Contact Information
               </h2>
 
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="bg-[#003366]/10 p-3 rounded-full mr-4">
-                    <MapPin className="text-[#003366] h-5 w-5" />
+                  <div className="bg-blue-900/10 p-3 rounded-full mr-4">
+                    <MapPin className="text-blue-900 h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">Address</h3>
@@ -114,8 +111,8 @@ export default function Contactus() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="bg-[#003366]/10 p-3 rounded-full mr-4">
-                    <Phone className="text-[#003366] h-5 w-5" />
+                  <div className="bg-blue-900/10 p-3 rounded-full mr-4">
+                    <Phone className="text-blue-900 h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">Phone</h3>
@@ -128,8 +125,8 @@ export default function Contactus() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="bg-[#003366]/10 p-3 rounded-full mr-4">
-                    <Mail className="text-[#003366] h-5 w-5" />
+                  <div className="bg-blue-900/10 p-3 rounded-full mr-4">
+                    <Mail className="text-blue-900 h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">Email</h3>
@@ -142,8 +139,8 @@ export default function Contactus() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="bg-[#003366]/10 p-3 rounded-full mr-4">
-                    <Clock className="text-[#003366] h-5 w-5" />
+                  <div className="bg-blue-900/10 p-3 rounded-full mr-4">
+                    <Clock className="text-blue-900 h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="font-medium text-gray-900">Office Hours</h3>
@@ -160,8 +157,8 @@ export default function Contactus() {
             </div>
 
             {/* Contact Form */}
-            <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
-              <h2 className="text-2xl font-bold text-[#003366] mb-6">
+            <div className="w-full md:w-1/2 mt-8 md:mt-0">
+              <h2 className="text-2xl font-bold text-blue-900 mb-6">
                 Send us a Message
               </h2>
 
@@ -198,7 +195,7 @@ export default function Contactus() {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#003366] focus:border-[#003366]"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
                       placeholder="John Doe"
                       required
                     />
@@ -217,7 +214,7 @@ export default function Contactus() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#003366] focus:border-[#003366]"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
                       placeholder="john@example.com"
                       required
                     />
@@ -236,7 +233,7 @@ export default function Contactus() {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#003366] focus:border-[#003366]"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
                       placeholder="Inquiry about lost item"
                       required
                     />
@@ -255,7 +252,7 @@ export default function Contactus() {
                       value={formData.message}
                       onChange={handleChange}
                       rows="5"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#003366] focus:border-[#003366]"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
                       placeholder="Your message here..."
                       required
                     ></textarea>
@@ -263,9 +260,8 @@ export default function Contactus() {
 
                   <button
                     onClick={handleSubmit}
-                    className="w-full bg-[#003366] text-white font-medium py-3 px-6 rounded-md hover:bg-[#004080] transition-colors duration-300 flex items-center justify-center"
+                    className="w-full bg-[#003366] text-white font-medium py-3 px-6 rounded-md hover:bg-blue-800 transition-colors duration-300 flex items-center justify-center"
                   >
-                    <Send className="w-4 h-4 mr-2" />
                     Send Message
                   </button>
                 </div>
