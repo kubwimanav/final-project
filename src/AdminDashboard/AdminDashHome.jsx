@@ -11,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { FaDollarSign, FaUsers } from "react-icons/fa6";
+import {  FaMessage, FaUsers } from "react-icons/fa6";
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdInsertDriveFile } from "react-icons/md";
 function AdminDashHome() {
@@ -39,22 +39,22 @@ function AdminDashHome() {
     {
       id: 1,
       username: "johndoe",
-      action: "Placed an order #12345",
-      time: "12 min ago",
+      action: "johndoe@gmail.com",
+      time: "+250788123456",
       status: "Completed",
     },
     {
       id: 2,
       username: "sarahsmith",
-      action: "Requested refund #67890",
-      time: "37 min ago",
+      action: "sarahsmith@gmail.com",
+      time: "+250734012345",
       status: "Pending",
     },
     {
       id: 3,
       username: "mikebrown",
-      action: "Updated profile",
-      time: "2 hours ago",
+      action: "mikebrown@gmail.com",
+      time: "+25078946677",
       status: "Completed",
     },
   ];
@@ -83,9 +83,7 @@ function AdminDashHome() {
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">Users</span>
               <span className="text-xm font-bold mt-1">5,248</span>
-              <span className="text-sm text-green-500 mt-1">
-                +12.5% from last month
-              </span>
+              <span className="text-sm text-green-500 mt-1">Total Users</span>
             </div>
             <div className="w-7 h-7 rounded-sm bg-[#EFF6FF] flex items-center justify-center text-blue-400 text-xl">
               <FaUsers />
@@ -98,7 +96,7 @@ function AdminDashHome() {
               <span className="text-sm text-gray-500">LostItems</span>
               <span className="text-xm font-bold mt-1">1,427</span>
               <span className="text-sm text-green-500 mt-1">
-                +5.2% from last month
+                Total Lost Items
               </span>
             </div>
             <div className="w-7 h-7 rounded-sm bg-[#ECFDF5] flex items-center justify-center text-[#10B981] text-xl">
@@ -109,11 +107,11 @@ function AdminDashHome() {
           {/* Card 3 */}
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500">
-                FoundIems
-              </span>
+              <span className="text-sm text-gray-500">FoundItems</span>
               <span className="text-sm font-bold mt-1">24,583</span>
-              <span className="text-sm text-green-500 mt-1">12 completed</span>
+              <span className="text-sm text-green-500 mt-1">
+                Total Found Items
+              </span>
             </div>
             <div className="w-7 h-7 rounded-sm bg-[#F5F3FF] flex items-center justify-center text-[#8B5CF6] text-xl">
               <MdInsertDriveFile />
@@ -125,12 +123,12 @@ function AdminDashHome() {
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">Messages</span>
               <span className="text-sm font-bold mt-1">24</span>
-              <span className="text-sm text-red-500 mt-1">
-                +8.4% from last month
+              <span className="text-sm text-green-500 mt-1">
+                Total Messages
               </span>
             </div>
             <div className="w-7 h-7 rounded-sm bg-[#FFFBEB] flex items-center justify-center text-[#F59E0B] text-xl">
-              <FaDollarSign />
+              <FaMessage />
             </div>
           </div>
         </div>
@@ -214,13 +212,13 @@ function AdminDashHome() {
                     Username
                   </th>
                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Action
+                    Email
                   </th>
                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Time
+                    Phone Number
                   </th>
                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                  Action
                   </th>
                 </tr>
               </thead>
