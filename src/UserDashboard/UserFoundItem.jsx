@@ -430,7 +430,7 @@ export default function UserFoundItem() {
 
       {/* Main content */}
       <main className="py-6">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-0">
           {/* Action Buttons */}
           <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
