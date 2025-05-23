@@ -9,6 +9,7 @@ import laptopcharger from "../assets/laptopcharger.jpg";
 import wallet from "../assets/wallet.jpg";
 import bluebag from "../assets/bluebag.jpg";
 import ReportItemForm from "./ReportLostItemForm";
+import ReportFoundtItem from "./ReportFoundItem";
 const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
   const pageNumbers = [];
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -289,7 +290,7 @@ export default function FoundItem() {
       />
 
       {/* Report Item Form Modal */}
-      <ReportItemForm
+      <ReportFoundtItem
         isOpen={isReportModalOpen}
         onClose={closeReportModal}
         onSubmit={handleReportSubmit}

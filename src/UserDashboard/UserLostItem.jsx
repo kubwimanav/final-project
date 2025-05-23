@@ -1,15 +1,13 @@
 import { useState } from "react";
 import {
   Search,
+  Plus,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Phone,
-  Mail,
-  Eye,
-  CheckCircle,
-  Info,
+  Edit,
+  Trash2,
 } from "lucide-react";
 
 export default function UserLostItem() {
@@ -17,352 +15,105 @@ export default function UserLostItem() {
   const allItems = [
     {
       id: 1,
-      name: "Wallet",
-      location: "Main Lobby",
-      date: "2025-05-10",
-      status: "Unclaimed",
-      description: "Brown leather wallet with ID cards inside",
-      finder: {
-        name: "John Doe",
-        contact: "john.doe@example.com",
-        phone: "555-123-4567",
-      },
+      itemName: "Silver Watch",
+      category: "Documents",
+      location: "FTSM Building",
+      dateFound: "2023-05-08",
+      description: "Found at Computer Lab 3",
+      foundBy: "John Doe",
+      contact: "john@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&crop=center",
     },
     {
       id: 2,
-      name: "iPhone 16",
-      location: "Cafeteria",
-      date: "2025-05-11",
-      status: "Unclaimed",
-      description: "Black iPhone with red case",
-      finder: {
-        name: "Sarah Wilson",
-        contact: "s.wilson@example.com",
-        phone: "555-987-6543",
-      },
+      itemName: "Laptop Charger",
+      category: "Electronics",
+      location: "Library",
+      dateFound: "2023-05-07",
+      description: "Found at Study Table B4",
+      foundBy: "Jane Smith",
+      contact: "jane@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1504707748692-419802cf939d?w=100&h=100&fit=crop&crop=center",
     },
     {
       id: 3,
-      name: "Umbrella",
-      location: "Entrance Hall",
-      date: "2025-05-09",
-      status: "Claimed",
-      description: "Blue foldable umbrella",
-      finder: {
-        name: "Mike Chen",
-        contact: "mike.c@example.com",
-        phone: "555-333-7777",
-      },
+      itemName: "Water Bottle",
+      category: "Personal Items",
+      location: "Cafeteria",
+      dateFound: "2023-05-06",
+      description: "Blue colored bottle found on table",
+      foundBy: "Mike Johnson",
+      contact: "mike@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=100&h=100&fit=crop&crop=center",
     },
     {
       id: 4,
-      name: "Laptop Bag",
-      location: "Conference Room B",
-      date: "2025-05-08",
-      status: "Unclaimed",
-      description: "Black Dell laptop bag",
-      finder: {
-        name: "Lisa Johnson",
-        contact: "ljohnson@example.com",
-        phone: "555-444-5555",
-      },
+      itemName: "Laptop",
+      category: "Books",
+      location: "Lecture Hall A",
+      dateFound: "2023-05-05",
+      description: "Calculus textbook found under seat",
+      foundBy: "Sarah Lee",
+      contact: "sarah@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&h=100&fit=crop&crop=center",
     },
     {
       id: 5,
-      name: "Water Bottle",
-      location: "Gym",
-      date: "2025-05-11",
-      status: "Unclaimed",
-      description: "Metal water bottle with company logo",
-      finder: {
-        name: "Tom Brown",
-        contact: "t.brown@example.com",
-        phone: "555-222-3333",
-      },
+      itemName: "Car Key",
+      category: "Personal Items",
+      location: "Bus Stop",
+      dateFound: "2023-05-04",
+      description: "Black umbrella left at the bus stop",
+      foundBy: "Ahmad Razali",
+      contact: "ahmad@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop&crop=center",
     },
     {
       id: 6,
-      name: "Reading Glasses",
-      location: "Library",
-      date: "2025-05-07",
-      status: "Unclaimed",
-      description: "Tortoiseshell frame reading glasses",
-      finder: {
-        name: "Emma Davis",
-        contact: "emma.d@example.com",
-        phone: "555-888-9999",
-      },
+      itemName: "iPhone 17 Pro",
+      category: "Personal Items",
+      location: "Sports Complex",
+      dateFound: "2023-05-03",
+      description: "Found near basketball court",
+      foundBy: "Mei Ling",
+      contact: "mei@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100&h=100&fit=crop&crop=center",
     },
     {
       id: 7,
-      name: "Car Keys",
-      location: "Parking Lot",
-      date: "2025-05-10",
-      status: "Claimed",
-      description: "Toyota car keys with black fob",
-      finder: {
-        name: "Robert Wilson",
-        contact: "rwilson@example.com",
-        phone: "555-777-8888",
-      },
-    },
-    {
-      id: 8,
-      name: "Notebook",
-      location: "Study Room",
-      date: "2025-05-09",
-      status: "Unclaimed",
-      description: "Red spiral notebook with math notes",
-      finder: {
-        name: "Jessica Park",
-        contact: "j.park@example.com",
-        phone: "555-111-2222",
-      },
-    },
-    {
-      id: 9,
-      name: "Headphones",
-      location: "Bus Stop",
-      date: "2025-05-08",
-      status: "Unclaimed",
-      description: "White AirPods Pro with case",
-      finder: {
-        name: "David Martinez",
-        contact: "d.martinez@example.com",
-        phone: "555-666-7777",
-      },
-    },
-    {
-      id: 10,
-      name: "Scarf",
-      location: "Coat Rack",
-      date: "2025-05-07",
-      status: "Claimed",
-      description: "Blue wool scarf with fringe",
-      finder: {
-        name: "Grace Kim",
-        contact: "g.kim@example.com",
-        phone: "555-222-1111",
-      },
-    },
-    {
-      id: 11,
-      name: "Tablet",
-      location: "Meeting Room",
-      date: "2025-05-06",
-      status: "Unclaimed",
-      description: "iPad Air with green cover",
-      finder: {
-        name: "Alex Johnson",
-        contact: "ajohnson@example.com",
-        phone: "555-333-4444",
-      },
-    },
-    {
-      id: 12,
-      name: "Credit Card",
-      location: "Reception",
-      date: "2025-05-11",
-      status: "Unclaimed",
-      description: 'Visa card under name "John Smith"',
-      finder: {
-        name: "Rachel Lee",
-        contact: "r.lee@example.com",
-        phone: "555-999-8888",
-      },
-    },
-    {
-      id: 13,
-      name: "Lunch Box",
-      location: "Cafeteria",
-      date: "2025-05-10",
-      status: "Claimed",
-      description: "Blue plastic lunch container",
-      finder: {
-        name: "Kevin Wong",
-        contact: "k.wong@example.com",
-        phone: "555-444-3333",
-      },
-    },
-    {
-      id: 14,
-      name: "Sunglasses",
-      location: "Garden",
-      date: "2025-05-09",
-      status: "Unclaimed",
-      description: "Ray-Ban aviator sunglasses",
-      finder: {
-        name: "Maria Garcia",
-        contact: "mgarcia@example.com",
-        phone: "555-111-7777",
-      },
-    },
-    {
-      id: 15,
-      name: "USB Drive",
-      location: "Computer Lab",
-      date: "2025-05-08",
-      status: "Unclaimed",
-      description: "32GB Kingston flash drive",
-      finder: {
-        name: "James Wilson",
-        contact: "jwilson@example.com",
-        phone: "555-222-6666",
-      },
-    },
-    {
-      id: 16,
-      name: "Watch",
-      location: "Changing Room",
-      date: "2025-05-07",
-      status: "Unclaimed",
-      description: "Silver Casio digital watch",
-      finder: {
-        name: "Patricia Lopez",
-        contact: "plopez@example.com",
-        phone: "555-888-1111",
-      },
-    },
-    {
-      id: 17,
-      name: "Textbook",
-      location: "Study Area",
-      date: "2025-05-06",
-      status: "Claimed",
-      description: "Biology 101 textbook",
-      finder: {
-        name: "Daniel Kim",
-        contact: "dkim@example.com",
-        phone: "555-777-2222",
-      },
-    },
-    {
-      id: 18,
-      name: "Gloves",
-      location: "Lost and Found Box",
-      date: "2025-05-05",
-      status: "Unclaimed",
-      description: "Black leather gloves, size M",
-      finder: {
-        name: "Michelle Thomas",
-        contact: "mthomas@example.com",
-        phone: "555-333-5555",
-      },
-    },
-    {
-      id: 19,
-      name: "Camera",
-      location: "Auditorium",
-      date: "2025-05-04",
-      status: "Unclaimed",
-      description: "Canon DSLR with lens cap",
-      finder: {
-        name: "Brian Clark",
-        contact: "b.clark@example.com",
-        phone: "555-444-7777",
-      },
-    },
-    {
-      id: 20,
-      name: "Necklace",
-      location: "Bathroom",
-      date: "2025-05-03",
-      status: "Claimed",
-      description: "Gold chain with heart pendant",
-      finder: {
-        name: "Sophie Wang",
-        contact: "swang@example.com",
-        phone: "555-999-1111",
-      },
-    },
-    {
-      id: 21,
-      name: "ID Card",
-      location: "Security Desk",
-      date: "2025-05-10",
-      status: "Unclaimed",
-      description: "University ID card for Sarah Johnson",
-      finder: {
-        name: "Mark Rodriguez",
-        contact: "mrodriguez@example.com",
-        phone: "555-222-8888",
-      },
-    },
-    {
-      id: 22,
-      name: "Jacket",
-      location: "Coat Check",
-      date: "2025-05-09",
-      status: "Unclaimed",
-      description: "Navy blue windbreaker, size L",
-      finder: {
-        name: "Laura Miller",
-        contact: "lmiller@example.com",
-        phone: "555-666-3333",
-      },
-    },
-    {
-      id: 23,
-      name: "Pen Set",
-      location: "Conference Room",
-      date: "2025-05-08",
-      status: "Unclaimed",
-      description: "Mont Blanc pen set in case",
-      finder: {
-        name: "Chris Taylor",
-        contact: "ctaylor@example.com",
-        phone: "555-111-4444",
-      },
-    },
-    {
-      id: 24,
-      name: "Earbuds",
-      location: "Gym",
-      date: "2025-05-07",
-      status: "Claimed",
-      description: "Wireless earbuds in charging case",
-      finder: {
-        name: "Nicole Adams",
-        contact: "nadams@example.com",
-        phone: "555-333-2222",
-      },
-    },
-    {
-      id: 25,
-      name: "Baseball Cap",
-      location: "Sports Field",
-      date: "2025-05-06",
-      status: "Unclaimed",
-      description: "Red baseball cap with team logo",
-      finder: {
-        name: "Ryan Johnson",
-        contact: "rjohnson@example.com",
-        phone: "555-888-4444",
-      },
+      itemName: "Blue Backpack",
+      category: "Electronics",
+      location: "Engineering Building",
+      dateFound: "2023-05-02",
+      description: "Scientific calculator found in Room 201",
+      foundBy: "David Wong",
+      contact: "david@ukm.edu.my",
+      image:
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&h=100&fit=crop&crop=center",
     },
   ];
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
   const [expandedItemId, setExpandedItemId] = useState(null);
 
-  const statuses = ["All", "Claimed", "Unclaimed"];
-
-  // Filter items based on search term and filters
+  // Filter items based on search term
   const filteredItems = allItems.filter((item) => {
     const matchesSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.finder.name.toLowerCase().includes(searchTerm.toLowerCase());
+      item.foundBy.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === "All" || item.status === statusFilter;
-
-    return matchesSearch && matchesStatus;
+    return matchesSearch;
   });
 
   // Calculate pagination
@@ -379,14 +130,20 @@ export default function UserLostItem() {
     setCurrentPage((prev) => Math.min(totalPages, prev + 1));
   const goToLastPage = () => setCurrentPage(totalPages);
 
-  // Toggle expanded item
-  const toggleItemExpansion = (id) => {
-    setExpandedItemId(expandedItemId === id ? null : id);
+  // Action handlers
+  const handleEdit = (itemId) => {
+    console.log("Edit item:", itemId);
+    // Add your edit logic here
+  };
+
+  const handleDelete = (itemId) => {
+    console.log("Delete item:", itemId);
+    // Add your delete logic here
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-3 sm:p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
+    <div className="w-full max-w-7xl mx-auto p-3 sm:p-6 bg-white shadow-lg rounded-lg">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-2">
         Lost Items Dashboard
       </h1>
 
@@ -409,262 +166,278 @@ export default function UserLostItem() {
         </div>
 
         <div className="flex flex-row gap-2 sm:gap-4">
-          <select
-            className="px-2 sm:px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            value={statusFilter}
-            onChange={(e) => {
-              setStatusFilter(e.target.value);
-              setCurrentPage(1); // Reset to first page on filter change
-            }}
-          >
-            {statuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-
-          <select
-            className="px-2 sm:px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            value={itemsPerPage}
-            onChange={(e) => {
-              setItemsPerPage(Number(e.target.value));
-              setCurrentPage(1); // Reset to first page when changing items per page
-            }}
-          >
-            <option value={5}>5 per page</option>
-            <option value={10}>10 per page</option>
-            <option value={15}>15 per page</option>
-          </select>
+          <button className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <Plus size={16} className="mr-2" />
+            Add Lost Item
+          </button>
         </div>
       </div>
 
-      {/* Mobile view - Cards */}
-      <div className="sm:hidden space-y-4">
-        {currentItems.length > 0 ? (
-          currentItems.map((item) => (
-            <div
-              key={item.id}
-              className="border border-gray-200 rounded-lg shadow-sm overflow-hidden"
-            >
-              <div className="p-4 bg-gray-50 flex justify-between items-center">
-                <div>
-                  <h3 className="font-medium text-gray-800">{item.name}</h3>
-                  <p className="text-sm text-gray-500">{item.date}</p>
-                </div>
-                <span
-                  className={`px-2 py-1 text-xs font-semibold rounded-full
-                  ${
-                    item.status === "Claimed"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-orange-100 text-orange-800"
-                  }`}
-                >
-                  {item.status}
-                </span>
-              </div>
-
-              <div className="p-4">
-                <p className="text-sm text-gray-700 mb-2">{item.description}</p>
-                <p className="text-sm text-gray-600">
-                  <strong>Location:</strong> {item.location}
-                </p>
-
-                <div className="mt-3 pt-3 border-t border-gray-100">
-                  <p className="text-sm font-medium text-gray-700">
-                    Finder Information
-                  </p>
-                  <p className="text-sm text-gray-600">{item.finder.name}</p>
-                  <div className="flex items-center mt-1 text-sm text-gray-600">
-                    <Mail size={14} className="mr-1" /> {item.finder.contact}
-                  </div>
-                  <div className="flex items-center mt-1 text-sm text-gray-600">
-                    <Phone size={14} className="mr-1" /> {item.finder.phone}
-                  </div>
-                </div>
-
-                <div className="mt-4 flex justify-end">
-                  <button
-                    className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors"
-                    title="View Details"
-                  >
-                    <Eye size={20} />
-                  </button>
-                  {item.status === "Unclaimed" && (
-                    <button
-                      className="p-2 ml-2 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-full transition-colors"
-                      title="Claim Item"
-                    >
-                      <CheckCircle size={20} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="py-6 text-center text-gray-500">
-            No items found matching your search criteria
-          </div>
-        )}
-      </div>
-
       {/* Desktop view - Table */}
-      <div className="hidden sm:block overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="py-3 px-4 text-left font-semibold text-gray-700 border-b">
-                Item
-              </th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700 border-b">
-                Location
-              </th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700 border-b">
-                Date Found
-              </th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700 border-b">
-                Status
-              </th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700 border-b">
-                Finder
-              </th>
-              <th className="py-3 px-4 text-center font-semibold text-gray-700 border-b">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.length > 0 ? (
-              currentItems.map((item) => (
-                <>
-                  <tr
-                    key={item.id}
-                    className={`hover:bg-gray-50 border-b cursor-pointer ${
-                      expandedItemId === item.id ? "bg-blue-50" : ""
-                    }`}
-                    onClick={() => toggleItemExpansion(item.id)}
-                  >
-                    <td className="py-3 px-4">
-                      <div>
-                        <div className="font-medium text-gray-800">
-                          {item.name}
+      <div className="hidden lg:block">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Item
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Description
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Location
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Date Lost
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Lost By
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentItems.map((item) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img
+                          className="h-10 w-10 rounded-md object-cover"
+                          src={item.image}
+                          alt={item.itemName}
+                          onError={(e) => {
+                            e.target.src =
+                              "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNiAxNkMyMC40MTgzIDE2IDI0IDE5LjU4MTcgMjQgMjRDMjQgMjguNDE4MyAyMC40MTgzIDMyIDE2IDMyQzExLjU4MTcgMzIgOCAyOC40MTgzIDggMjRDOCAxOS41ODE3IDExLjU4MTcgMTYgMTYgMTZaIiBmaWxsPSIjOUM5Qzk3Ii8+CjxwYXRoIGQ9Ik0yMS4zMzMzIDIxLjMzMzNWMjIuNjY2N0gyMi42NjY3VjI0SDIxLjMzMzNWMjUuMzMzM0gyMFYyNEgxOC42NjY3VjIyLjY2NjdIMjBWMjEuMzMzM0gyMS4zMzMzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+";
+                          }}
+                        />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">
+                          {item.itemName}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {item.description}
+                          {item.category}
                         </div>
                       </div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-700">{item.location}</td>
-                    <td className="py-3 px-4 text-gray-700">{item.date}</td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                        ${
-                          item.status === "Claimed"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-orange-100 text-orange-800"
-                        }`}
+                    </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="text-sm text-gray-900 max-w-xs">
+                      {item.description}
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{item.location}</div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {item.dateFound}
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{item.foundBy}</div>
+                    <div className="text-sm text-gray-500">{item.contact}</div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(item.id)}
+                        className="text-blue-600 hover:text-blue-800 p-1 rounded-md hover:bg-blue-50 transition-colors"
+                        title="Edit item"
                       >
-                        {item.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-gray-700">
-                      {item.finder.name}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex justify-center space-x-2">
-                        <button
-                          className="p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleItemExpansion(item.id);
-                          }}
-                          title="View Details"
-                        >
-                          <Eye size={18} />
-                        </button>
-                        {item.status === "Unclaimed" && (
-                          <button
-                            className="p-1 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-full transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                            title="Claim Item"
-                          >
-                            <CheckCircle size={18} />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                  {expandedItemId === item.id && (
-                    <tr>
-                      <td colSpan="6" className="bg-gray-50 p-4 border-b">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <h4 className="font-medium text-gray-700 mb-2">
-                              Item Details
-                            </h4>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Name:</strong> {item.name}
-                            </p>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Description:</strong> {item.description}
-                            </p>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Location Found:</strong> {item.location}
-                            </p>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Date Found:</strong> {item.date}
-                            </p>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Status:</strong>
-                              <span
-                                className={`ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                ${
-                                  item.status === "Claimed"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-orange-100 text-orange-800"
-                                }`}
-                              >
-                                {item.status}
-                              </span>
-                            </p>
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-gray-700 mb-2">
-                              Finder Information
-                            </h4>
-                            <p className="text-sm text-gray-600 mb-1">
-                              <strong>Name:</strong> {item.finder.name}
-                            </p>
-                            <div className="flex items-center mb-1">
-                              <Mail size={16} className="mr-2 text-gray-500" />
-                              <p className="text-sm text-gray-600">
-                                <strong>Email:</strong> {item.finder.contact}
-                              </p>
-                            </div>
-                            <div className="flex items-center mb-1">
-                              <Phone size={16} className="mr-2 text-gray-500" />
-                              <p className="text-sm text-gray-600">
-                                <strong>Phone:</strong> {item.finder.phone}
-                              </p>
-                            </div>
-                          </div>
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="text-red-600 hover:text-red-800 p-1 rounded-md hover:bg-red-50 transition-colors"
+                        title="Delete item"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Tablet view - Cards */}
+      <div className="hidden sm:block lg:hidden">
+        <div className="grid gap-4">
+          {currentItems.length > 0 ? (
+            currentItems.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-4 flex-1">
+                    <div className="flex-shrink-0">
+                      <img
+                        className="h-16 w-16 rounded-md object-cover"
+                        src={item.image}
+                        alt={item.itemName}
+                        onError={(e) => {
+                          e.target.src =
+                            "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNiAyNkMzNC44MzY2IDI2IDQyIDMzLjE2MzQgNDIgNDJDNDIgNTAuODM2NiAzNC44MzY2IDU4IDI2IDU4QzE3LjE2MzQgNTggMTAgNTAuODM2NiAxMCA0MkMxMCAzMy4xNjM0IDE3LjE2MzQgMjYgMjYgMjZaIiBmaWxsPSIjOUM5Qzk3Ii8+CjxwYXRoIGQ9Ik0zNC4xMzMzIDM0LjEzMzNWMzYuMjY2N0gzNi4yNjY3VjM4LjRIMzQuMTMzM1Y0MC41MzMzSDMzLjA2NjdWMzguNEgzMC40VjM2LjI2NjdIMzMuMDY2N1YzNC4xMzMzSDM0LjEzMzNaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=";
+                        }}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h3 className="text-lg font-medium text-gray-900">
+                            {item.itemName}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {item.category}
+                          </p>
                         </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="py-6 text-center text-gray-500">
-                  No items found matching your search criteria
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                        <p className="text-sm text-gray-500 ml-2">
+                          {item.dateFound}
+                        </p>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        {item.description}
+                      </p>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-500">Location:</span>
+                          <p className="text-gray-900">{item.location}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Found by:</span>
+                          <p className="text-gray-900">{item.foundBy}</p>
+                          <p className="text-gray-500 text-xs">
+                            {item.contact}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-2 ml-4">
+                    <button
+                      onClick={() => handleEdit(item.id)}
+                      className="text-blue-600 hover:text-blue-800 p-2 rounded-md hover:bg-blue-50 transition-colors"
+                      title="Edit item"
+                    >
+                      <Edit size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:text-red-800 p-2 rounded-md hover:bg-red-50 transition-colors"
+                      title="Delete item"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-6 text-center text-gray-500">
+              No items found matching your search criteria
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Card Layout */}
+      <div className="sm:hidden">
+        <div className="divide-y divide-gray-200">
+          {currentItems.length > 0 ? (
+            currentItems.map((item) => (
+              <div key={item.id} className="p-3 hover:bg-gray-50">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    <img
+                      className="h-12 w-12 rounded-md object-cover"
+                      src={item.image}
+                      alt={item.itemName}
+                      onError={(e) => {
+                        e.target.src =
+                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xOSAxOUMyNi4xODA2IDE5IDMyIDI0LjgxOTQgMzIgMzJDMzIgMzkuMTgwNiAyNi4xODA2IDQ1IDE5IDQ1QzExLjgxOTQgNDUgNiAzOS4xODA2IDYgMzJDNiAyNC44MTk0IDExLjgxOTQgMTkgMTkgMTlaIiBmaWxsPSIjOUM5Qzk3Ii8+CjxwYXRoIGQ9Ik0yNS42IDI1LjZWMjcuMkgyNy4yVjI4LjhIMjUuNlYzMC40SDI0LjhWMjguOEgyMi44VjI3LjJIMjQuOFYyNS42SDI1LjZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=";
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1 pr-2">
+                        <p className="text-sm font-medium text-gray-900">
+                          {item.itemName}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {item.category}
+                        </p>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <button
+                          onClick={() => handleEdit(item.id)}
+                          className="text-blue-600 hover:text-blue-800 p-1.5 rounded-md hover:bg-blue-50 transition-colors"
+                          title="Edit item"
+                        >
+                          <Edit size={14} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="text-red-600 hover:text-red-800 p-1.5 rounded-md hover:bg-red-50 transition-colors"
+                          title="Delete item"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-700">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="mt-2 flex flex-col space-y-1 text-xs text-gray-500">
+                      <div className="flex justify-between">
+                        <span>📍 {item.location}</span>
+                        <span>{item.dateFound}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-900 font-medium">
+                          {item.foundBy}
+                        </span>
+                        <span className="ml-2">{item.contact}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-6 text-center text-gray-500">
+              No items found matching your search criteria
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Pagination */}

@@ -1,41 +1,36 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import comput from "../assets/image1.jpg";
+import axios from "axios";
 
 export default function Contactus() {
+
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
-    subject: "",
+    name: "",
+    phone: "",
     message: "",
   });
-
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Show success message
-    setFormSubmitted(true);
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
-    }, 3000);
+    try {
+      console.log(formData);
+      await axios.post(
+        "https://virtserver.swaggerhub.com/michaelfred/lostandfoundapi/3.0.0/contact",
+        formData
+      );
+      alert("sent sucessfully");
+    } catch (error) {
+      console.log(error.response);
+      alert(error.message);
+    }
   };
+
 
   return (
     <div className="font-sans bg-gray-100 w-full min-h-screen m-0 overflow-x-hidden">
@@ -162,26 +157,8 @@ export default function Contactus() {
                 Send us a Message
               </h2>
 
-              {formSubmitted ? (
-                <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-6 flex items-center">
-                  <div className="bg-green-100 p-2 rounded-full mr-3">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <p>Thank you! Your message has been sent successfully.</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
+             
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
                     <label
                       htmlFor="name"
@@ -220,24 +197,6 @@ export default function Contactus() {
                     />
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="subject"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
-                      placeholder="Inquiry about lost item"
-                      required
-                    />
-                  </div>
 
                   <div>
                     <label
@@ -263,13 +222,12 @@ export default function Contactus() {
                     className="w-full bg-[#003366] text-white font-medium py-3 px-6 rounded-md hover:bg-blue-800 transition-colors duration-300 flex items-center justify-center"
                   >
                     Send Message
-                  </button>
+                </button>
+                </form>
                 </div>
-              )}
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }

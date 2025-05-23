@@ -104,7 +104,7 @@ export default function UserMessage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const messagesPerPage = 5;
+  const messagesPerPage = 3;
 
   // Delete message handler
   const handleDelete = (id) => {
@@ -156,7 +156,7 @@ export default function UserMessage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 ">
       <div className="max-w-7xl mx-auto py-4 px-2 sm:px-4 lg:px-6">
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {/* Header */}

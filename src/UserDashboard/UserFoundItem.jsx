@@ -347,7 +347,7 @@ export default function UserFoundItem() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const [filteredItems, setFilteredItems] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
 
@@ -418,7 +418,7 @@ export default function UserFoundItem() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className=" bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -429,10 +429,10 @@ export default function UserFoundItem() {
       </header>
 
       {/* Main content */}
-      <main className="py-6">
+      <main className="py-2">
         <div className="mx-auto px-4 sm:px-6 lg:px-0">
           {/* Action Buttons */}
-          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+          <div className="mb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               {/* Search */}
               <div className="relative w-full sm:w-64">

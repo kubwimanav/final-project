@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-
 import comput from "../assets/image1.jpg";
-
 const Link = ({ to, children, className }) => (
   <a href={to} className={className}>
     {children}
@@ -10,17 +8,22 @@ const Link = ({ to, children, className }) => (
 
 export default function Signup() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     username: "",
     email: "",
+    location: "",
     gender: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Configure your backend API endpoint here
+  const API_ENDPOINT = "https://your-backend-api.com/api/signup";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,10 +33,58 @@ export default function Signup() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
+    setIsLoading(true);
+    setMessage("");
+
+    // Basic validation
+    if (formData.password !== formData.confirmPassword) {
+      setMessage("Passwords do not match!");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          location: formData.location,
+          gender: formData.gender,
+          phoneNumber: formData.phoneNumber,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("Account created successfully!");
+        // Reset form
+        setFormData({
+          username: "",
+          email: "",
+          location: "",
+          gender: "",
+          phoneNumber: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } else {
+        setMessage(data.message || "Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setMessage("Network error. Please check your connection and try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -70,7 +121,7 @@ export default function Signup() {
       >
         <div className="mb-8 md:mb-10">
           <div className="w-[70px] h-[80px] mx-auto mb-4 bg-white rounded-full flex items-center justify-center relative">
-            <div className="w-[60px] h-[60px] bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%2778b0a0%27%3E%3Cpath d=%27M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z%27/%3E%3C/svg%3E')] bg-contain bg-no-repeat bg-center"></div>
+            <div className="w-[60px] h-[60px] bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%2378b0a0%27%3E%3Cpath d=%27M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z%27/%3E%3C/svg%3E')] bg-contain bg-no-repeat bg-center"></div>
           </div>
           <h3 className="text-[22px] font-medium">
             Digital Lost and Found System
@@ -79,7 +130,7 @@ export default function Signup() {
         <p className="mb-5 text-base">Already have an account?</p>
         <Link
           to={"/login"}
-          className="px-8 py-2 bg-transparent text-white border-2 border-white rounded-full text-base transition-all hover:bg-white/10"
+          className="px-8 py-2 bg-transparent text-white border-2 border-white rounded-md text-base transition-all hover:bg-white/10"
         >
           Sign In
         </Link>
@@ -90,35 +141,20 @@ export default function Signup() {
         <h1 className="text-3xl font-medium mb-1">Hello!</h1>
         <p className="text-gray-500 mb-1">Please signup to continue</p>
 
-        <div className="w-full">
-          {/* First row with first and last name */}
-          <div className="flex flex-col md:flex-row gap-3 md:gap-5">
-            <div className="flex-1 mb-1 relative">
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                placeholder="First Name"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
-              />
-            </div>
-
-            <div className="flex-1 mb-1 relative">
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                placeholder="Last Name"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
-              />
-            </div>
+        {message && (
+          <div
+            className={`mb-4 p-3 rounded ${
+              message.includes("successfully")
+                ? "bg-green-100 text-green-700 border border-green-200"
+                : "bg-red-100 text-red-700 border border-red-200"
+            }`}
+          >
+            {message}
           </div>
+        )}
 
-          <div className="mb-1 relative">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className=" relative">
             <input
               type="text"
               id="username"
@@ -126,11 +162,12 @@ export default function Signup() {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
+              required
               className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
             />
           </div>
 
-          <div className="mb-1 relative">
+          <div className=" relative">
             <input
               type="email"
               id="email"
@@ -138,17 +175,32 @@ export default function Signup() {
               placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
+              required
               className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
             />
           </div>
 
-          <div className="mb-1 relative">
+          <div className="relative">
+            <input
+              type="text"
+              id="location"
+              name="location"
+              placeholder="Location"
+              value={formData.location}
+              onChange={handleChange}
+              required
+              className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
+            />
+          </div>
+
+          <div className="relative">
             <div className="relative">
               <select
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
+                required
                 className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent appearance-none focus:outline-none focus:border-[#78b0a0]"
               >
                 <option value="" disabled>
@@ -177,7 +229,20 @@ export default function Signup() {
             </div>
           </div>
 
-          <div className="mb-1 relative">
+          <div className=" relative">
+            <input
+              type="tel"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+              className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
+            />
+          </div>
+
+          <div className=" relative">
             <input
               type={showPassword ? "text" : "password"}
               id="password"
@@ -185,11 +250,41 @@ export default function Signup() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+              required
               className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
             />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {showPassword ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                )}
+              </svg>
+            </button>
           </div>
 
-          <div className="mb-1 relative">
+          <div className=" relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
@@ -197,15 +292,46 @@ export default function Signup() {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
+              required
               className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
             />
+            <button
+              type="button"
+              onClick={toggleConfirmPasswordVisibility}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {showConfirmPassword ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                )}
+              </svg>
+            </button>
           </div>
 
           <button
-            onClick={handleSubmit}
-            className="w-full py-2 px-4 bg-[#003366] text-white rounded text-base cursor-pointer transition-colors hover:bg-[#669e8d] mt-2"
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-2 px-4 bg-[#003366] text-white rounded text-base cursor-pointer transition-colors hover:bg-[#669e8d] mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign Up
+            {isLoading ? "Creating Account..." : "Sign Up"}
           </button>
 
           <div className="relative text-center my-1">
@@ -221,11 +347,14 @@ export default function Signup() {
 
           <p className="text-center text-sm text-gray-500">
             I'm already a member!{" "}
-            <a className="text-[#78b0a0] font-medium no-underline hover:underline">
+            <Link
+              to="/login"
+              className="text-[#78b0a0] font-medium no-underline hover:underline"
+            >
               Sign In
-            </a>
+            </Link>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
