@@ -9,95 +9,12 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
+import { mycontext } from "../Context/ContextProvider";
 
 export default function UserLostItem() {
-  // Mock data for lost items (in a real app, this would come from an API)
-  const allItems = [
-    {
-      id: 1,
-      itemName: "Silver Watch",
-      category: "Documents",
-      location: "FTSM Building",
-      dateFound: "2023-05-08",
-      description: "Found at Computer Lab 3",
-      foundBy: "John Doe",
-      contact: "john@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&crop=center",
-    },
-    {
-      id: 2,
-      itemName: "Laptop Charger",
-      category: "Electronics",
-      location: "Library",
-      dateFound: "2023-05-07",
-      description: "Found at Study Table B4",
-      foundBy: "Jane Smith",
-      contact: "jane@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1504707748692-419802cf939d?w=100&h=100&fit=crop&crop=center",
-    },
-    {
-      id: 3,
-      itemName: "Water Bottle",
-      category: "Personal Items",
-      location: "Cafeteria",
-      dateFound: "2023-05-06",
-      description: "Blue colored bottle found on table",
-      foundBy: "Mike Johnson",
-      contact: "mike@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=100&h=100&fit=crop&crop=center",
-    },
-    {
-      id: 4,
-      itemName: "Laptop",
-      category: "Books",
-      location: "Lecture Hall A",
-      dateFound: "2023-05-05",
-      description: "Calculus textbook found under seat",
-      foundBy: "Sarah Lee",
-      contact: "sarah@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&h=100&fit=crop&crop=center",
-    },
-    {
-      id: 5,
-      itemName: "Car Key",
-      category: "Personal Items",
-      location: "Bus Stop",
-      dateFound: "2023-05-04",
-      description: "Black umbrella left at the bus stop",
-      foundBy: "Ahmad Razali",
-      contact: "ahmad@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&h=100&fit=crop&crop=center",
-    },
-    {
-      id: 6,
-      itemName: "iPhone 17 Pro",
-      category: "Personal Items",
-      location: "Sports Complex",
-      dateFound: "2023-05-03",
-      description: "Found near basketball court",
-      foundBy: "Mei Ling",
-      contact: "mei@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100&h=100&fit=crop&crop=center",
-    },
-    {
-      id: 7,
-      itemName: "Blue Backpack",
-      category: "Electronics",
-      location: "Engineering Building",
-      dateFound: "2023-05-02",
-      description: "Scientific calculator found in Room 201",
-      foundBy: "David Wong",
-      contact: "david@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100&h=100&fit=crop&crop=center",
-    },
-  ];
+  // Get data from context with safe destructuring
+  const { tour } = mycontext();
+  const allItems = tour?.allItems || []; // Provide fallback empty array
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -105,13 +22,13 @@ export default function UserLostItem() {
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedItemId, setExpandedItemId] = useState(null);
 
-  // Filter items based on search term
+  // Filter items based on search term - now safe because allItems is always an array
   const filteredItems = allItems.filter((item) => {
     const matchesSearch =
-      item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.foundBy.toLowerCase().includes(searchTerm.toLowerCase());
+      item.itemName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.foundBy?.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesSearch;
   });
@@ -141,8 +58,12 @@ export default function UserLostItem() {
     // Add your delete logic here
   };
 
+  const dates = tour;
+
+
   return (
     <div className="w-full max-w-7xl mx-auto p-3 sm:p-6 bg-white shadow-lg rounded-lg">
+
       <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-2">
         Lost Items Dashboard
       </h1>
@@ -218,14 +139,14 @@ export default function UserLostItem() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentItems.map((item) => (
+              {dates.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <img
                           className="h-10 w-10 rounded-md object-cover"
-                          src={item.image}
+                          src={item.itemImage}
                           alt={item.itemName}
                           onError={(e) => {
                             e.target.src =
@@ -238,7 +159,7 @@ export default function UserLostItem() {
                           {item.itemName}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {item.category}
+                          {item.ownerEmail}
                         </div>
                       </div>
                     </div>
@@ -252,13 +173,15 @@ export default function UserLostItem() {
                     <div className="text-sm text-gray-900">{item.location}</div>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {item.dateFound}
-                    </div>
+                    <div className="text-sm text-gray-900">{item.date}</div>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{item.foundBy}</div>
-                    <div className="text-sm text-gray-500">{item.contact}</div>
+                    <div className="text-sm text-gray-900">
+                      {item.ownerName}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {item.ownerPhone}
+                    </div>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap text-center">
                     <div className="flex items-center justify-center space-x-2">
@@ -299,7 +222,7 @@ export default function UserLostItem() {
                     <div className="flex-shrink-0">
                       <img
                         className="h-16 w-16 rounded-md object-cover"
-                        src={item.image}
+                        src={item.itemImage}
                         alt={item.itemName}
                         onError={(e) => {
                           e.target.src =
@@ -376,7 +299,7 @@ export default function UserLostItem() {
                   <div className="flex-shrink-0">
                     <img
                       className="h-12 w-12 rounded-md object-cover"
-                      src={item.image}
+                      src={item.itemImage} // Fixed: was item.image, now item.itemImage
                       alt={item.itemName}
                       onError={(e) => {
                         e.target.src =

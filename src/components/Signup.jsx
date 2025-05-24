@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import comput from "../assets/image1.jpg";
+
 const Link = ({ to, children, className }) => (
   <a href={to} className={className}>
     {children}
@@ -10,9 +11,9 @@ export default function Signup() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    location: "",
+    country: "",
     gender: "",
-    phoneNumber: "",
+    city: "",
     password: "",
     confirmPassword: "",
   });
@@ -22,8 +23,11 @@ export default function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Configure your backend API endpoint here
-  const API_ENDPOINT = "https://your-backend-api.com/api/signup";
+  // Using Vite dev server proxy (recommended)
+  const API_ENDPOINT = "/api/auth/signup";
+  
+  // Fallback to direct API call (will fail due to CORS)
+  // const API_ENDPOINT = "https://lostandfoundapi.onrender.com/auth/signup";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,6 +50,7 @@ export default function Signup() {
     }
 
     try {
+      // Using Vite proxy - requests to /api/* will be forwarded to your backend
       const response = await fetch(API_ENDPOINT, {
         method: "POST",
         headers: {
@@ -54,15 +59,25 @@ export default function Signup() {
         body: JSON.stringify({
           username: formData.username,
           email: formData.email,
-          location: formData.location,
+          location: formData.country,
           gender: formData.gender,
-          phoneNumber: formData.phoneNumber,
+          phoneNumber: formData.city,
           password: formData.password,
-          confirmPassword: formData.confirmPassword,
         }),
       });
 
-      const data = await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      let data;
+      
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        // If not JSON, try to get text response
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error(`Server returned non-JSON response. Status: ${response.status}`);
+      }
 
       if (response.ok) {
         setMessage("Account created successfully!");
@@ -70,9 +85,9 @@ export default function Signup() {
         setFormData({
           username: "",
           email: "",
-          location: "",
+          country: "",
           gender: "",
-          phoneNumber: "",
+          city: "",
           password: "",
           confirmPassword: "",
         });
@@ -81,7 +96,15 @@ export default function Signup() {
       }
     } catch (error) {
       console.error("Registration error:", error);
-      setMessage("Network error. Please check your connection and try again.");
+      
+      // More specific error handling
+      if (error.message.includes('non-JSON response')) {
+        setMessage("Server error: Invalid response format. Please contact support.");
+      } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        setMessage("Connection error: Please check if the server is running and try again.");
+      } else {
+        setMessage(error.message || "Network error. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +177,7 @@ export default function Signup() {
         )}
 
         <form onSubmit={handleSubmit} className="w-full">
-          <div className=" relative">
+          <div className="relative">
             <input
               type="text"
               id="username"
@@ -167,7 +190,7 @@ export default function Signup() {
             />
           </div>
 
-          <div className=" relative">
+          <div className="relative">
             <input
               type="email"
               id="email"
@@ -183,10 +206,10 @@ export default function Signup() {
           <div className="relative">
             <input
               type="text"
-              id="location"
-              name="location"
-              placeholder="Location"
-              value={formData.location}
+              id="country"
+              name="country"
+              placeholder="Country"
+              value={formData.country}
               onChange={handleChange}
               required
               className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
@@ -229,20 +252,20 @@ export default function Signup() {
             </div>
           </div>
 
-          <div className=" relative">
+          <div className="relative">
             <input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
+              type="text"
+              id="city"
+              name="city"
+              placeholder="City"
+              value={formData.city}
               onChange={handleChange}
               required
               className="w-full py-3 border-b border-gray-300 text-base text-gray-800 bg-transparent focus:outline-none focus:border-[#78b0a0] placeholder-gray-400"
             />
           </div>
 
-          <div className=" relative">
+          <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               id="password"
@@ -284,7 +307,7 @@ export default function Signup() {
             </button>
           </div>
 
-          <div className=" relative">
+          <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
@@ -313,6 +336,7 @@ export default function Signup() {
                     strokeLinejoin="round"
                     strokeWidth={2}
                     d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+            
                   />
                 ) : (
                   <path

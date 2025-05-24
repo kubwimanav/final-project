@@ -4,13 +4,15 @@ import comput from "../assets/image1.jpg";
 import axios from "axios";
 
 export default function Contactus() {
-
   const [formData, setFormData] = useState({
     email: "",
     name: "",
-    phone: "",
+    subject: "",
     message: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -18,19 +20,36 @@ export default function Contactus() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     try {
       console.log(formData);
-      await axios.post(
-        "https://virtserver.swaggerhub.com/michaelfred/lostandfoundapi/3.0.0/contact",
-        formData
-      );
-      alert("sent sucessfully");
+      // Use proxy endpoint instead of direct API call
+      await axios.post("/api/contacts", formData);
+      alert("Message sent successfully!");
+
+      // Reset form after successful submission
+      setFormData({
+        email: "",
+        name: "",
+        subject: "",
+        message: "",
+      });
     } catch (error) {
-      console.log(error.response);
-      alert(error.message);
+      console.error("Error submitting form:", error);
+      if (error.response) {
+        alert(
+          `Error: ${error.response.data?.message || "Failed to send message"}`
+        );
+      } else if (error.request) {
+        alert("Network error. Please check your connection and try again.");
+      } else {
+        alert("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
 
   return (
     <div className="font-sans bg-gray-100 w-full min-h-screen m-0 overflow-x-hidden">
@@ -67,7 +86,6 @@ export default function Contactus() {
       </header>
 
       {/* Google Map - Full width */}
-
       <div className="w-full h-96 overflow-hidden mb-0">
         <iframe
           className="w-full h-full border-0"
@@ -157,77 +175,107 @@ export default function Contactus() {
                 Send us a Message
               </h2>
 
-             
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Your Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
-                      placeholder="John Doe"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
-                      placeholder="john@example.com"
-                      required
-                    />
-                  </div>
-
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      rows="5"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
-                      placeholder="Your message here..."
-                      required
-                    ></textarea>
-                  </div>
-
-                  <button
-                    onClick={handleSubmit}
-                    className="w-full bg-[#003366] text-white font-medium py-3 px-6 rounded-md hover:bg-blue-800 transition-colors duration-300 flex items-center justify-center"
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Send Message
-                </button>
-                </form>
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
+                    placeholder="John Doe"
+                    required
+                  />
                 </div>
+
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
+                    placeholder="john@example.com"
+                    required
+                  />
+                </div>
+
+               
+
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
+                    placeholder="Subject of your message"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows="5"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 focus:border-blue-900"
+                    placeholder="Your message here..."
+                    required
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#003366] text-white font-medium py-3 px-6 rounded-md hover:bg-blue-800 transition-colors duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4 mr-2" />
+                      Send Message
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }

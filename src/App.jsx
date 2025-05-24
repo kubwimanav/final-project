@@ -27,42 +27,45 @@ import UserHome from "./UserDashboard/UserHome";
 import UserMessage from "./UserDashboard/UserMessage";
 import UserFoundItem from "./UserDashboard/UserFoundItem";
 import UserLostItem from "./UserDashboard/UserLostItem";
+import { AppContext } from "./Context/ContextProvider";
 
 
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LayoutHome />}>
-          <Route index element={<Home />} />
-          <Route path="lost" element={<LostItems />} />
-          <Route path="found" element={<FoundItem />} />
-          <Route path="contact" element={<Contactus />} />
-        </Route>
-        <Route path="/admin" element={<AdminDashboardLayout />}>
-          <Route index element={<AdminDashHome />} />
-          <Route path="adminhome" element={<AdminDashHome />} />
-          <Route path="user" element={<UserManagement />} />
-          <Route path="adminsetting" element={<SettingAdmin />} />
-          <Route path="contact" element={<ContactMessageDashboard />} />
-          <Route path="founditem" element={<FounItemsDash />} />
-          <Route path="lostitem" element={<LostitemDash />} />
-        </Route>
+    <AppContext>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LayoutHome />}>
+            <Route index element={<Home />} />
+            <Route path="lost" element={<LostItems />} />
+            <Route path="found" element={<FoundItem />} />
+            <Route path="contact" element={<Contactus />} />
+          </Route>
+          <Route path="/admin" element={<AdminDashboardLayout />}>
+            <Route index element={<AdminDashHome />} />
+            <Route path="adminhome" element={<AdminDashHome />} />
+            <Route path="user" element={<UserManagement />} />
+            <Route path="adminsetting" element={<SettingAdmin />} />
+            <Route path="contact" element={<ContactMessageDashboard />} />
+            <Route path="founditem" element={<FounItemsDash />} />
+            <Route path="lostitem" element={<LostitemDash />} />
+          </Route>
 
-        <Route path="/userdash" element={<UserLayoutDashboard />}>
-          <Route index element={<UserHome/>} />
-          <Route path="userhome" element={<UserHome />} />
-          <Route path="adminsetting" element={<SettingAdmin />} />
-          <Route path="usermessage" element={<UserMessage/>} />
-          <Route path="userfounditem" element={<UserFoundItem />} />
-          <Route path="userlostitem" element={<UserLostItem />} />
-        </Route>
+          <Route path="/userdash" element={<UserLayoutDashboard />}>
+            <Route index element={<UserHome />} />
+            <Route path="userhome" element={<UserHome />} />
+            <Route path="adminsetting" element={<SettingAdmin />} />
+            <Route path="usermessage" element={<UserMessage />} />
+            <Route path="userfounditem" element={<UserFoundItem />} />
+            <Route path="userlostitem" element={<UserLostItem />} />
+          </Route>
 
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Signup />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Signup />} />
+        </Routes>
+      </BrowserRouter>
+    </AppContext>
   );
 }
 
