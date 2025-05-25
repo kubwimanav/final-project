@@ -14,7 +14,7 @@ import { mycontext } from "../Context/ContextProvider";
 export default function UserLostItem() {
   // Get data from context with safe destructuring
   const { tour } = mycontext();
-  const allItems = tour?.allItems || []; // Provide fallback empty array
+  const allItems = Array.isArray(tour) ? tour : tour?.allItems || []; // Provide fallback empty array
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,7 +57,6 @@ export default function UserLostItem() {
     console.log("Delete item:", itemId);
     // Add your delete logic here
   };
-
   const dates = tour;
 
 
@@ -139,7 +138,7 @@ export default function UserLostItem() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {dates.map((item) => (
+              {currentItems.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-4 py-4 whitespace-nowrap">
                     <div className="flex items-center">

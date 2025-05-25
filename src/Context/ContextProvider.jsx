@@ -25,7 +25,7 @@ export const AppContext = ({ children }) => {
     const fetchtours = async () => {
       try {
         const response = await axiosClient.get(
-          "https://lostandfoundapi.onrender.com/items"
+          "https://lostandfoundapi.onrender.com/lostItems"
         );
         console.log(response.data);
         setTour(response.data);

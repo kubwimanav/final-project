@@ -3,15 +3,15 @@ import { X } from "lucide-react";
 
 const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
-    foundName: "",
-    foundEmail: "",
-    phoneNumber: "",
+    ownerName: "",
+    ownerEmail: "",
+    ownerPhone: "",
     itemName: "",
     itemImage: null,
-    itemSerialNumber: "",
+    itemSerial: "",
     location: "",
     description: "",
-    dateFound: "",
+    date: "",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -21,15 +21,15 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
   useEffect(() => {
     if (!isOpen) {
       setFormData({
-        foundName: "",
-        foundEmail: "",
-        phoneNumber: "",
+        ownerName: "",
+        ownerEmail: "",
+        ownerPhone: "",
         itemName: "",
         itemImage: null,
-        itemSerialNumber: "",
+        itemSerial: "",
         location: "",
         description: "",
-        dateFound: "",
+        date: "",
       });
       setImagePreview(null);
       setFormErrors({});
@@ -71,16 +71,16 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.foundName.trim()) errors.foundName = "Your name is required";
+    if (!formData.ownerName.trim()) errors.ownerName = "Your name is required";
     if (!formData.itemName.trim()) errors.itemName = "Item name is required";
     if (!formData.location.trim()) errors.location = "Location is required";
-    if (!formData.dateFound.trim()) errors.dateFound = "Date found is required";
+    if (!formData.date.trim()) errors.date = "Date found is required";
 
     // Basic email validation
-    if (!formData.foundEmail.trim()) {
-      errors.foundEmail = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.foundEmail)) {
-      errors.foundEmail = "Please enter a valid email address";
+    if (!formData.ownerEmail.trim()) {
+      errors.ownerEmail = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.ownerEmail)) {
+      errors.ownerEmail = "Please enter a valid email address";
     }
 
     return errors;
@@ -102,7 +102,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
     }
 
     // Submit to backend
-    fetch("/api/found-items", {
+    fetch("/api/lostItems", {
       method: "POST",
       body: submitData,
     })
@@ -149,46 +149,46 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
               <div className="flex flex-col md:flex-row gap-2 md:gap-3">
                 <div className="flex-1 space-y-1">
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                    Your Name *
+                    Your Name
                   </label>
                   <input
                     type="text"
-                    name="foundName"
-                    value={formData.foundName}
+                    name="ownerName"
+                    value={formData.ownerName}
                     onChange={handleChange}
                     className={`w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      formErrors.foundName
+                      formErrors.ownerName
                         ? "border-red-500"
                         : "border-gray-300"
                     }`}
                     placeholder="John Doe"
                   />
-                  {formErrors.foundName && (
+                  {formErrors.ownerName && (
                     <p className="text-red-500 text-xs">
-                      {formErrors.foundName}
+                      {formErrors.ownerName}
                     </p>
                   )}
                 </div>
 
                 <div className="flex-1 space-y-1">
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                    Email Address *
+                    Email Address
                   </label>
                   <input
                     type="email"
-                    name="foundEmail"
-                    value={formData.foundEmail}
+                    name="ownerEmail"
+                    value={formData.ownerEmail}
                     onChange={handleChange}
                     className={`w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      formErrors.foundEmail
+                      formErrors.ownerEmail
                         ? "border-red-500"
                         : "border-gray-300"
                     }`}
                     placeholder="your.email@example.com"
                   />
-                  {formErrors.foundEmail && (
+                  {formErrors.ownerEmail && (
                     <p className="text-red-500 text-xs">
-                      {formErrors.foundEmail}
+                      {formErrors.ownerEmail}
                     </p>
                   )}
                 </div>
@@ -202,8 +202,8 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                   </label>
                   <input
                     type="tel"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
+                    name="ownerPhone"
+                    value={formData.ownerPhone}
                     onChange={handleChange}
                     className="w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="0789488837"
@@ -212,7 +212,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
 
                 <div className="flex-1 space-y-1">
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                    Item Name *
+                    Item Name
                   </label>
                   <input
                     type="text"
@@ -240,8 +240,8 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                   </label>
                   <input
                     type="text"
-                    name="itemSerialNumber"
-                    value={formData.itemSerialNumber}
+                    name="itemSerial"
+                    value={formData.itemSerial}
                     onChange={handleChange}
                     className="w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Serial number or unique identifier"
@@ -274,23 +274,19 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
               <div className="flex flex-col md:flex-row gap-2 md:gap-3">
                 <div className="flex-1 space-y-1">
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                    Date Found *
+                    Date Found
                   </label>
                   <input
                     type="date"
-                    name="dateFound"
-                    value={formData.dateFound}
+                    name="date"
+                    value={formData.date}
                     onChange={handleChange}
                     className={`w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                      formErrors.dateFound
-                        ? "border-red-500"
-                        : "border-gray-300"
+                      formErrors.date ? "border-red-500" : "border-gray-300"
                     }`}
                   />
                   {formErrors.dateFound && (
-                    <p className="text-red-500 text-xs">
-                      {formErrors.dateFound}
-                    </p>
+                    <p className="text-red-500 text-xs">{formErrors.date}</p>
                   )}
                 </div>
 
@@ -331,6 +327,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                 />
               </div>
             </div>
+          
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-2 pt-3 sm:pt-4">
