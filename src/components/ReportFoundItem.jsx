@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { toast } from "react-toastify";
 
 const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -100,14 +101,17 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
     for (const key in formData) {
       submitData.append(key, formData[key]);
     }
+    const loadingToast = toast.loading("Submitting form...");
 
     // Submit to backend
-    fetch("/api/lostItems", {
+    fetch("/api/foundItems", {
       method: "POST",
       body: submitData,
     })
       .then((response) => {
         if (response.ok) {
+          toast.dismiss(loadingToast);
+          toast.success("Form submitted successfully!");
           onSubmit(submitData);
           onClose();
         } else {
@@ -123,7 +127,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 bg-[rgba(49,49,49,0.8)] bg-opacity-80 flex justify-center items-start sm:items-center z-1000 p-2 sm:p-4 overflow-y-auto">
-      <div className="relative w-full max-w-[320px] xs:max-w-[380px] sm:max-w-[470px] md:max-w-[520px] lg:max-w-[600px] min-h-fit my-2 sm:my-0">
+      <div className="relative w-full max-w-[320px] xs:max-w-[380px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[450px] min-h-fit my-2 sm:my-0">
         {/* Close button positioned at top right, partially outside */}
         <button
           className="absolute right-0 top-0 z-20 flex items-center justify-center h-8 w-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors -mt-2 -mr-2 rounded-md shadow-lg"
@@ -156,7 +160,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                     name="ownerName"
                     value={formData.ownerName}
                     onChange={handleChange}
-                    className={`w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                    className={`w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
                       formErrors.ownerName
                         ? "border-red-500"
                         : "border-gray-300"
@@ -179,7 +183,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                     name="ownerEmail"
                     value={formData.ownerEmail}
                     onChange={handleChange}
-                    className={`w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                    className={`w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
                       formErrors.ownerEmail
                         ? "border-red-500"
                         : "border-gray-300"
@@ -205,7 +209,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                     name="ownerPhone"
                     value={formData.ownerPhone}
                     onChange={handleChange}
-                    className="w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="0789488837"
                   />
                 </div>
@@ -219,7 +223,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                     name="itemName"
                     value={formData.itemName}
                     onChange={handleChange}
-                    className={`w-full px-1.5 py-1.5 sm:px-2.5 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                    className={`w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
                       formErrors.itemName ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="iPhone"
@@ -333,13 +337,13 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
             <div className="flex flex-col sm:flex-row gap-2 pt-3 sm:pt-4">
               <button
                 onClick={onClose}
-                className="w-full sm:flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 sm:py-2.5 px-4 rounded-lg transition-colors order-2 sm:order-1 text-sm"
+                className="w-full sm:flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-2 sm:order-1 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 sm:py-2.5 px-4 rounded-lg transition-colors order-1 sm:order-2 text-sm"
+                className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-1 sm:order-2 text-sm"
               >
                 Submit Form
               </button>

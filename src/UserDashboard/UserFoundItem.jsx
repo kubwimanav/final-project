@@ -15,142 +15,7 @@ import silverwatch from "../assets/silverwatch.jpg";
 import laptop from "../assets/laptop.jpg";
 import laptopcharger from "../assets/laptopcharger.jpg";
 import Wallet from "../assets/wallet.jpg";
-
-// Sample data for found items
-const foundItemsData = [
-  {
-    id: 1,
-    itemName: "Sliver Watch",
-    category: "Documents",
-    location: "FTSM Building",
-    dateFound: "2023-05-08",
-    description: "Found at Computer Lab 3",
-    foundBy: "John Doe",
-    contact: "john@ukm.edu.my",
-    image: silverwatch,
-  },
-  {
-    id: 2,
-    itemName: "Laptop Charger",
-    category: "Electronics",
-    location: "Library",
-    dateFound: "2023-05-07",
-    description: "Found at Study Table B4",
-    foundBy: "Jane Smith",
-    contact: "jane@ukm.edu.my",
-    image: laptopcharger,
-  },
-  {
-    id: 3,
-    itemName: "Water Bottle",
-    category: "Personal Items",
-    location: "Cafeteria",
-    dateFound: "2023-05-06",
-    description: "Blue colored bottle found on table",
-    foundBy: "Mike Johnson",
-    contact: "mike@ukm.edu.my",
-    image: Wallet,
-  },
-  {
-    id: 4,
-    itemName: "Laptop",
-    category: "Books",
-    location: "Lecture Hall A",
-    dateFound: "2023-05-05",
-    description: "Calculus textbook found under seat",
-    foundBy: "Sarah Lee",
-    contact: "sarah@ukm.edu.my",
-    image: laptop,
-  },
-  {
-    id: 5,
-    itemName: "Car key",
-    category: "Personal Items",
-    location: "Bus Stop",
-    dateFound: "2023-05-04",
-    description: "Black umbrella left at the bus stop",
-    foundBy: "Ahmad Razali",
-    contact: "ahmad@ukm.edu.my",
-    image: carkey,
-  },
-  {
-    id: 6,
-    itemName: "Iphone 17 Pro",
-    category: "Personal Items",
-    location: "Sports Complex",
-    dateFound: "2023-05-03",
-    description: "Found near basketball court",
-    foundBy: "Mei Ling",
-    contact: "mei@ukm.edu.my",
-    image: iphone,
-  },
-  {
-    id: 7,
-    itemName: "Blue Backpack",
-    category: "Electronics",
-    location: "Engineering Building",
-    dateFound: "2023-05-02",
-    description: "Scientific calculator found in Room 201",
-    foundBy: "David Wong",
-    contact: "david@ukm.edu.my",
-    image: bluebag,
-  },
-  {
-    id: 8,
-    itemName: "Wallet",
-    category: "Personal Items",
-    location: "Student Center",
-    dateFound: "2023-05-01",
-    description: "Brown leather wallet with ID inside",
-    foundBy: "Aisha Rahman",
-    contact: "aisha@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 9,
-    itemName: "USB Drive",
-    category: "Electronics",
-    location: "Computer Lab",
-    dateFound: "2023-04-30",
-    description: "16GB black USB drive",
-    foundBy: "Lee Ming",
-    contact: "lee@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 10,
-    itemName: "Notebook",
-    category: "Stationery",
-    location: "Library",
-    dateFound: "2023-04-29",
-    description: "Blue spiral notebook with math notes",
-    foundBy: "Ali Hassan",
-    contact: "ali@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 11,
-    itemName: "Earphones",
-    category: "Electronics",
-    location: "Student Lounge",
-    dateFound: "2023-04-28",
-    description: "White wireless earphones",
-    foundBy: "Jessica Tan",
-    contact: "jessica@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 12,
-    itemName: "Sweater",
-    category: "Clothing",
-    location: "Lecture Hall B",
-    dateFound: "2023-04-27",
-    description: "Gray university hoodie, size M",
-    foundBy: "Raj Patel",
-    contact: "raj@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-];
+import { mycontext } from "../Context/ContextProvider";
 
 // Item Card component for mobile view
 const ItemCard = ({ item, onEdit, onDelete }) => {
@@ -159,7 +24,7 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <img
-            src={item.image}
+            src={item.itemImage}
             alt={item.itemName}
             className="w-12 h-12 rounded-md object-cover mr-4"
           />
@@ -167,7 +32,7 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
             <h3 className="text-sm font-medium text-gray-900">
               {item.itemName}
             </h3>
-            <p className="text-xs text-gray-500">{item.category}</p>
+            <p className="text-xs text-gray-500">{item.ownerName}</p>
           </div>
         </div>
       </div>
@@ -179,21 +44,23 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
         </div>
         <div>
           <p className="text-gray-500">Date Found:</p>
-          <p className="font-medium">{item.dateFound}</p>
+          <p className="font-medium">{item.dateFound || item.date}</p>
         </div>
         <div>
           <p className="text-gray-500">Found By:</p>
-          <p className="font-medium">{item.foundBy}</p>
+          <p className="font-medium">{item.foundBy || item.ownerName}</p>
         </div>
         <div>
           <p className="text-gray-500">Contact:</p>
-          <p className="font-medium truncate">{item.contact}</p>
+          <p className="font-medium truncate">
+            {item.contact || item.ownerPhone}
+          </p>
         </div>
       </div>
 
       <div className="mt-2 text-xs">
         <p className="text-gray-500">Description:</p>
-        <p className="font-medium text-gray-900">{item.description}</p>
+        <p className="font-medium text-gray-900">{item.descrption}</p>
       </div>
 
       <div className="mt-4 flex justify-end space-x-2">
@@ -340,6 +207,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
 // Main component
 export default function UserFoundItem() {
+  // Add debugging and error handling for context
+  const contextData = mycontext();
+  console.log("Context data:", contextData); // Debug log
+
+  const booking = contextData?.booking || [];
+  console.log("Booking data:", booking); // Debug log
+
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -347,18 +221,25 @@ export default function UserFoundItem() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [itemsPerPage, setItemsPerPage] = useState(5); // Changed default to 5
   const [filteredItems, setFilteredItems] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
 
   // Filter items based on search term and category filter
   useEffect(() => {
-    const filtered = foundItemsData.filter((item) => {
+    console.log("Filtering items, booking length:", booking.length); // Debug log
+
+    if (!booking || booking.length === 0) {
+      setFilteredItems([]);
+      return;
+    }
+
+    const filtered = booking.filter((item) => {
       const matchesSearch =
-        item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchTerm.toLowerCase());
+        item.itemName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
         categoryFilter === "All" || item.category === categoryFilter;
@@ -366,15 +247,21 @@ export default function UserFoundItem() {
       return matchesSearch && matchesCategory;
     });
 
+    console.log("Filtered items:", filtered); // Debug log
     setFilteredItems(filtered);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [searchTerm, categoryFilter]);
+  }, [searchTerm, categoryFilter, booking]);
 
   // Calculate displayed items for current page
   useEffect(() => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    setDisplayedItems(filteredItems.slice(indexOfFirstItem, indexOfLastItem));
+    const itemsToDisplay = filteredItems.slice(
+      indexOfFirstItem,
+      indexOfLastItem
+    );
+    console.log("Displayed items:", itemsToDisplay); // Debug log
+    setDisplayedItems(itemsToDisplay);
   }, [filteredItems, currentPage, itemsPerPage]);
 
   // Calculate total pages
@@ -414,25 +301,49 @@ export default function UserFoundItem() {
   // Extract unique categories from data
   const categories = [
     "All",
-    ...new Set(foundItemsData.map((item) => item.category)),
+    ...new Set(
+      booking.filter((item) => item.category).map((item) => item.category)
+    ),
   ];
 
+  // Show loading or error state
+  if (!contextData) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500">Error: Context not available</p>
+          <p className="text-sm text-gray-400 mt-2">
+            Make sure the component is wrapped with the context provider
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!booking || booking.length === 0) {
+    console.log("No booking data available"); // Debug log
+  }
+
   return (
-    <div className=" bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <h1 className="text-xl font-semibold text-gray-900">
             Found Items Administration
           </h1>
+          {/* Debug info */}
+          <p className="text-sm text-gray-500 mt-1">
+            Total items: {booking.length} | Filtered: {filteredItems.length}
+          </p>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="py-2">
-        <div className="mx-auto px-4 sm:px-6 lg:px-0">
+      <main className="py-6">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           {/* Action Buttons */}
-          <div className="mb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               {/* Search */}
               <div className="relative w-full sm:w-64">
@@ -540,7 +451,7 @@ export default function UserFoundItem() {
                           <div className="flex-shrink-0 h-10 w-10">
                             <img
                               className="h-10 w-10 rounded-md object-cover"
-                              src={item.image}
+                              src={item.itemImage}
                               alt={item.itemName}
                             />
                           </div>
@@ -549,14 +460,14 @@ export default function UserFoundItem() {
                               {item.itemName}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {item.category}
+                              {item.ownerName}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {item.description}
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900 max-w-xs truncate">
+                          {item.descrption}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -566,15 +477,15 @@ export default function UserFoundItem() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.dateFound}
+                          {item.dateFound || item.date}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.foundBy}
+                          {item.foundBy || item.ownerEmail}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {item.contact}
+                          {item.contact || item.ownerPhone}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -613,7 +524,19 @@ export default function UserFoundItem() {
           </div>
 
           {/* Empty state */}
-          {filteredItems.length === 0 && (
+          {booking.length === 0 && (
+            <div className="bg-white shadow rounded-lg p-8 text-center">
+              <p className="text-gray-500 text-lg font-medium">
+                No items available
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                Check your context provider or data source
+              </p>
+            </div>
+          )}
+
+          {/* No filtered results */}
+          {booking.length > 0 && filteredItems.length === 0 && (
             <div className="bg-white shadow rounded-lg p-8 text-center">
               <p className="text-gray-500">
                 No items found. Try adjusting your search or filter.
@@ -622,15 +545,15 @@ export default function UserFoundItem() {
           )}
 
           {/* Pagination */}
-          <div className="mt-6">
-            {filteredItems.length > 0 && (
+          {filteredItems.length > 0 && totalPages > 1 && (
+            <div className="mt-6">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
               />
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Results summary */}
           {filteredItems.length > 0 && (

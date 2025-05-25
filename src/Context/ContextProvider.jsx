@@ -10,16 +10,15 @@ export const AppContext = ({ children }) => {
   const [todoss, setTodoss] = useState([]);
 
   
-// date: "2025-05-23T21:44:51.787Z";
-// descrption: "Iyi phone irarenze ndayishaka noaha cyn, woe wayibye yizane hano.";
-// itemImage: "src/middlewares/uploads/81d5b26c92a0a81468b616b269eea158";
-// itemName: "Samsung S12";
-// itemSerial: "IME7384782326328223";
-// location: "Nyamirambo";
-// ownerEmail: "bohqf9f5i@mozmail.com";
-// ownerName: "Vincent";
-// ownerPhone: "0787733262";
-// status: "lost";
+// 'descrption=string' \
+//   -F 'itemSerial=string' \
+//   -F 'itemImage=' \
+//   -F 'ownerEmail=user@example.com' \
+//   -F 'date=2025-05-25T17:39:06.318Z' \
+//   -F 'location=string' \
+//   -F 'ownerPhone=string' \
+//   -F 'itemName=string' \
+//   -F 'ownerName=string'
 
   useEffect(() => {
     const fetchtours = async () => {
@@ -107,35 +106,37 @@ export const AppContext = ({ children }) => {
     fetchcontact();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchbook = async () => {
-  //     try {
-  //       const response = await axiosClient.get(
-  //         `https://holiday-planner-4lnj.onrender.com/api/v1/booking/view`,
-  //         {
-  //           headers: {
-  //             Authorization: "Bearer " + tokenn,
-  //           },
-  //         }
-  //       );
-  //       console.log(response.data);
+  useEffect(() => {
+    const fetchbook = async () => {
+      try {
+        const response = await axiosClient.get(
+          `https://lostandfoundapi.onrender.com/foundItems`,
+          {
+            headers: {
+              Authorization: "Bearer " + tokenn,
+            },
+          }
+        );
+        console.log(response.data);
+        console.log("hhhhhhhhhhhhh");
 
-  //       setBooking(response.data);
-  //     } catch (err) {
-  //       if (err.response) {
-  //         console.log;
-  //         err.response.data;
-  //         console.log;
-  //         err.response.status;
-  //         console.log;
-  //         err.response.headers;
-  //       } else {
-  //         console.log("error: ${err.message}");
-  //       }
-  //     }
-  //   };
-  //   fetchbook();
-  // }, []);
+        setBooking(response.data);
+      } catch (err) {
+        if (err.response) {
+          console.log;
+          err.response.data;
+          console.log;
+          err.response.status;
+          console.log;
+          err.response.headers;
+        } else {
+          console.log("error: ${err.message}");
+        }
+        
+      }
+    };
+    fetchbook();
+  }, []);
 
   // useEffect(() => {
   //   fetchTodos();
@@ -166,6 +167,8 @@ export const AppContext = ({ children }) => {
         setTour,
         contact,
         setContact,
+        booking,
+        setBooking,
       }}
     >
       {children}

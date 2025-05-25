@@ -2,7 +2,7 @@ import React from "react";
 import { Bell, Search, Menu, X } from "lucide-react";
 import { GiRoyalLove } from "react-icons/gi";
 
-import profile from "../assets/profile.jpg"; 
+import profile from "../assets/profl.jpg"; 
 
 const Header = ({ toggleSidebar, isMobile, sidebarOpen }) => {
   return (

@@ -14,6 +14,7 @@ import {
 import {  FaMessage, FaUsers } from "react-icons/fa6";
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdInsertDriveFile } from "react-icons/md";
+import { mycontext } from "../Context/ContextProvider";
 function AdminDashHome() {
   // Sample data for charts
   const revenueData = [
@@ -59,6 +60,7 @@ function AdminDashHome() {
     },
   ];
 
+  const { booking,users,tour,contact } = mycontext();
   // Status badge color configuration
   const getStatusColor = (status) => {
     switch (status) {
@@ -82,7 +84,7 @@ function AdminDashHome() {
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">Users</span>
-              <span className="text-xm font-bold mt-1">5,248</span>
+              <span className="text-xm font-bold mt-1">{ users.length}</span>
               <span className="text-sm text-green-500 mt-1">Total Users</span>
             </div>
             <div className="w-7 h-7 rounded-sm bg-[#EFF6FF] flex items-center justify-center text-blue-400 text-xl">
@@ -94,7 +96,7 @@ function AdminDashHome() {
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">LostItems</span>
-              <span className="text-xm font-bold mt-1">1,427</span>
+              <span className="text-xm font-bold mt-1">{tour.length }</span>
               <span className="text-sm text-green-500 mt-1">
                 Total Lost Items
               </span>
@@ -108,7 +110,7 @@ function AdminDashHome() {
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">FoundItems</span>
-              <span className="text-sm font-bold mt-1">24,583</span>
+              <span className="text-sm font-bold mt-1">{booking.length}</span>
               <span className="text-sm text-green-500 mt-1">
                 Total Found Items
               </span>
@@ -122,7 +124,7 @@ function AdminDashHome() {
           <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-sm text-gray-500">Messages</span>
-              <span className="text-sm font-bold mt-1">24</span>
+              <span className="text-sm font-bold mt-1">{contact.length}</span>
               <span className="text-sm text-green-500 mt-1">
                 Total Messages
               </span>

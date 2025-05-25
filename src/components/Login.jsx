@@ -1,27 +1,60 @@
 import { useState } from "react";
+import axios from "axios"; // Add this import
 import comput from "../assets/image1.jpg";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',  
+    password: '', 
+    
   });
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value, });
   };
-
-  const handleSubmit = (e) => {
+ const navigate = useNavigate();
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
-  };
+    try {
+      console.log(formData)
+      const res = await axios.post(
+        "https://lostandfoundapi.onrender.com/auth/login",
+        formData
+      );
+      alert('login successfully')
+      localStorage.setItem("token", res.data.access_token)
+      localStorage.setItem("loggedUser", JSON.stringify(res.data.user))
+      
+      // Add a small delay to ensure localStorage is set before navigation
+      setTimeout(() => {
+        if (res.data.user.role === 'admin') {
+          navigate('/userdash')
+        } else {
+          navigate('/')
+        }
+      }, 100)
 
-  // Mock Link component since we can't import react-router-dom
+      console.log(res.data);
+    }
+    catch (error) {
+      console.log(error)
+      // Add proper error handling
+      if (error.response && error.response.data && error.response.data.message) {
+        alert(error.response.data.message)
+      } else if (error.message) {
+        alert(error.message)
+      } else {
+        alert('An error occurred during login')
+      }
+    }
+  }
+ 
+  
   const Link = ({ to, children, className }) => (
     <a href={to} className={className}>
       {children}
@@ -57,7 +90,7 @@ export default function Login() {
           <h1 className="text-gray-800 mb-2 text-4xl">Welcome Back!</h1>
           <p className="text-gray-500 mb-8">Please login to continue</p>
 
-          <div className="flex flex-col gap-6 w-full">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
             <div className="w-full">
               <input
                 type="email"
@@ -91,12 +124,12 @@ export default function Login() {
               </Link>
             </div>
             <button
-              onClick={handleSubmit}
+              type="submit"
               className="bg-[#003366] text-white border-none p-3 rounded text-base cursor-pointer transition-all duration-300 hover:bg-[#004c99] mt-4"
             >
               Login
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
