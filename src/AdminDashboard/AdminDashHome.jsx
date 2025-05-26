@@ -15,6 +15,7 @@ import {  FaMessage, FaUsers } from "react-icons/fa6";
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdInsertDriveFile } from "react-icons/md";
 import { mycontext } from "../Context/ContextProvider";
+import { Link } from "react-router-dom";
 function AdminDashHome() {
   // Sample data for charts
   const revenueData = [
@@ -36,32 +37,12 @@ function AdminDashHome() {
   ];
 
   // Sample data for activity table
-  const activities = [
-    {
-      id: 1,
-      username: "johndoe",
-      action: "johndoe@gmail.com",
-      time: "+250788123456",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      username: "sarahsmith",
-      action: "sarahsmith@gmail.com",
-      time: "+250734012345",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      username: "mikebrown",
-      action: "mikebrown@gmail.com",
-      time: "+25078946677",
-      status: "Completed",
-    },
-  ];
+
 
   const { booking,users,tour,contact } = mycontext();
   // Status badge color configuration
+  const firstFiveuser = users?.slice(0, 5);
+
   const getStatusColor = (status) => {
     switch (status) {
       case "Completed":
@@ -201,48 +182,46 @@ function AdminDashHome() {
             <h3 className="text-base font-medium text-gray-800">
               Recent Activity
             </h3>
-            <a href="#" className="text-blue-600 hover:text-blue-800 text-sm">
+            <Link to={'user'} className="text-blue-600 hover:text-blue-800 text-sm">
               View All
-            </a>
+            </Link>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                     Username
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                     Email
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Phone Number
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                    Gender
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Action
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                  Country
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {activities.map((activity) => (
+                {firstFiveuser.map((activity) => (
                   <tr key={activity.id}>
-                    <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500">
                       {activity.username}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                      {activity.action}
+                      {activity.email}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                      {activity.time}
+                      {activity.gender}
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                          activity.status
-                        )}`}
+                        className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-gray-500 "
                       >
-                        {activity.status}
+                        {activity.country}
                       </span>
                     </td>
                   </tr>

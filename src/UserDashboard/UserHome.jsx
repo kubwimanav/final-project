@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { DollarSign, Users, UserCheck, FileText } from "lucide-react";
+import { mycontext } from "../Context/ContextProvider";
 
 function UserHome() {
   // Sample data for charts
@@ -77,6 +78,9 @@ function UserHome() {
  
   ];
 
+  const { booking, contact, tour } = mycontext();
+  const firstFiveBookings = booking?.slice(0, 3);
+
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
@@ -86,7 +90,9 @@ function UserHome() {
           <div className="bg-white rounded-lg shadow p-3 sm:p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-xs sm:text-sm text-gray-500">Users</span>
-              <span className="text-lg sm:text-xl font-bold mt-1">5,248</span>
+              <span className="text-lg sm:text-xl font-bold mt-1">
+                {booking.length}
+              </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
                 +12.5% from last month
               </span>
@@ -118,7 +124,9 @@ function UserHome() {
               <span className="text-xs sm:text-sm text-gray-500">
                 Found Items
               </span>
-              <span className="text-lg sm:text-xl font-bold mt-1">24,583</span>
+              <span className="text-lg sm:text-xl font-bold mt-1">
+                {tour.length}
+              </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
                 12 completed
               </span>
@@ -132,7 +140,9 @@ function UserHome() {
           <div className="bg-white rounded-lg shadow p-3 sm:p-4 flex justify-between items-center">
             <div className="flex flex-col">
               <span className="text-xs sm:text-sm text-gray-500">Messages</span>
-              <span className="text-lg sm:text-xl font-bold mt-1">24</span>
+              <span className="text-lg sm:text-xl font-bold mt-1">
+                {contact.length}
+              </span>
               <span className="text-xs sm:text-sm text-red-500 mt-1">
                 +8.4% from last month
               </span>
@@ -195,7 +205,7 @@ function UserHome() {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" tick={{ fontSize: 12 }} interval={0} />
-                  <YAxis tick={{ fontSize: 12}} />
+                  <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Bar dataKey="users" fill="#20bf6b" />
                 </BarChart>
@@ -257,14 +267,14 @@ function UserHome() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {activities.map((item) => (
+                  {firstFiveBookings.map((item) => (
                     <tr key={item.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
                             <img
                               className="h-10 w-10 rounded-md object-cover"
-                              src={item.image}
+                              src={item.itemImage}
                               alt={item.itemName}
                               onError={(e) => {
                                 e.target.src =
@@ -277,14 +287,14 @@ function UserHome() {
                               {item.itemName}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {item.category}
+                              {item.ownerName}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">
-                          {item.description}
+                          {item.descrption}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -293,16 +303,14 @@ function UserHome() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {item.dateFound}
-                        </div>
+                        <div className="text-sm text-gray-900">{item.date}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.foundBy}
+                          {item.ownerEmail}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {item.contact}
+                          {item.ownerPhone}
                         </div>
                       </td>
                     </tr>
@@ -315,13 +323,13 @@ function UserHome() {
           {/* Mobile Card Layout */}
           <div className="lg:hidden">
             <div className="divide-y divide-gray-200">
-              {activities.map((item) => (
+              {firstFiveBookings.map((item) => (
                 <div key={item.id} className="p-3 sm:p-4 hover:bg-gray-50">
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0">
                       <img
                         className="h-12 w-12 sm:h-14 sm:w-14 rounded-md object-cover"
-                        src={item.image}
+                        src={item.itemImage}
                         alt={item.itemName}
                         onError={(e) => {
                           e.target.src =
@@ -336,27 +344,25 @@ function UserHome() {
                             {item.itemName}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">
-                            {item.category}
+                            {item.ownerName}
                           </p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="text-xs text-gray-500">
-                            {item.dateFound}
-                          </p>
+                          <p className="text-xs text-gray-500">{item.date}</p>
                         </div>
                       </div>
                       <div className="mt-2">
                         <p className="text-sm text-gray-700">
-                          {item.description}
+                          {item.descrption}
                         </p>
                       </div>
                       <div className="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-500 space-y-1 sm:space-y-0">
                         <span>📍 {item.location}</span>
                         <div className="sm:text-right">
                           <span className="block text-gray-900 font-medium">
-                            {item.foundBy}
+                            {item.ownerEmail}
                           </span>
-                          <span className="block">{item.contact}</span>
+                          <span className="block">{item.ownerPhone}</span>
                         </div>
                       </div>
                     </div>

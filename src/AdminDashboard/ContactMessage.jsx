@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Trash2,
   Send,
@@ -10,101 +10,35 @@ import {
   MoreHorizontal,
   Menu,
 } from "lucide-react";
-
-// Sample data for messages
-const initialMessages = [
-  {
-    id: 1,
-    name: "Nurul Ahmad",
-    email: "nurul@ukm.edu.my",
-    description:
-      "I found a student ID card near the library with the name 'Muhammad Firdaus'",
-    status: "unread",
-  },
-  {
-    id: 2,
-    name: "Sarah Tan",
-    email: "sarah.tan@siswa.ukm.edu.my",
-    description:
-      "I lost my water bottle in the Faculty of Technology and Information Science building yesterday",
-    status: "pending",
-  },
-  {
-    id: 3,
-    name: "Ahmad Razak",
-    email: "ahmad.razak@ukm.edu.my",
-    description:
-      "Found a calculator in Lecture Hall A. It's a scientific calculator Texas Instruments",
-    status: "resolved",
-  },
-  {
-    id: 4,
-    name: "Mei Ling",
-    email: "mei.ling@siswa.ukm.edu.my",
-    description:
-      "Lost my student ID card somewhere in the cafeteria. My name is Mei Ling, matric number A175523",
-    status: "pending",
-  },
-  {
-    id: 5,
-    name: "Dr. Kumar",
-    email: "kumar@ukm.edu.my",
-    description:
-      "Found a laptop charger in the staff room. It appears to be for a Lenovo ThinkPad",
-    status: "resolved",
-  },
-
-  {
-    id: 1,
-    name: "Nurul Ahmad",
-    email: "nurul@ukm.edu.my",
-    description:
-      "I found a student ID card near the library with the name 'Muhammad Firdaus'",
-    status: "unread",
-  },
-  {
-    id: 2,
-    name: "Sarah Tan",
-    email: "sarah.tan@siswa.ukm.edu.my",
-    description:
-      "I lost my water bottle in the Faculty of Technology and Information Science building yesterday",
-    status: "pending",
-  },
-  {
-    id: 3,
-    name: "Ahmad Razak",
-    email: "ahmad.razak@ukm.edu.my",
-    description:
-      "Found a calculator in Lecture Hall A. It's a scientific calculator Texas Instruments",
-    status: "resolved",
-  },
-  {
-    id: 4,
-    name: "Mei Ling",
-    email: "mei.ling@siswa.ukm.edu.my",
-    description:
-      "Lost my student ID card somewhere in the cafeteria. My name is Mei Ling, matric number A175523",
-    status: "pending",
-  },
-  {
-    id: 5,
-    name: "Dr. Kumar",
-    email: "kumar@ukm.edu.my",
-    description:
-      "Found a laptop charger in the staff room. It appears to be for a Lenovo ThinkPad",
-    status: "resolved",
-  },
-];
+import { mycontext } from "../Context/ContextProvider";
 
 export default function ContactMessagesPage() {
-  const [messages, setMessages] = useState(initialMessages);
+  // Get context data with error handling
+  const contextData = mycontext();
+  const { contact } = contextData || {};
+
+  const [messages, setMessages] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const messagesPerPage = 5;
+  const messagesPerPage = 4;
+
+  // Update messages when context data changes
+  useEffect(() => {
+    if (contact && Array.isArray(contact)) {
+      // Ensure each message has the required properties
+      const processedMessages = contact.map((message) => ({
+        ...message,
+        time: message.time || "Recently",
+        description:
+          message.description || message.message || "No description available",
+      }));
+      setMessages(processedMessages);
+    }
+  }, [contact]);
 
   // Delete message handler
   const handleDelete = (id) => {
@@ -129,9 +63,11 @@ export default function ContactMessagesPage() {
   // Filter messages based on search term and status filter
   const filteredMessages = messages.filter((message) => {
     const matchesSearch =
-      message.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      message.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      message.description.toLowerCase().includes(searchTerm.toLowerCase());
+      (message.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (message.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (message.description || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
     const matchesFilter =
       filterStatus === "all" || message.status === filterStatus;
@@ -155,8 +91,20 @@ export default function ContactMessagesPage() {
     resolved: "bg-green-100 text-green-800",
   };
 
+  // Show loading state if context is not ready
+  if (!contextData) {
+    return (
+      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading messages...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50  rounded-2xl">
       <div className="max-w-7xl mx-auto py-4 px-2 sm:px-4 lg:px-6">
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {/* Header */}
@@ -252,24 +200,28 @@ export default function ContactMessagesPage() {
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <h3 className="font-medium text-gray-900">
-                          {message.name}
+                          {message.name || "Unknown"}
                         </h3>
-                        <p className="text-xs text-gray-500">{message.email}</p>
+                        <p className="text-xs text-gray-500">
+                          {message.email || "No email"}
+                        </p>
                       </div>
                       <span
                         className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          statusColors[message.status]
+                          statusColors[message.status] || statusColors.unread
                         }`}
                       >
-                        {message.status.charAt(0).toUpperCase() +
-                          message.status.slice(1)}
+                        {(message.status || "unread").charAt(0).toUpperCase() +
+                          (message.status || "unread").slice(1)}
                       </span>
                     </div>
                     <p className="text-sm text-gray-700 mb-2 line-clamp-2">
-                      {message.description}
+                      {message.description || "No description available"}
                     </p>
                     <div className="flex justify-between items-center">
-                      <p className="text-xs text-gray-500">{message.time}</p>
+                      <p className="text-xs text-gray-500">
+                        {message.time || "Recently"}
+                      </p>
                       <div className="flex space-x-2">
                         <button
                           className="text-blue-600 hover:text-blue-900 p-1"
@@ -298,7 +250,9 @@ export default function ContactMessagesPage() {
               </div>
             ) : (
               <div className="p-12 text-center text-gray-500">
-                No messages found matching your criteria
+                {messages.length === 0
+                  ? "No messages available"
+                  : "No messages found matching your criteria"}
               </div>
             )}
           </div>
@@ -314,11 +268,12 @@ export default function ContactMessagesPage() {
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                     Email
                   </th>
+
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Description
+                    Subject
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                    Description
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -331,21 +286,27 @@ export default function ContactMessagesPage() {
                     <tr key={message.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
-                          {message.name}
+                          {message.name || "Unknown"}
                         </div>
                         <div className="text-xs text-gray-500 md:hidden">
-                          {message.email}
+                          {message.email || "No email"}
                         </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap hidden lg:table-cell">
                         <div className="text-sm text-gray-500">
-                          {message.email}
+                          {message.email || "No email"}
                         </div>
+                      </td>
+
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs font-semibold rounded-full">
+                          {message.subject}
+                        </span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="text-sm text-gray-900 flex items-center">
                           <span className="line-clamp-1 xl:line-clamp-2">
-                            {message.description}
+                            {message.description || "No description available"}
                           </span>
                           <button
                             className="ml-1 flex-shrink-0 text-xs text-blue-600 hover:text-blue-800"
@@ -355,16 +316,6 @@ export default function ContactMessagesPage() {
                             <MoreHorizontal size={16} />
                           </button>
                         </div>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <span
-                          className={`px-2 py-1 inline-flex text-xs font-semibold rounded-full ${
-                            statusColors[message.status]
-                          }`}
-                        >
-                          {message.status.charAt(0).toUpperCase() +
-                            message.status.slice(1)}
-                        </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
@@ -391,7 +342,9 @@ export default function ContactMessagesPage() {
                       colSpan="5"
                       className="px-4 py-8 text-center text-gray-500"
                     >
-                      No messages found matching your criteria
+                      {messages.length === 0
+                        ? "No messages available"
+                        : "No messages found matching your criteria"}
                     </td>
                   </tr>
                 )}
@@ -491,13 +444,14 @@ export default function ContactMessagesPage() {
                 <div className="mb-3">
                   <p className="text-sm font-medium text-gray-500">From</p>
                   <p className="text-sm text-gray-900">
-                    {selectedMessage.name} ({selectedMessage.email})
+                    {selectedMessage.name || "Unknown"} (
+                    {selectedMessage.email || "No email"})
                   </p>
                 </div>
                 <div className="mb-3">
                   <p className="text-sm font-medium text-gray-500">Time</p>
                   <p className="text-sm text-gray-900">
-                    {selectedMessage.time}
+                    {selectedMessage.time || "Recently"}
                   </p>
                 </div>
                 <div className="mb-3">
@@ -505,15 +459,18 @@ export default function ContactMessagesPage() {
                   <div className="flex items-center space-x-2 mt-1">
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        statusColors[selectedMessage.status]
+                        statusColors[selectedMessage.status] ||
+                        statusColors.unread
                       }`}
                     >
-                      {selectedMessage.status.charAt(0).toUpperCase() +
-                        selectedMessage.status.slice(1)}
+                      {(selectedMessage.status || "unread")
+                        .charAt(0)
+                        .toUpperCase() +
+                        (selectedMessage.status || "unread").slice(1)}
                     </span>
                     <select
                       className="text-xs border border-gray-300 rounded-md px-2 py-1"
-                      value={selectedMessage.status}
+                      value={selectedMessage.status || "unread"}
                       onChange={(e) =>
                         handleStatusChange(selectedMessage.id, e.target.value)
                       }
@@ -527,7 +484,7 @@ export default function ContactMessagesPage() {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Message</p>
                   <p className="text-sm text-gray-900 mt-1">
-                    {selectedMessage.description}
+                    {selectedMessage.description || "No description available"}
                   </p>
                 </div>
               </div>

@@ -8,6 +8,7 @@ const Link = ({ to, children, className }) => (
 );
 
 export default function Signup() {
+  const svgBackground = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2378b0a0'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E")`;
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -143,8 +144,11 @@ export default function Signup() {
         }}
       >
         <div className="mb-8 md:mb-10">
-          <div className="w-[70px] h-[80px] mx-auto mb-4 bg-white rounded-full flex items-center justify-center relative">
-            <div className="w-[60px] h-[60px] bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%2378b0a0%27%3E%3Cpath d=%27M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z%27/%3E%3C/svg%3E')] bg-contain bg-no-repeat bg-center"></div>
+          <div className="w-[70px] h-[80px] mx-auto mb-4 rounded-full flex items-center justify-center relative">
+            <div
+              className="w-[60px] h-[60px]  bg-contain bg-no-repeat bg-center"
+              style={{ backgroundImage: svgBackground }}
+            ></div>
           </div>
           <h3 className="text-[22px] font-medium">
             Digital Lost and Found System
@@ -336,7 +340,6 @@ export default function Signup() {
                     strokeLinejoin="round"
                     strokeWidth={2}
                     d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
-            
                   />
                 ) : (
                   <path

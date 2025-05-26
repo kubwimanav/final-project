@@ -58,11 +58,10 @@ export default function UserLostItem() {
     // Add your delete logic here
   };
   const dates = tour;
-
+   
 
   return (
     <div className="w-full max-w-7xl mx-auto p-3 sm:p-6 bg-white shadow-lg rounded-lg">
-
       <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-2">
         Lost Items Dashboard
       </h1>
@@ -165,7 +164,7 @@ export default function UserLostItem() {
                   </td>
                   <td className="px-4 py-4">
                     <div className="text-sm text-gray-900 max-w-xs">
-                      {item.description}
+                      {item.descrption}
                     </div>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
@@ -236,15 +235,15 @@ export default function UserLostItem() {
                             {item.itemName}
                           </h3>
                           <p className="text-sm text-gray-500">
-                            {item.category}
+                            {item.ownerEmail}
                           </p>
                         </div>
                         <p className="text-sm text-gray-500 ml-2">
-                          {item.dateFound}
+                          {item.date}
                         </p>
                       </div>
                       <p className="text-sm text-gray-700 mb-2">
-                        {item.description}
+                        {item.descrption}
                       </p>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
@@ -255,7 +254,7 @@ export default function UserLostItem() {
                           <span className="text-gray-500">Found by:</span>
                           <p className="text-gray-900">{item.foundBy}</p>
                           <p className="text-gray-500 text-xs">
-                            {item.contact}
+                            {item.ownerPhone}
                           </p>
                         </div>
                       </div>
@@ -302,7 +301,7 @@ export default function UserLostItem() {
                       alt={item.itemName}
                       onError={(e) => {
                         e.target.src =
-                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xOSAxOUMyNi4xODA2IDE5IDMyIDI0LjgxOTQgMzIgMzJDMzIgMzkuMTgwNiAyNi4xODA2IDQ1IDE5IDQ1QzExLjgxOTQgNDUgNiAzOS4xODA2IDYgMzJDNiAyNC44MTk0IDExLjgxOTQgMTkgMTkgMTlaIiBmaWxsPSIjOUM5Qzk3Ii8+CjxwYXRoIGQ9Ik0yNS42IDI1LjZWMjcuMkgyNy4yVjI4LjhIMjUuNlYzMC40SDI0LjhWMjguOEgyMi44VjI3LjJIMjQuOFYyNS42SDI1LjZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=";
+                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xOSAxOUMyNi4xODA2IDE5IDMyIDI0LjgxOTQgMzIgMzJDMzIgMzkuMTgwNiAyNi4xODA2IDQ1IDE5IDQ1QzExLjgxOTQgNDUgNiAzOS4xODA2IDYgMzJDNiAyNC44MTk0IDExLjgxOTQgMTkMTkgMTlaIiBmaWxsPSIjOUM5Qzk3Ii8+CjxwYXRoIGQ9Ik0yNS42IDI1LjZWMjcuMkgyNy4yVjI4LjhIMjUuNlYzMC40SDI0LjhWMjguOEgyMi44VjI3LjJIMjQuOFYyNS42SDI1LjZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=";
                       }}
                     />
                   </div>
@@ -313,7 +312,7 @@ export default function UserLostItem() {
                           {item.itemName}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {item.category}
+                          {item.ownerEmail}
                         </p>
                       </div>
                       <div className="flex items-center space-x-1">
@@ -334,20 +333,18 @@ export default function UserLostItem() {
                       </div>
                     </div>
                     <div className="mt-2">
-                      <p className="text-xs text-gray-700">
-                        {item.description}
-                      </p>
+                      <p className="text-xs text-gray-700">{item.descrption}</p>
                     </div>
                     <div className="mt-2 flex flex-col space-y-1 text-xs text-gray-500">
                       <div className="flex justify-between">
                         <span>📍 {item.location}</span>
-                        <span>{item.dateFound}</span>
+                        <span>{item.date}</span>
                       </div>
                       <div>
                         <span className="text-gray-900 font-medium">
-                          {item.foundBy}
+                          {item.ownerPhone}
                         </span>
-                        <span className="ml-2">{item.contact}</span>
+                        <span className="ml-2">{item.descrption}</span>
                       </div>
                     </div>
                   </div>

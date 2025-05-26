@@ -17,142 +17,9 @@ import silverwatch from "../assets/silverwatch.jpg";
 import laptop from "../assets/laptop.jpg";
 import laptopcharger from "../assets/laptopcharger.jpg";
 import Wallet from "../assets/wallet.jpg";
+import { mycontext } from "../Context/ContextProvider";
 
 // Sample data for found items
-const foundItemsData = [
-  {
-    id: 1,
-    itemName: "Sliver Watch",
-    category: "Documents",
-    location: "FTSM Building",
-    dateFound: "2023-05-08",
-    description: "Lost at Computer Lab 3",
-    foundBy: "Nicole Adams",
-    contact: "nadams@gmail.com",
-    image: silverwatch,
-  },
-  {
-    id: 2,
-    itemName: "Laptop Charger",
-    category: "Electronics",
-    location: "Sports Field",
-    dateFound: "2023-05-07",
-    description: "Red baseball cap with team logo",
-    foundBy: "Ryan Johnson",
-    contact: "rjohnson@gmail.com",
-    image: laptopcharger,
-  },
-  {
-    id: 3,
-    itemName: "Water Bottle",
-    category: "Personal Items",
-    location: "Cafeteria",
-    dateFound: "2023-05-06",
-    description: "Blue colored bottle found on table",
-    foundBy: "Mike Johnson",
-    contact: "mike@ukm.edu.my",
-    image: Wallet,
-  },
-  {
-    id: 4,
-    itemName: "Laptop",
-    category: "Books",
-    location: "Lecture Hall A",
-    dateFound: "2023-05-05",
-    description: "Calculus textbook found under seat",
-    foundBy: "Sarah Lee",
-    contact: "sarah@ukm.edu.my",
-    image: laptop,
-  },
-  {
-    id: 5,
-    itemName: "Car key",
-    category: "Personal Items",
-    location: "Bus Stop",
-    dateFound: "2023-05-04",
-    description: "Black umbrella left at the bus stop",
-    foundBy: "Ahmad Razali",
-    contact: "ahmad@ukm.edu.my",
-    image: carkey,
-  },
-  {
-    id: 6,
-    itemName: "Iphone 17 Pro",
-    category: "Personal Items",
-    location: "Sports Complex",
-    dateFound: "2023-05-03",
-    description: "Found near basketball court",
-    foundBy: "Mei Ling",
-    contact: "mei@ukm.edu.my",
-    image: iphone,
-  },
-  {
-    id: 7,
-    itemName: "Blue Backpack",
-    category: "Electronics",
-    location: "Engineering Building",
-    dateFound: "2023-05-02",
-    description: "Scientific calculator found in Room 201",
-    foundBy: "David Wong",
-    contact: "david@ukm.edu.my",
-    image: bluebag,
-  },
-  {
-    id: 8,
-    itemName: "Wallet",
-    category: "Personal Items",
-    location: "Student Center",
-    dateFound: "2023-05-01",
-    description: "Brown leather wallet with ID inside",
-    foundBy: "Aisha Rahman",
-    contact: "aisha@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 9,
-    itemName: "USB Drive",
-    category: "Electronics",
-    location: "Computer Lab",
-    dateFound: "2023-04-30",
-    description: "16GB black USB drive",
-    foundBy: "Lee Ming",
-    contact: "lee@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 10,
-    itemName: "Notebook",
-    category: "Stationery",
-    location: "Library",
-    dateFound: "2023-04-29",
-    description: "Blue spiral notebook with math notes",
-    foundBy: "Ali Hassan",
-    contact: "ali@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 11,
-    itemName: "Earphones",
-    category: "Electronics",
-    location: "Student Lounge",
-    dateFound: "2023-04-28",
-    description: "White wireless earphones",
-    foundBy: "Jessica Tan",
-    contact: "jessica@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-  {
-    id: 12,
-    itemName: "Sweater",
-    category: "Clothing",
-    location: "Lecture Hall B",
-    dateFound: "2023-04-27",
-    description: "Gray university hoodie, size M",
-    foundBy: "Raj Patel",
-    contact: "raj@ukm.edu.my",
-    image: "/api/placeholder/80/80",
-  },
-];
 
 // Item Card component for mobile view
 const ItemCard = ({ item, onEdit, onDelete }) => {
@@ -161,7 +28,7 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <img
-            src={item.image}
+            src={item.itemImage}
             alt={item.itemName}
             className="w-12 h-12 rounded-md object-cover mr-4"
           />
@@ -169,7 +36,7 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
             <h3 className="text-sm font-medium text-gray-900">
               {item.itemName}
             </h3>
-            <p className="text-xs text-gray-500">{item.category}</p>
+            <p className="text-xs text-gray-500">{item.ownerName}</p>
           </div>
         </div>
       </div>
@@ -180,22 +47,22 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
           <p className="font-medium">{item.location}</p>
         </div>
         <div>
-          <p className="text-gray-500">Date Found:</p>
-          <p className="font-medium">{item.dateFound}</p>
+          <p className="text-gray-500">SerialNumber:</p>
+          <p className="font-medium">{item.itemSerial}</p>
         </div>
         <div>
           <p className="text-gray-500">Found By:</p>
-          <p className="font-medium">{item.foundBy}</p>
+          <p className="font-medium">{item.ownerEmail}</p>
         </div>
         <div>
           <p className="text-gray-500">Contact:</p>
-          <p className="font-medium truncate">{item.contact}</p>
+          <p className="font-medium truncate">{item.ownerPhone}</p>
         </div>
       </div>
 
       <div className="mt-2 text-xs">
         <p className="text-gray-500">Description:</p>
-        <p className="font-medium text-gray-900">{item.description}</p>
+        <p className="font-medium text-gray-900">{item.descrption}</p>
       </div>
 
       <div className="mt-4 flex justify-end space-x-2">
@@ -342,6 +209,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
 // Main component
 export default function LostitemDash() {
+  const { tour } = mycontext();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -349,13 +218,13 @@ export default function LostitemDash() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const [filteredItems, setFilteredItems] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
 
   // Filter items based on search term and category filter
   useEffect(() => {
-    const filtered = foundItemsData.filter((item) => {
+    const filtered = tour.filter((item) => {
       const matchesSearch =
         item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -416,14 +285,14 @@ export default function LostitemDash() {
   // Extract unique categories from data
   const categories = [
     "All",
-    ...new Set(foundItemsData.map((item) => item.category)),
+    ...new Set(tour.map((item) => item.category)),
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className=" bg-gray-100">
       {/* Header */}
       <header>
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <h1 className="text-xl font-semibold text-gray-900">
             All Lost Items In Our System
           </h1>
@@ -431,10 +300,10 @@ export default function LostitemDash() {
       </header>
 
       {/* Main content */}
-      <main className="py-6">
+      <main className="py-3">
         <div className="mx-auto px-4 sm:px-6 lg:px-1">
           {/* Action Buttons */}
-          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+          <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               {/* Search */}
               <div className="relative w-full sm:w-64">
@@ -518,7 +387,7 @@ export default function LostitemDash() {
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Date Found
+                      SerialNumber
                     </th>
                     <th
                       scope="col"
@@ -542,7 +411,7 @@ export default function LostitemDash() {
                           <div className="flex-shrink-0 h-10 w-10">
                             <img
                               className="h-10 w-10 rounded-md object-cover"
-                              src={item.image}
+                              src={item.itemImage}
                               alt={item.itemName}
                             />
                           </div>
@@ -551,14 +420,14 @@ export default function LostitemDash() {
                               {item.itemName}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {item.category}
+                              {item.ownerName}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.description}
+                          {item.descrption}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -568,15 +437,15 @@ export default function LostitemDash() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.dateFound}
+                          {item.itemSerial}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.foundBy}
+                          {item.ownerEmail}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {item.contact}
+                          {item.ownerPhone}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

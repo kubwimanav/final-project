@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import profile from "../assets/profile.jpg";
+import profile from "../assets/profl.jpg";
 
 export default function SettingsPage() {
   const [publicProfile, setPublicProfile] = useState(false);

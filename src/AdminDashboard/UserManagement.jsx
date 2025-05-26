@@ -1,111 +1,31 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { mycontext } from "../Context/ContextProvider";
 
 export default function UserManagement() {
-  // Sample user data - in a real app, this would come from an API
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "+1 (555) 123-4567",
-      initials: "J",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "+1 (555) 987-6543",
-      initials: "J",
-    },
-    {
-      id: 3,
-      name: "Robert Johnson",
-      email: "robert.j@example.com",
-      phoneNumber: "+1 (555) 234-5678",
-      initials: "R",
-    },
-    {
-      id: 4,
-      name: "Sarah Williams",
-      email: "sarah.w@example.com",
-      phoneNumber: "+1 (555) 345-6789",
-      initials: "S",
-    },
-    {
-      id: 5,
-      name: "Michael Brown",
-      email: "michael.b@example.com",
-      phoneNumber: "+1 (555) 456-7890",
-      initials: "M",
-    },
-    {
-      id: 6,
-      name: "Emily Davis",
-      email: "emily.d@example.com",
-      phoneNumber: "+1 (555) 567-8901",
-      initials: "E",
-    },
-    {
-      id: 7,
-      name: "David Miller",
-      email: "david.m@example.com",
-      phoneNumber: "+1 (555) 678-9012",
-      initials: "D",
-    },
-    {
-      id: 8,
-      name: "Lisa Wilson",
-      email: "lisa.w@example.com",
-      phoneNumber: "+1 (555) 789-0123",
-      initials: "L",
-    },
-    {
-      id: 9,
-      name: "Kevin Jones",
-      email: "kevin.j@example.com",
-      phoneNumber: "+1 (555) 890-1234",
-      initials: "K",
-    },
-    {
-      id: 10,
-      name: "Amanda Taylor",
-      email: "amanda.t@example.com",
-      phoneNumber: "+1 (555) 901-2345",
-      initials: "A",
-    },
-    {
-      id: 11,
-      name: "Brian Clark",
-      email: "brian.c@example.com",
-      phoneNumber: "+1 (555) 012-3456",
-      initials: "B",
-    },
-    {
-      id: 12,
-      name: "Nicole Lewis",
-      email: "nicole.l@example.com",
-      phoneNumber: "+1 (555) 123-4567",
-      initials: "N",
-    },
-  ]);
+  // Fix: Destructure users and setUsers from context
+  const { users, setUsers } = mycontext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const usersPerPage = 3;
 
   // Filter users based on search term
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.phoneNumber.includes(searchTerm)
-  );
+  const filteredUsers = Array.isArray(users)
+    ? users.filter(
+        (user) =>
+          user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user?.phoneNumber?.includes(searchTerm)
+      )
+    : [];
 
   // Delete user handler
   const handleDeleteUser = (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      setUsers(users.filter((user) => user.id !== userId));
+      if (Array.isArray(users) && typeof setUsers === "function") {
+        setUsers(users.filter((user) => user.id !== userId));
+      }
     }
   };
 
@@ -189,15 +109,21 @@ export default function UserManagement() {
 
     return pageNumbers;
   };
+  let i = 1;
+  let b = 1;
+
+  // Debug: Add console log to check data
+  console.log("Users data:", users);
+  console.log("Filtered users:", filteredUsers);
 
   return (
-    <div className="w-full px-2 sm:px-4 py-4 sm:py-8 mx-auto max-w-7xl">
-      <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+    <div className="w-full px-2 sm:px-4 py-4 sm:py-4 mx-auto max-w-7xl">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-3">
         User Management
       </h1>
 
       {/* Search and controls */}
-      <div className="flex flex-col md:flex-row md:justify-between mb-4 gap-2 sm:gap-4">
+      <div className="flex flex-col md:flex-row md:justify-between mb-2 gap-2 sm:gap-2">
         <div className="relative w-full md:w-auto">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <Search className="w-4 h-4 text-gray-500" />
@@ -272,23 +198,23 @@ export default function UserManagement() {
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
                     <div className="text-xs sm:text-sm text-gray-900">
-                      {user.id}
+                      {b++}
                     </div>
                   </td>
                   <td className="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-2 sm:mr-3 text-xs sm:text-sm">
-                        {user.initials}
+                        {i++}
                       </div>
                       <div className="text-xs sm:text-sm font-medium text-gray-900">
                         <div className="truncate max-w-24 sm:max-w-none">
-                          {user.name}
+                          {user.username}
                         </div>
                         <div className="md:hidden text-xs text-gray-500 mt-1 truncate max-w-24 sm:max-w-none">
                           {user.email}
                         </div>
                         <div className="lg:hidden text-xs text-gray-500 mt-1 md:block truncate max-w-24 sm:max-w-none">
-                          {user.phoneNumber}
+                          {user.country}
                         </div>
                       </div>
                     </div>
@@ -299,7 +225,7 @@ export default function UserManagement() {
                     </div>
                   </td>
                   <td className="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden lg:table-cell">
-                    {user.phoneNumber}
+                    {user.country}
                   </td>
                   <td className="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
