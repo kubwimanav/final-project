@@ -41,7 +41,7 @@ function AdminDashHome() {
 
   const { booking,users,tour,contact } = mycontext();
   // Status badge color configuration
-  const firstFiveuser = users?.slice(0, 5);
+  const firstFiveuser = users?.slice(0, 3);
 
   const getStatusColor = (status) => {
     switch (status) {

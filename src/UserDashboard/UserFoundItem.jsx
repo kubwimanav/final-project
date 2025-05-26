@@ -7,15 +7,385 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
+  X,
+  Save,
+  Upload,
 } from "lucide-react";
-import bluebag from "../assets/bluebag.jpg";
-import iphone from "../assets/iphone.jpg";
-import carkey from "../assets/carkeys.jpg";
-import silverwatch from "../assets/silverwatch.jpg";
-import laptop from "../assets/laptop.jpg";
-import laptopcharger from "../assets/laptopcharger.jpg";
-import Wallet from "../assets/wallet.jpg";
+
 import { mycontext } from "../Context/ContextProvider";
+
+// Edit Modal Component
+const EditModal = ({ item, isOpen, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    itemName: "",
+    ownerName: "",
+    ownerEmail: "",
+    ownerPhone: "",
+    location: "",
+    dateFound: "",
+    foundBy: "",
+    contact: "",
+    descrption: "",
+    category: "",
+    itemImage: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Initialize form data when item changes
+  useEffect(() => {
+    if (item) {
+      setFormData({
+        itemName: item.itemName || "",
+        ownerName: item.ownerName || "",
+        ownerEmail: item.ownerEmail || "",
+        ownerPhone: item.ownerPhone || "",
+        location: item.location || "",
+        dateFound: item.dateFound || item.date || "",
+        foundBy: item.foundBy || "",
+        contact: item.contact || "",
+        descrption: item.descrption || "",
+        category: item.category || "",
+        itemImage: item.itemImage || "",
+      });
+      setErrors({});
+    }
+  }, [item]);
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  // Handle file upload (placeholder - you'll need to implement actual file upload)
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // In a real app, you would upload the file to a server
+      // For now, we'll just create a local URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFormData((prev) => ({
+          ...prev,
+          itemImage: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Validate form
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.itemName.trim()) {
+      newErrors.itemName = "Item name is required";
+    }
+
+    if (!formData.location.trim()) {
+      newErrors.location = "Location is required";
+    }
+
+    if (!formData.dateFound.trim()) {
+      newErrors.dateFound = "Date found is required";
+    }
+
+    if (!formData.foundBy.trim()) {
+      newErrors.foundBy = "Found by field is required";
+    }
+
+    if (!formData.contact.trim()) {
+      newErrors.contact = "Contact information is required";
+    }
+
+    if (!formData.descrption.trim()) {
+      newErrors.descrption = "Description is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Call the onSave callback with updated data
+      onSave({
+        ...item,
+        ...formData,
+      });
+
+      // Close modal
+      onClose();
+    } catch (error) {
+      console.error("Error saving item:", error);
+      // Handle error (show notification, etc.)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Reset form and close modal
+  const handleClose = () => {
+    setFormData({
+      itemName: "",
+      ownerName: "",
+      ownerEmail: "",
+      ownerPhone: "",
+      location: "",
+      dateFound: "",
+      foundBy: "",
+      contact: "",
+      descrption: "",
+      category: "",
+      itemImage: "",
+    });
+    setErrors({});
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-[rgba(49,49,49,0.8)] bg-opacity-80 flex justify-center items-start sm:items-center z-1000 p-2 sm:p-2 overflow-y-auto">
+      <div className=" relative flex items-center justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        {/* Background overlay */}
+
+        {/* Modal */}
+        <div className="inline-block align-bottom bg-amber-200 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+          {/* Header */}
+          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
+                Edit Found Item
+              </h3>
+              <button
+                onClick={handleClose}
+                className="absolute right-0 top-5 z-2 flex items-center justify-center h-8 w-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors  rounded-md shadow-lg"
+              >
+                <X size={24} />
+              </button>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="bg-white">
+            <div className="px-4 py-5 sm:p-6 max-h-90 overflow-y-auto">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {/* Item Image */}
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Item Image
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    {formData.itemImage && (
+                      <img
+                        src={formData.itemImage}
+                        alt="Item preview"
+                        className="h-13 w-13 rounded-md object-cover"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Item Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Item Name
+                  </label>
+                  <input
+                    type="text"
+                    name="itemName"
+                    value={formData.itemName}
+                    onChange={handleInputChange}
+                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.itemName ? "border-red-300" : "border-gray-300"
+                    }`}
+                    placeholder="Enter item name"
+                  />
+                  {errors.itemName && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.itemName}
+                    </p>
+                  )}
+                </div>
+
+                {/* Owner Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Owner Name
+                  </label>
+                  <input
+                    type="text"
+                    name="ownerName"
+                    value={formData.ownerName}
+                    onChange={handleInputChange}
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter owner name"
+                  />
+                </div>
+
+                {/* Owner Email */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Owner Email
+                  </label>
+                  <input
+                    type="email"
+                    name="ownerEmail"
+                    value={formData.ownerEmail}
+                    onChange={handleInputChange}
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter owner email"
+                  />
+                </div>
+
+                {/* Owner Phone */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Owner Phone
+                  </label>
+                  <input
+                    type="tel"
+                    name="ownerPhone"
+                    value={formData.ownerPhone}
+                    onChange={handleInputChange}
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter owner phone"
+                  />
+                </div>
+
+                {/* Location */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Location Found
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.location ? "border-red-300" : "border-gray-300"
+                    }`}
+                    placeholder="Enter location where item was found"
+                  />
+                  {errors.location && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.location}
+                    </p>
+                  )}
+                </div>
+
+                {/* Date Found */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Date Found
+                  </label>
+                  <input
+                    type="date"
+                    name="dateFound"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.dateFound ? "border-red-300" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.dateFound && (
+                    <p className="mt-1 text-sm text-red-600">{errors.date}</p>
+                  )}
+                </div>
+
+                {/* Description */}
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    name="descrption"
+                    value={formData.descrption}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.descrption ? "border-red-300" : "border-gray-300"
+                    }`}
+                    placeholder="Enter detailed description of the item"
+                  />
+                  {errors.descrption && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.descrption}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save size={16} className="mr-2" />
+                    Save Changes
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={handleClose}
+                disabled={isLoading}
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Item Card component for mobile view
 const ItemCard = ({ item, onEdit, onDelete }) => {
@@ -65,7 +435,7 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
 
       <div className="mt-4 flex justify-end space-x-2">
         <button
-          onClick={() => onEdit(item.id)}
+          onClick={() => onEdit(item)}
           className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
         >
           <Edit size={16} />
@@ -219,6 +589,10 @@ export default function UserFoundItem() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
+  // Edit modal state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState(null);
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3); // Changed default to 5
@@ -286,10 +660,23 @@ export default function UserFoundItem() {
     setItemToDelete(null);
   };
 
-  // Handle edit
-  const handleEdit = (itemId) => {
-    // In a real app, you would navigate to the edit page or show an edit modal
-    console.log("Editing item:", itemId);
+  // Handle edit - updated to show modal
+  const handleEdit = (item) => {
+    setItemToEdit(item);
+    setShowEditModal(true);
+  };
+
+  // Handle save from edit modal
+  const handleSaveEdit = (updatedItem) => {
+    // In a real app, you would update the item in the database here
+    console.log("Saving updated item:", updatedItem);
+
+    // For now, just close the modal
+    setShowEditModal(false);
+    setItemToEdit(null);
+
+    // You could also update the local state here if you're managing it locally
+    // or trigger a refetch of data from your context/API
   };
 
   // Handle items per page change
@@ -491,7 +878,7 @@ export default function UserFoundItem() {
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex space-x-2">
                           <button
-                            onClick={() => handleEdit(item.id)}
+                            onClick={() => handleEdit(item)}
                             className="text-blue-600 hover:text-blue-900"
                           >
                             <Edit size={16} />
@@ -570,6 +957,17 @@ export default function UserFoundItem() {
         </div>
       </main>
 
+      {/* Edit Modal */}
+      <EditModal
+        item={itemToEdit}
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setItemToEdit(null);
+        }}
+        onSave={handleSaveEdit}
+      />
+
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -586,7 +984,7 @@ export default function UserFoundItem() {
             >
               &#8203;
             </span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="inline-block align-bottom bg-white- rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">

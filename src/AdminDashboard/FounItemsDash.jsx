@@ -28,6 +28,8 @@ const ItemCard = ({ item, onEdit, onDelete }) => {
           <img
             src={item.itemImage}
             alt={item.itemName}
+            
+            
             className="w-12 h-12 rounded-md object-cover mr-4"
           />
           <div>
@@ -411,7 +413,16 @@ export default function FoundItemsDashboard() {
                               className="h-10 w-10 rounded-md object-cover"
                               src={item.itemImage}
                               alt={item.itemName}
+                              onError={(e) =>
+                                console.log(
+                                  "Image failed to load:hhhhhhhhhhhhhhhhhh",
+                                  e.target.src
+                                )
+                                
+                              }
                             />
+                            <p>{console.log(item.itemImage)
+                            }</p>
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
