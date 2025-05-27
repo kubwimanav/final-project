@@ -1,4 +1,6 @@
 import { useState } from "react";
+import ReportFoundItem from "./ReportFoundItem";
+import ReportLostItem from "./ReportLostItemForm";
 
 // Component to simulate react-icons
 const Icons = () => {
@@ -118,6 +120,24 @@ const Icons = () => {
 
 // CTA Section Component
 const CTASection = () => {
+  const [isReportLostModalOpen, setIsReportLostModalOpen] = useState(false);
+  const openReportLostModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportLostModal = () => {
+    setIsReportLostModalOpen(false);
+  };
+
+  
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  };
   return (
     <section
       className="py-16 text-white text-center relative bg-gradient-to-r from-blue-900 to-blue-800 bg-opacity-85"
@@ -139,19 +159,24 @@ const CTASection = () => {
 
         <div className="flex flex-col md:flex-row justify-center gap-4 mt-8">
           <a
-            href="/report-lost"
+            onClick={openReportLostModal}
             className="inline-block px-8 py-3 bg-white text-blue-900 border-2 border-white rounded font-semibold transition-all duration-300 min-w-40 hover:bg-transparent hover:text-white transform hover:-translate-y-1 shadow-md hover:shadow-lg"
           >
             Report Lost Item
           </a>
           <a
-            href="/report-found"
+            onClick={openReportModal}
             className="inline-block px-8 py-3 bg-transparent text-white border-2 border-white rounded font-semibold transition-all duration-300 min-w-40 hover:bg-white/10 transform hover:-translate-y-1 hover:shadow-md"
           >
             Report Found Item
           </a>
         </div>
       </div>
+      <ReportLostItem
+        isOpen={isReportLostModalOpen}
+        onClose={closeReportLostModal}
+      />
+      <ReportFoundItem isOpen={isReportModalOpen} onClose={closeReportModal} />
     </section>
   );
 };

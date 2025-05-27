@@ -123,7 +123,7 @@ export default function UserManagement() {
 
   const handleConfirmDelete = async (id) => {
     Notiflix.Confirm.show(
-      "Confirm delete tour",
+      "Confirm delete user",
       "Do you agree with me?",
       "Yes",
       "No",

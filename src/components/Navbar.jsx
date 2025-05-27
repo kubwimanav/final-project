@@ -124,14 +124,14 @@ const Navbar = () => {
                 md:mt-2 transform origin-top-left md:translate-y-0 scale-95 group-hover:scale-100"
               >
                 <Link
-                  to="/lostform"
+                  to="/lost"
                   className="block px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm transition-colors duration-200"
                   onClick={() => setMenuOpen(false)}
                 >
                   Report Lost Item
                 </Link>
                 <Link
-                  to="/foundform"
+                  to="/found"
                   className="block px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm transition-colors duration-200"
                   onClick={() => setMenuOpen(false)}
                 >

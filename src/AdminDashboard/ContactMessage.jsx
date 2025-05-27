@@ -11,6 +11,8 @@ import {
   Menu,
 } from "lucide-react";
 import { mycontext } from "../Context/ContextProvider";
+import Notiflix from "notiflix";
+import axios from "axios";
 
 export default function ContactMessagesPage() {
   // Get context data with error handling
@@ -90,6 +92,54 @@ export default function ContactMessagesPage() {
     pending: "bg-yellow-100 text-yellow-800",
     resolved: "bg-green-100 text-green-800",
   };
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleConfirmDelete = async (id) => {
+    Notiflix.Confirm.show(
+      "Confirm delete message",
+      "Do you agree with me?",
+      "Yes",
+      "No",
+      async () => {
+        try {
+          setIsLoading(true);
+          const res = await axios.delete(
+            `https://lostandfoundapi.onrender.com/contacts/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          setIsLoading(false);
+          window.location.reload();
+        } catch (error) {
+          setIsLoading(false);
+          console.log(error);
+          // Show error message to user
+          Notiflix.Notify.failure("Failed to delete item");
+        }
+      },
+      () => {
+        console.log("Delete cancelled");
+      },
+      {}
+    );
+  };
+
+  const handleDeleteClick = (item) => {
+    if (item && item._id) {
+      handleConfirmDelete(item._id);
+    } else {
+      console.error("Item or item ID is missing");
+      Notiflix.Notify.failure("Cannot delete item - ID is missing");
+    }
+  };
+
+
+
 
   // Show loading state if context is not ready
   if (!contextData) {
@@ -239,7 +289,7 @@ export default function ContactMessagesPage() {
                         <button
                           className="text-red-600 hover:text-red-900 p-1"
                           title="Delete"
-                          onClick={() => handleDelete(message.id)}
+                          onClick={() => handleConfirmDelete(message._id)}
                         >
                           <Trash2 size={16} />
                         </button>
@@ -328,7 +378,7 @@ export default function ContactMessagesPage() {
                           <button
                             className="text-red-600 hover:text-red-900 p-1"
                             title="Delete"
-                            onClick={() => handleDelete(message.id)}
+                            onClick={() => handleConfirmDelete(message._id)}
                           >
                             <Trash2 size={16} />
                           </button>
