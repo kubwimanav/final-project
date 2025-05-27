@@ -13,6 +13,9 @@ import {
 } from "lucide-react";
 
 import { mycontext } from "../Context/ContextProvider";
+import axios from "axios";
+import Notiflix from "notiflix";
+import { useForm } from "react-hook-form";
 
 // Edit Modal Component
 const EditModal = ({ item, isOpen, onClose, onSave }) => {
@@ -22,36 +25,45 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
     ownerEmail: "",
     ownerPhone: "",
     location: "",
-    dateFound: "",
-    foundBy: "",
-    contact: "",
-    descrption: "",
-    category: "",
+    date: "",
+    itemSerial: "",
+    descrption: "", // Fixed: Changed from 'descrption' to 'descrption'
     itemImage: "",
   });
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  // Helper function to convert datetime to date format
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return "";
+    try {
+      const date = new Date(dateString);
+      return date.toISOString().split("T")[0]; // Extract YYYY-MM-DD part
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
+    }
+  };
+
   // Initialize form data when item changes
   useEffect(() => {
-    if (item) {
+    if (item && isOpen) {
+      // Added isOpen check to prevent unnecessary updates
       setFormData({
         itemName: item.itemName || "",
         ownerName: item.ownerName || "",
         ownerEmail: item.ownerEmail || "",
         ownerPhone: item.ownerPhone || "",
         location: item.location || "",
-        dateFound: item.dateFound || item.date || "",
-        foundBy: item.foundBy || "",
-        contact: item.contact || "",
-        descrption: item.descrption || "",
-        category: item.category || "",
+        date: formatDateForInput(item.date || item.date),
+        itemSerial: item.itemSerial || item.itemSerial || "",
+        descrption: item.descrption || item.descrption || "", // Handle both field names
         itemImage: item.itemImage || "",
       });
       setErrors({});
     }
-  }, [item]);
+  }, [item, isOpen]);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -70,17 +82,38 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
     }
   };
 
-  // Handle file upload (placeholder - you'll need to implement actual file upload)
+  // Handle file upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // In a real app, you would upload the file to a server
-      // For now, we'll just create a local URL
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({
+          ...prev,
+          itemImage: "File size must be less than 5MB",
+        }));
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        setErrors((prev) => ({
+          ...prev,
+          itemImage: "Please select a valid image file",
+        }));
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         setFormData((prev) => ({
           ...prev,
           itemImage: e.target.result,
+        }));
+        // Clear any previous image errors
+        setErrors((prev) => ({
+          ...prev,
+          itemImage: "",
         }));
       };
       reader.readAsDataURL(file);
@@ -91,35 +124,40 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.itemName.trim()) {
+    // Check if fields exist and are not empty
+    if (!formData.itemName || !formData.itemName.trim()) {
       newErrors.itemName = "Item name is required";
     }
 
-    if (!formData.location.trim()) {
+    if (!formData.location || !formData.location.trim()) {
       newErrors.location = "Location is required";
     }
 
-    if (!formData.dateFound.trim()) {
-      newErrors.dateFound = "Date found is required";
+    if (!formData.date || !formData.date.trim()) {
+      newErrors.date = "Date found is required";
     }
 
-    if (!formData.foundBy.trim()) {
-      newErrors.foundBy = "Found by field is required";
+    if (!formData.itemSerial || !formData.itemSerial.trim()) {
+      newErrors.itemSerial = "Serial number is required";
     }
 
-    if (!formData.contact.trim()) {
-      newErrors.contact = "Contact information is required";
-    }
-
-    if (!formData.descrption.trim()) {
+    if (!formData.descrption || !formData.descrption.trim()) {
       newErrors.descrption = "Description is required";
+    }
+
+    // Validate email format if provided
+    if (formData.ownerEmail && formData.ownerEmail.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.ownerEmail)) {
+        newErrors.ownerEmail = "Please enter a valid email address";
+      }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
+  // Handle form submission with API call
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -127,23 +165,75 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
       return;
     }
 
+    // Fixed: Properly access the item ID
+    const itemId = item?._id || item?.id;
+
+    if (!item || !itemId) {
+      console.error("Item ID is required for editing. Item:", item);
+      setErrors((prev) => ({
+        ...prev,
+        general: "Unable to identify item for editing. Please try again.",
+      }));
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Prepare data for API call
+      const updateData = {
+        itemName: formData.itemName,
+        ownerName: formData.ownerName,
+        ownerEmail: formData.ownerEmail,
+        ownerPhone: formData.ownerPhone,
+        location: formData.location,
+        date: formData.date,
+        itemSerial: formData.itemSerial,
+        descrption: formData.descrption, // Fixed: Use correct field name
+        itemImage: formData.itemImage,
+      };
+
+      // Make API call to update the item using axios
+      const response = await axios.put(
+        `https://lostandfoundapi.onrender.com/foundItems/${itemId}`,
+        updateData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          timeout: 10000, // 10 seconds timeout
+        }
+      );
 
       // Call the onSave callback with updated data
-      onSave({
-        ...item,
-        ...formData,
-      });
+      onSave(response.data);
 
       // Close modal
       onClose();
     } catch (error) {
-      console.error("Error saving item:", error);
-      // Handle error (show notification, etc.)
+      console.error("Error updating item:", error);
+
+      let errorMessage = "Failed to update item. Please try again.";
+
+      if (error.response) {
+        // Server responded with error status
+        errorMessage =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response received
+        errorMessage =
+          "Network error. Please check your connection and try again.";
+      } else if (error.code === "ECONNABORTED") {
+        // Request timeout
+        errorMessage = "Request timeout. Please try again.";
+      }
+
+      setErrors((prev) => ({
+        ...prev,
+        general: errorMessage,
+      }));
     } finally {
       setIsLoading(false);
     }
@@ -157,11 +247,9 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
       ownerEmail: "",
       ownerPhone: "",
       location: "",
-      dateFound: "",
-      foundBy: "",
-      contact: "",
-      descrption: "",
-      category: "",
+      date: "",
+      itemSerial: "",
+      descrption: "", // Fixed: Use correct field name
       itemImage: "",
     });
     setErrors({});
@@ -173,10 +261,8 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 bg-[rgba(49,49,49,0.8)] bg-opacity-80 flex justify-center items-start sm:items-center z-1000 p-2 sm:p-2 overflow-y-auto">
       <div className=" relative flex items-center justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        {/* Background overlay */}
-
         {/* Modal */}
-        <div className="inline-block align-bottom bg-amber-200 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+        <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-full">
           {/* Header */}
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
@@ -185,20 +271,32 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
               </h3>
               <button
                 onClick={handleClose}
-                className="absolute right-0 top-5 z-2 flex items-center justify-center h-8 w-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors  rounded-md shadow-lg"
+                className="flex items-center justify-center h-8 w-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors rounded-md shadow-lg"
+                type="button"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
             </div>
           </div>
 
+          {/* General Error Message */}
+          {errors.general && (
+            <div className="bg-red-50 border-l-4 border-red-400 p-4 mx-4 mt-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <p className="text-sm text-red-700">{errors.general}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="bg-white">
-            <div className="px-4 py-5 sm:p-6 max-h-90 overflow-y-auto">
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="px-4 py-5 sm:p-6 max-h-96 overflow-y-auto">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {/* Item Image */}
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Item Image
                   </label>
                   <div className="flex items-center space-x-4">
@@ -206,7 +304,7 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                       <img
                         src={formData.itemImage}
                         alt="Item preview"
-                        className="h-13 w-13 rounded-md object-cover"
+                        className="h-16 w-16 rounded-md object-cover border border-gray-200"
                       />
                     )}
                     <div className="flex-1">
@@ -218,12 +316,17 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                       />
                     </div>
                   </div>
+                  {errors.itemImage && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.itemImage}
+                    </p>
+                  )}
                 </div>
 
                 {/* Item Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Item Name
+                    Item Name *
                   </label>
                   <input
                     type="text"
@@ -242,10 +345,10 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                   )}
                 </div>
 
-                {/* Owner Name */}
+                {/* Founder Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Owner Name
+                    Founder Name
                   </label>
                   <input
                     type="text"
@@ -253,29 +356,36 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                     value={formData.ownerName}
                     onChange={handleInputChange}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter owner name"
+                    placeholder="Enter founder name"
                   />
                 </div>
 
-                {/* Owner Email */}
+                {/* Founder Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Owner Email
+                    Founder Email
                   </label>
                   <input
                     type="email"
                     name="ownerEmail"
                     value={formData.ownerEmail}
                     onChange={handleInputChange}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter owner email"
+                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.ownerEmail ? "border-red-300" : "border-gray-300"
+                    }`}
+                    placeholder="Enter founder email"
                   />
+                  {errors.ownerEmail && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.ownerEmail}
+                    </p>
+                  )}
                 </div>
 
-                {/* Owner Phone */}
+                {/* Founder Phone */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Owner Phone
+                    Founder Phone
                   </label>
                   <input
                     type="tel"
@@ -283,14 +393,14 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                     value={formData.ownerPhone}
                     onChange={handleInputChange}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter owner phone"
+                    placeholder="Enter founder phone"
                   />
                 </div>
 
                 {/* Location */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Location Found
+                    Location Found *
                   </label>
                   <input
                     type="text"
@@ -312,26 +422,48 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                 {/* Date Found */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Date Found
+                    Date Found *
                   </label>
                   <input
                     type="date"
-                    name="dateFound"
+                    name="date"
                     value={formData.date}
                     onChange={handleInputChange}
                     className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.dateFound ? "border-red-300" : "border-gray-300"
+                      errors.date ? "border-red-300" : "border-gray-300"
                     }`}
                   />
-                  {errors.dateFound && (
+                  {errors.date && (
                     <p className="mt-1 text-sm text-red-600">{errors.date}</p>
+                  )}
+                </div>
+
+                {/* Serial Number */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Serial Number *
+                  </label>
+                  <input
+                    type="text"
+                    name="itemSerial"
+                    value={formData.itemSerial}
+                    onChange={handleInputChange}
+                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.itemSerial ? "border-red-300" : "border-gray-300"
+                    }`}
+                    placeholder="Enter serial number"
+                  />
+                  {errors.itemSerial && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.itemSerial}
+                    </p>
                   )}
                 </div>
 
                 {/* Description */}
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
+                    Description *
                   </label>
                   <textarea
                     name="descrption"
@@ -341,7 +473,7 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                     className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                       errors.descrption ? "border-red-300" : "border-gray-300"
                     }`}
-                    placeholder="Enter detailed description of the item"
+                    placeholder="Enter detailed descrption of the item"
                   />
                   {errors.descrption && (
                     <p className="mt-1 text-sm text-red-600">
@@ -583,6 +715,7 @@ export default function UserFoundItem() {
 
   const booking = contextData?.booking || [];
   console.log("Booking data:", booking); // Debug log
+  const [selected, setSelected] = useState({});
 
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
@@ -613,7 +746,7 @@ export default function UserFoundItem() {
         item.itemName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description?.toLowerCase().includes(searchTerm.toLowerCase());
+        item.descrption?.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
         categoryFilter === "All" || item.category === categoryFilter;
@@ -646,19 +779,57 @@ export default function UserFoundItem() {
     setCurrentPage(pageNumber);
   };
 
-  // Handle delete confirmation
-  const handleDeleteConfirmation = (itemId) => {
-    setItemToDelete(itemId);
-    setShowDeleteConfirm(true);
-  };
+  
 
-  // Handle delete
-  const handleDelete = () => {
-    // In a real app, you would delete the item from the database here
-    console.log("Deleting item:", itemToDelete);
-    setShowDeleteConfirm(false);
-    setItemToDelete(null);
-  };
+  
+    // Modal handlers
+
+
+
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    const handleConfirmDelete = async (id) => {
+      Notiflix.Confirm.show(
+        "Confirm delete tour",
+        "Do you agree with me?",
+        "Yes",
+        "No",
+        async () => {
+          try {
+            setIsLoading(true);
+            const res = await axios.delete(
+              `https://lostandfoundapi.onrender.com/foundItems/${id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+            setIsLoading(false);
+            window.location.reload();
+          } catch (error) {
+            setIsLoading(false);
+            console.log(error);
+            // Show error message to user
+            Notiflix.Notify.failure("Failed to delete item");
+          }
+        },
+        () => {
+          console.log("Delete cancelled");
+        },
+        {}
+      );
+    };
+
+    const handleDeleteClick = (item) => {
+      if (item && item._id) {
+        handleConfirmDelete(item._id);
+      } else {
+        console.error("Item or item ID is missing");
+        Notiflix.Notify.failure("Cannot delete item - ID is missing");
+      }
+    };
 
   // Handle edit - updated to show modal
   const handleEdit = (item) => {
@@ -712,7 +883,7 @@ export default function UserFoundItem() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className=" bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -832,7 +1003,7 @@ export default function UserFoundItem() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {displayedItems.map((item) => (
-                    <tr key={item.id} className="hover:bg-gray-50">
+                    <tr key={item._id || item.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
@@ -847,7 +1018,7 @@ export default function UserFoundItem() {
                               {item.itemName}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {item.ownerName}
+                              {item.itemSerial}
                             </div>
                           </div>
                         </div>
@@ -884,7 +1055,7 @@ export default function UserFoundItem() {
                             <Edit size={16} />
                           </button>
                           <button
-                            onClick={() => handleDeleteConfirmation(item.id)}
+                            onClick={() => handleConfirmDelete(item._id)}
                             className="text-red-600 hover:text-red-900"
                           >
                             <Trash2 size={16} />
@@ -905,7 +1076,7 @@ export default function UserFoundItem() {
                 key={item.id}
                 item={item}
                 onEdit={handleEdit}
-                onDelete={handleDeleteConfirmation}
+                onDelete={handleConfirmDelete}
               />
             ))}
           </div>
@@ -1029,6 +1200,7 @@ export default function UserFoundItem() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

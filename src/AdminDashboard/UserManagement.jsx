@@ -1,6 +1,8 @@
 import { useState, useContext } from "react";
 import { Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { mycontext } from "../Context/ContextProvider";
+import Notiflix from "notiflix";
+import axios from "axios";
 
 export default function UserManagement() {
   // Fix: Destructure users and setUsers from context
@@ -116,6 +118,53 @@ export default function UserManagement() {
   console.log("Users data:", users);
   console.log("Filtered users:", filteredUsers);
 
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleConfirmDelete = async (id) => {
+    Notiflix.Confirm.show(
+      "Confirm delete tour",
+      "Do you agree with me?",
+      "Yes",
+      "No",
+      async () => {
+        try {
+          setIsLoading(true);
+          const res = await axios.delete(
+            `https://lostandfoundapi.onrender.com/users/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          setIsLoading(false);
+          window.location.reload();
+        } catch (error) {
+          setIsLoading(false);
+          console.log(error);
+          // Show error message to user
+          Notiflix.Notify.failure("Failed to delete item");
+        }
+      },
+      () => {
+        console.log("Delete cancelled");
+      },
+      {}
+    );
+  };
+
+  const handleDeleteClick = (item) => {
+    if (item && item._id) {
+      handleConfirmDelete(item._id);
+    } else {
+      console.error("Item or item ID is missing");
+      Notiflix.Notify.failure("Cannot delete item - ID is missing");
+    }
+  };
+
+
+
   return (
     <div className="w-full px-2 sm:px-4 py-4 sm:py-4 mx-auto max-w-7xl">
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-3">
@@ -229,7 +278,7 @@ export default function UserManagement() {
                   </td>
                   <td className="px-2 sm:px-4 py-3 sm:py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleConfirmDelete(user._id)}
                       className="text-red-600 hover:text-red-800"
                       aria-label="Delete user"
                     >

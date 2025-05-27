@@ -11,7 +11,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
     itemImage: null,
     itemSerial: "",
     location: "",
-    description: "",
+    descrption: "",
     date: "",
   });
 
@@ -29,7 +29,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
         itemImage: null,
         itemSerial: "",
         location: "",
-        description: "",
+        descrption: "",
         date: "",
       });
       setImagePreview(null);
@@ -322,8 +322,8 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                   Description
                 </label>
                 <textarea
-                  name="description"
-                  value={formData.description}
+                  name="descrption"
+                  value={formData.descrption}
                   onChange={handleChange}
                   rows={2}
                   className="w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-vertical min-h-[50px]"

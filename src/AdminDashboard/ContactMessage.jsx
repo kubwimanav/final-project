@@ -262,20 +262,20 @@ export default function ContactMessagesPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                     Email
                   </th>
 
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                     Subject
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                     Description
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -288,7 +288,7 @@ export default function ContactMessagesPage() {
                         <div className="text-sm font-medium text-gray-900">
                           {message.name || "Unknown"}
                         </div>
-                        <div className="text-xs text-gray-500 md:hidden">
+                        <div className="text-sm text-gray-500 md:hidden">
                           {message.email || "No email"}
                         </div>
                       </td>
@@ -299,7 +299,7 @@ export default function ContactMessagesPage() {
                       </td>
 
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs font-semibold rounded-full">
+                        <span className="px-2 py-1 inline-flex text-sm font-semibold rounded-full">
                           {message.subject}
                         </span>
                       </td>
@@ -309,7 +309,7 @@ export default function ContactMessagesPage() {
                             {message.description || "No description available"}
                           </span>
                           <button
-                            className="ml-1 flex-shrink-0 text-xs text-blue-600 hover:text-blue-800"
+                            className="ml-1 flex-shrink-0 text-sm text-blue-600 hover:text-blue-800"
                             title="View full description"
                             onClick={() => setSelectedMessage(message)}
                           >
