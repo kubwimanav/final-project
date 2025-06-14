@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios"; // Add this import
 import comput from "../assets/image1.jpg";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
 
@@ -17,44 +18,30 @@ export default function Login() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value, });
   };
- const navigate = useNavigate();
+  const navigate = useNavigate();
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData)
-      const res = await axios.post(
-        "http://localhost:5000/auth/login",
-        formData
-      );
-      alert('login successfully')
-      localStorage.setItem("token", res.data.access_token)
-      localStorage.setItem("loggedUser", JSON.stringify(res.data.user))
-      
-      // Add a small delay to ensure localStorage is set before navigation
-      setTimeout(() => {
-        if (res.data.user.role === 'admin') {
-          navigate('/admin')
-        } else {
-          navigate('/userdash')
-        }
-      }, 100)
+      const res = await axios.post("http://localhost:5000/auth/login", formData);
+      const token = res.data.token;
+      const decoded = jwtDecode(token); // decode the token to get role
+      localStorage.setItem("token", token);
+      localStorage.setItem("loggedUser", JSON.stringify(decoded));
 
-      console.log(res.data);
-    }
-    catch (error) {
-      console.log(error)
-      // Add proper error handling
-      if (error.response && error.response.data && error.response.data.message) {
-        alert(error.response.data.message)
-      } else if (error.message) {
-        alert(error.message)
+    setTimeout(() => {
+      if (decoded.role === 'admin') {
+        navigate('/admin');
       } else {
-        alert('An error occurred during login')
+        navigate('/userdash');
       }
-    }
+    }, 100);
+  } catch (error) {
+    console.log(error);
+    alert(error?.response?.data?.message || error.message || 'Login failed');
   }
- 
+};
+
   
   const Link = ({ to, children, className }) => (
     <a href={to} className={className}>
