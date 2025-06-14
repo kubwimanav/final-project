@@ -23,9 +23,13 @@ export default function Login() {
     e.preventDefault();
     try {
       console.log(formData)
+      // const res = await axios.post(
+      //   "https://lostandfoundapi.onrender.com/auth/login",
+      //   formData
+      // );
       const res = await axios.post(
-        "https://lostandfoundapi.onrender.com/auth/login",
-        formData
+      "http://localhost:5000/auth/login",
+      formData
       );
       alert('login successfully')
       localStorage.setItem("token", res.data.access_token)
