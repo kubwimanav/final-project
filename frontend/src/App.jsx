@@ -27,6 +27,7 @@ import UserHome from "./UserDashboard/UserHome";
 import UserMessage from "./UserDashboard/UserMessage";
 import UserFoundItem from "./UserDashboard/UserFoundItem";
 import UserLostItem from "./UserDashboard/UserLostItem";
+import SimpleLostItems from "./components/SimpleLostItems";
 import { AppContext } from "./Context/ContextProvider";
 
 
@@ -41,6 +42,8 @@ function App() {
             <Route path="lost" element={<LostItems />} />
             <Route path="found" element={<FoundItem />} />
             <Route path="contact" element={<Contactus />} />
+            <Route path="Simple" element={<SimpleLostItems />} />
+            
           </Route>
           <Route path="/admin" element={<AdminDashboardLayout />}>
             <Route index element={<AdminDashHome />} />

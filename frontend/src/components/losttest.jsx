@@ -1,24 +1,20 @@
-// File: components/LostItems.jsx
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import comput from "../assets/image1.jpg";
 import ReportItemForm from "./ReportLostItemForm";
-
-// Helper function to format dates
-const formatDate = (isoString) => {
-  const date = new Date(isoString);
-  return date.toLocaleDateString("en-GB", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+import bluebag from "../assets/bluebag.jpg";
+import iphone from "../assets/iphone.jpg";  
+import carkey from "../assets/carkeys.jpg";
+import silverwatch from "../assets/silverwatch.jpg";
+import laptop from "../assets/laptop.jpg";
+import laptopcharger from "../assets/laptopcharger.jpg";
+import Wallet from "../assets/wallet.jpg";
 
 // Pagination component
 const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
   const pageNumbers = [];
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+  // Generate page numbers array
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
@@ -27,6 +23,7 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
     <div className="flex justify-center mt-8">
       <nav>
         <ul className="flex space-x-1">
+          {/* Previous button */}
           <li>
             <button
               onClick={() => currentPage > 1 && paginate(currentPage - 1)}
@@ -40,7 +37,10 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
               &laquo;
             </button>
           </li>
+
+          {/* Page numbers */}
           {pageNumbers.map((number) => {
+            // Show current page, first, last and pages +/- 1 from current
             if (
               number === 1 ||
               number === totalPages ||
@@ -61,6 +61,8 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
                 </li>
               );
             }
+
+            // Show ellipsis for gaps
             if (number === currentPage - 2 || number === currentPage + 2) {
               return (
                 <li key={`ellipsis-${number}`}>
@@ -68,8 +70,11 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
                 </li>
               );
             }
+
             return null;
           })}
+
+          {/* Next button */}
           <li>
             <button
               onClick={() =>
@@ -91,35 +96,113 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
   );
 };
 
-const LostItems = () => {
-  const [lostItems, setLostItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function LostItems() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
 
-  useEffect(() => {
-    const fetchLostItems = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/lostItems");
-        setLostItems(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching lost items:", error);
-        setLoading(false);
-      }
-    };
-    fetchLostItems();
-  }, []);
+  const lostItems = [
+    {
+      id: 1,
+      title: "Blue Backpack",
+      date: "April 23, 2025",
+      status: "Unclaimed",
+      imageUrl: bluebag,
+    },
+    {
+      id: 2,
+      title: "iPhone 17 Pro",
+      date: "April 25, 2025",
+      status: "Unclaimed",
+      imageUrl: iphone,
+    },
+    {
+      id: 3,
+      title: "Car Keys",
+      date: "April 22, 2025",
+      status: "Unclaimed",
+      imageUrl: carkey,
+    },
+    {
+      id: 4,
+      title: "Reading Glasses",
+      date: "April 20, 2025",
+      status: "Unclaimed",
+      imageUrl: comput,
+    },
+    {
+      id: 5,
+      title: "Silver Watch",
+      date: "April 19, 2025",
+      status: "Unclaimed",
+      imageUrl: silverwatch,
+    },
+    {
+      id: 6,
+      title: "Wallet",
+      date: "April 24, 2025",
+      status: "Unclaimed",
+      imageUrl: Wallet,
+    },
+    {
+      id: 7,
+      title: "Laptop Charger",
+      date: "April 26, 2025",
+      status: "Unclaimed",
+      imageUrl: laptopcharger,
+    },
+    {
+      id: 12,
+      title: "Laptop",
+      date: "April 15, 2025",
+      status: "Unclaimed",
+      imageUrl: laptop,
+    },
+    {
+      id: 8,
+      title: "Umbrella",
+      date: "April 21, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 9,
+      title: "Water Bottle",
+      date: "April 18, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 10,
+      title: "Student ID Card",
+      date: "April 17, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+    {
+      id: 11,
+      title: "Wireless Earbuds",
+      date: "April 16, 2025",
+      status: "Unclaimed",
+      imageUrl: "/api/placeholder/400/320",
+    },
+  ];
 
+  // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = lostItems.slice(indexOfFirstItem, indexOfLastItem);
 
+  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const openReportModal = () => setIsReportModalOpen(true);
-  const closeReportModal = () => setIsReportModalOpen(false);
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  };
 
   const handleReportSubmit = (formData) => {
     console.log("Report submitted:", formData);
@@ -129,11 +212,13 @@ const LostItems = () => {
 
   return (
     <div className="font-['Segoe_UI',_Tahoma,_Geneva,_Verdana,_sans-serif] bg-[#f5f5f5] w-full min-h-screen m-0 overflow-x-hidden pb-12">
-      {/* Header */}
+      {/* Header Section with Wave */}
       <header
         className="relative pt-16 pb-24 px-5 bg-[#003366] bg-opacity-85 bg-cover bg-center text-center text-white mb-16"
         style={{
           background: `linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), url(${comput})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <div className="relative z-10">
@@ -143,14 +228,14 @@ const LostItems = () => {
             with their belongings.
           </p>
           <button
-            className="mt-6 bg-white text-[#003366] py-2 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-1"
+            className="mt-6 bg-white text-[#003366] border-none py-2 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-1"
             onClick={openReportModal}
           >
             Report Lost Item
           </button>
         </div>
 
-        {/* Wave SVG */}
+        {/* Wave Effect */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
           <svg
             className="relative block w-full h-16"
@@ -168,44 +253,35 @@ const LostItems = () => {
 
       {/* Items Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 max-w-[90%] mx-auto">
-        {loading ? (
-          <p className="text-center col-span-full text-gray-500">
-            Loading lost items...
-          </p>
-        ) : currentItems.length === 0 ? (
-          <p className="text-center col-span-full text-gray-500">
-            No lost items found.
-          </p>
-        ) : (
-          currentItems.map((item) => (
-            <div
-              key={item._id}
-              className="h-64 w-full max-w-md mx-auto rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="w-full h-40 overflow-hidden">
-                <img
-                  src={item.itemImage}
-                  alt={item.itemName}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="bg-white text-black p-4">
+        {currentItems.map((property) => (
+          <div
+            key={property.id}
+            className="h-64 w-full max-w-md mx-auto rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg bg-cover bg-center"
+          >
+            <div className="w-full h-40 overflow-hidden">
+              <img
+                src={property.imageUrl}
+                alt="Property"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="bg-white text-black flex flex-col justify-end">
+              <div className="p-4 mt-auto">
                 <h3 className="text-lg font-semibold mb-1 uppercase">
-                  {item.itemName}
+                  {property.title}
                 </h3>
-                <p className="text-sm text-gray-600 mb-1">
-                  Date: {formatDate(item.date)}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Owner: {item.ownerName} | Location: {item.location}
-                </p>
+                <div className="flex mb-2">
+                  <span className="text-sm">{property.date}</span>
+                </div>
+                <div className="text-xs opacity-75 mb-3">{property.status}</div>
               </div>
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination Controls */}
       <Pagination
         itemsPerPage={itemsPerPage}
         totalItems={lostItems.length}
@@ -213,7 +289,7 @@ const LostItems = () => {
         paginate={paginate}
       />
 
-      {/* Modal */}
+      {/* Report Item Form Modal */}
       <ReportItemForm
         isOpen={isReportModalOpen}
         onClose={closeReportModal}
@@ -221,6 +297,4 @@ const LostItems = () => {
       />
     </div>
   );
-};
-
-export default LostItems;
+}
