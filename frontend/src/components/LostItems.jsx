@@ -179,28 +179,29 @@ const LostItems = () => {
         ) : (
           currentItems.map((item) => (
             <div
-              key={item._id}
-              className="h-64 w-full max-w-md mx-auto rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="w-full h-40 overflow-hidden">
-                <img
-                  src={item.itemImage}
-                  alt={item.itemName}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="bg-white text-black p-4">
-                <h3 className="text-lg font-semibold mb-1 uppercase">
-                  {item.itemName}
-                </h3>
-                <p className="text-sm text-gray-600 mb-1">
-                  Date: {formatDate(item.date)}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Owner: {item.ownerName} | Location: {item.location}
-                </p>
-              </div>
+            key={item._id}
+            className="bg-white rounded-lg shadow-md overflow-hidden"
+          >
+            <img
+              src={item.itemImage}
+              alt={item.itemName}
+              className="w-full h-48 object-cover object-center rounded-t-lg"
+            />
+            <div className="p-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                {item.itemName}
+              </h3>
+              <p className="text-sm text-gray-500">
+                Reported on: {formatDate(item.date)}
+              </p>
+              <p className="text-sm text-gray-600 mt-1">
+                Owner: {item.ownerName}
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Location: {item.location}
+              </p>
             </div>
+          </div>
           ))
         )}
       </div>
