@@ -3,19 +3,11 @@ const router = express.Router();
 const multer = require('multer');
 const lostController = require('../controllers/lostItemController');
 
-//for image
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './src/middlewares/uploads/uploadLostItems');
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    },
-});
-
+// Use in-memory storage
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// All routes secured by verifyAuth
+// Routes
 router.get('/', lostController.getAllLostItems);
 router.get('/:id', lostController.getLostItemById);
 router.post('/', upload.single('itemImage'), lostController.createLostItem);

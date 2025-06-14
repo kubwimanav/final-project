@@ -1,16 +1,23 @@
 const lostItem = require('../models/lostItems');
 
-// CREATE a new lost item
+// CREATE a new lost item using Base64 (in-memory)
 exports.createLostItem = async (req, res) => {
     try {
         const newItem = req.body;
-        if (req.file) {
-            newItem.itemImage = req.file.path;
+
+        if (req.file && req.file.buffer) {
+            const base64Image = req.file.buffer.toString('base64');
+            const mimeType = req.file.mimetype;
+            newItem.itemImage = `data:${mimeType};base64,${base64Image}`;
+        } else {
+            return res.status(400).json({ message: 'Image is required.' });
         }
+
         const savedItem = new lostItem(newItem);
         await savedItem.save();
-        res.status(201).json({message: 'Lost Item created successfully'});
+        res.status(201).json({ message: 'Lost Item created successfully' });
     } catch (error) {
+        console.error('Error:', error);
         res.status(400).json({ message: 'Error creating item', error });
     }
 };
@@ -35,8 +42,6 @@ exports.getLostItemById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching item by ID', error });
     }
 };
-
-
 
 // UPDATE a lost item by ID
 exports.updateLostItem = async (req, res) => {
