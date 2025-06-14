@@ -16,7 +16,7 @@
         "summary": "Register a new user",
         "tags": ["Athorization"],
         "requestBody": {
-          "required": true,
+          "required": ["username", "email","city", "country", "gender", "password"],
           "content": {
             "application/json": {
               "schema": {
@@ -47,9 +47,10 @@
                 "type": "object",
                 "properties": {
                   "email": { "type": "string" },
-                  "password": { "type": "string" }
+                  "password": { "type": "string" },
+                  "role": { "type": "string", "enum": ["user", "admin"], "default": "user" }
                 },
-                "required": ["email", "password"]
+                "required": ["email", "password","role"]
               }
             }
           }
