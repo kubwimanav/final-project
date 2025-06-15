@@ -185,6 +185,7 @@ const LostItems = () => {
             <img
               src={item.itemImage}
               alt={item.itemName}
+              loading="lazy"
               className="w-full h-48 object-cover object-center rounded-t-lg"
             />
             <div className="p-4">
