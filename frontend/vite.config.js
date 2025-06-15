@@ -10,7 +10,7 @@ export default defineConfig({
     allowedHosts: ['dfl.memiserve.com'], 
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "http://132.145.68.214:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
