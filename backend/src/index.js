@@ -1,5 +1,6 @@
 // File: index.js
 const express = require('express');
+const path = require('path');
 const authRoutes = require('./routes/authRoute');
 const lostItemRoutes = require('./routes/lostItemRoute');
 const foundItemRoutes = require('./routes/foundItemRoute');
@@ -21,12 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS for all routes
 app.use(cors({
-    origin: '*',
+    origin: process.env.NODE_ENV === 'production' ? false : '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
+}));
 app.use(bodyParser.json());
-
 
 // Routes
 app.use('/users', userRoutes);
@@ -37,18 +37,25 @@ app.use('/lostItems', lostItemRoutes);
 app.use('/foundItems', foundItemRoutes);
 app.use('/contacts', contactRoutes);
 
-
-
-app.get('/', (req, res) => {
-    res.json({ message: "Hello from backend" });
-});
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Serve static files from the frontend build directory in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+    
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.json({ message: "Hello from backend" });
+    });
+}
 
 // Error-handling middleware (logs to terminal)
 app.use((err, req, res, next) => {
-    console.error('❌ Error caught:', err.message); // shows in terminal
-    console.error(err.stack);                       // full stack trace
+    console.error('❌ Error caught:', err.message);
+    console.error(err.stack);
     res.status(500).json({ error: err.message });
 });
 
