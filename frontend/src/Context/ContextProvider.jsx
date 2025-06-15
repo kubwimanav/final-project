@@ -24,7 +24,7 @@ export const AppContext = ({ children }) => {
     const fetchtours = async () => {
       try {
         const response = await axiosClient.get(
-          "https://lostandfoundapi.onrender.com/lostItems"
+          "/api/lostItems"
         );
         console.log(response.data);
         setTour(response.data);
@@ -50,7 +50,7 @@ export const AppContext = ({ children }) => {
     const fetchposts = async () => {
       try {
         const response = await axiosClient.get(
-          "https://lostandfoundapi.onrender.com/users",
+          "/api/users",
           {
             headers: {
               Authorization: "Bearer " + tokenn,
@@ -80,7 +80,7 @@ export const AppContext = ({ children }) => {
     const fetchcontact = async () => {
       try {
         const response = await axiosClient.get(
-          "https://lostandfoundapi.onrender.com/contacts",
+          "/api/contacts",
           {
             headers: {
               Authorization: "Bearer " + tokenn,
@@ -110,7 +110,7 @@ export const AppContext = ({ children }) => {
     const fetchbook = async () => {
       try {
         const response = await axiosClient.get(
-          `https://lostandfoundapi.onrender.com/foundItems`,
+          `/api/foundItems`,
           {
             headers: {
               Authorization: "Bearer " + tokenn,

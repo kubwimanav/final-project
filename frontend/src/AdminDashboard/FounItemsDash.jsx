@@ -195,7 +195,7 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
 
       // Make API call to update the item using axios
       const response = await axios.put(
-        `https://lostandfoundapi.onrender.com/foundItems/${itemId}`,
+        "/api/foundItems/${itemId}",
         updateData,
         {
           headers: {
@@ -793,7 +793,7 @@ export default function FoundItemDash() {
         try {
           setIsLoading(true);
           const res = await axios.delete(
-            `https://lostandfoundapi.onrender.com/foundItems/${id}`,
+            `/api/foundItems/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

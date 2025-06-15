@@ -131,7 +131,7 @@ export default function UserManagement() {
         try {
           setIsLoading(true);
           const res = await axios.delete(
-            `/api/users/${id}`,
+            "/api/users/${id}",
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

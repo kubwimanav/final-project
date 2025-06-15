@@ -106,7 +106,7 @@ export default function ContactMessagesPage() {
         try {
           setIsLoading(true);
           const res = await axios.delete(
-            `https://lostandfoundapi.onrender.com/contacts/${id}`,
+            "/api/contacts/${id}",
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

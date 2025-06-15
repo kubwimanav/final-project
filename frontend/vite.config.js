@@ -7,11 +7,12 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    allowedHosts: ['dfl.memiserve.com'], 
     proxy: {
-      "/api": {
+      // Handle /api routes
+      "^/api/.*": {
         target: "http://localhost:5000",
         changeOrigin: true,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },    
