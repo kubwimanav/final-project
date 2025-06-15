@@ -101,7 +101,7 @@ const LostItems = () => {
   useEffect(() => {
     const fetchLostItems = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/lostItems");
+        const response = await axios.get("/api/lostItems");
         setLostItems(response.data);
         setLoading(false);
       } catch (error) {
