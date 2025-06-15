@@ -101,7 +101,7 @@ const FoundItems = () => {
   useEffect(() => {
     const fetchFoundItems = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/FoundItems");
+        const response = await axios.get("/api/FoundItems");
         setFoundItems(response.data);
         setLoading(false);
       } catch (error) {
