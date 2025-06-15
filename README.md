@@ -23,23 +23,18 @@ Before you begin, ensure you have the following installed:
 
 ### Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/kubwimanav/final-project/
 cd final-project
+git checkout development
 ```
 
-### Backend Setup
+###  Setup
 
-1. Navigate to the project directory:
-```bash
-cd final-project
-```
-
-2. Install dependencies:
+1. Install dependencies:
 ```bash
 npm run install-all
 ```
-
-3. start application:
+2. start application:
 ```bash
 npm run dev
 ```
