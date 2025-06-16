@@ -1,12 +1,75 @@
-# React + Vite
+# Digital Lost and Found System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application for managing lost and found items, built with React, Node.js, and MongoDB.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User authentication and authorization
+- Admin dashboard for managing users and items
+- User dashboard for reporting lost and found items
+- Contact messaging system
+- Image upload for items
+- Search and filter functionality
+- Responsive design
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Before you begin, ensure you have the following installed:
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- MongoDB (v4.4 or higher)
+
+## Installation
+
+### Clone the repository
+```bash
+git clone https://github.com/kubwimanav/final-project/
+cd final-project
+git checkout development
+```
+
+###  Setup
+
+1. Install dependencies:
+```bash
+npm run install-all
+```
+2. start application:
+```bash
+npm run dev
+```
+
+## Accessing the Application
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000
+- API Documentation: http://localhost:5000/api-docs
+
+## Project Structure
+
+```
+final-project/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── middleware/
+│   │   ├── index.js
+│   │   └── swagger.json
+│   ├── package.json
+│   └── .env
+└── frontend/
+    ├── src/
+    │   ├── components/
+    │   ├── AdminDashboard/
+    │   ├── UserDashboard/
+    │   ├── Context/
+    │   └── App.jsx
+    ├── package.json
+    └── vite.config.js
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
