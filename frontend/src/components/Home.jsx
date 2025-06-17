@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import keyboard from "../assets/keyboard.jpg";
 import comput from "../assets/comput.jpg";
 import homei from "../assets/image1.jpg";
-import { Clock, MapPin } from "lucide-react";
+import { mycontext } from "../Context/ContextProvider";
 
 
 const Home = () => {
@@ -23,82 +23,12 @@ const Home = () => {
     activeUsers: 1250,
     successRate: 92,
   };
+  const { booking, tour } = mycontext();
 
   // Mock data for recent items
-  const recentItems = [
-    {
-      id: 1,
-      type: "found",
-      name: "Student ID Card",
-      location: "Library, 2nd Floor",
-      date: "2025-04-15",
-      image: keyboard,
-      category: "identification",
-    },
-    {
-      id: 2,
-      type: "lost",
-      name: "Blue Water Bottle",
-      location: "Faculty of Science Building",
-      date: "2025-04-17",
-      image: comput,
-      category: "personal",
-    },
-    {
-      id: 3,
-      type: "found",
-      name: "Laptop Charger",
-      location: "Cafeteria",
-      date: "2025-04-18",
-      image: comput,
-      category: "electronics",
-    },
-    {
-      id: 4,
-      type: "lost",
-      name: "Psychology Textbook",
-      location: "Faculty of Social Sciences",
-      date: "2025-04-16",
-      image: comput,
-      category: "books",
-    },
-    {
-      id: 5,
-      type: "found",
-      name: "Student ID Card",
-      location: "Library, 2nd Floor",
-      date: "2025-04-15",
-      image: keyboard,
-      category: "identification",
-    },
-    {
-      id: 6,
-      type: "lost",
-      name: "Blue Water Bottle",
-      location: "Faculty of Science Building",
-      date: "2025-04-17",
-      image: comput,
-      category: "personal",
-    },
-    {
-      id: 7,
-      type: "found",
-      name: "Laptop Charger",
-      location: "Cafeteria",
-      date: "2025-04-18",
-      image: comput,
-      category: "electronics",
-    },
-    {
-      id: 8,
-      type: "lost",
-      name: "Psychology Textbook",
-      location: "Faculty of Social Sciences",
-      date: "2025-04-16",
-      image: comput,
-      category: "books",
-    },
-  ];
+  const recentItems = booking.slice(0, 4);
+  const Lostitems = tour.slice(0, 4);
+
 
   return (
     <div>
@@ -223,6 +153,60 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Lostitems.map((item) => (
+              <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-white border border-gray-100">
+                {/* Status Badge */}
+                <div
+                  className={`absolute top-3 left-3 py-1 px-3 rounded-full text-xs font-semibold z-10 ${
+                    item.type === "found"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-orange-500 text-white"
+                  }`}
+                >
+                  {item.type === "found" ? "Found" : "Found"}
+                </div>
+
+                {/* Image Container with Overlay */}
+                <div className="relative w-full h-40 overflow-hidden">
+                  <img src={item.itemImage} alt={item.name} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70" />
+                </div>
+
+                {/* Content Section */}
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">
+                    {item.name}
+                  </h3>
+
+                  <div className="space-y-2 mb-3">
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <p size={16} className="mr-2 text-indigo-600">
+                        Location:
+                      </p>
+                      {item.location}
+                    </div>
+
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <p size={16} className="mr-2 text-indigo-600">
+                        Date:{" "}
+                      </p>
+                      {new Date(item.date).toLocaleDateString()}
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <a
+                    href={`/items/${item.id}`}
+                    className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200"
+                  >
+                    Claim Item
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {recentItems.map((item) => (
               <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-white border border-gray-100">
                 {/* Status Badge */}
@@ -238,7 +222,7 @@ const Home = () => {
 
                 {/* Image Container with Overlay */}
                 <div className="relative w-full h-40 overflow-hidden">
-                  <img src={item.image} alt={item.name} />
+                  <img src={item.itemImage} alt={item.name} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70" />
                 </div>
 
@@ -250,12 +234,16 @@ const Home = () => {
 
                   <div className="space-y-2 mb-3">
                     <div className="flex items-center text-gray-600 text-sm">
-                      <MapPin size={16} className="mr-2 text-indigo-600" />
+                      <p size={16} className="mr-2 text-indigo-600">
+                        Location:
+                      </p>
                       {item.location}
                     </div>
 
                     <div className="flex items-center text-gray-600 text-sm">
-                      <Clock size={16} className="mr-2 text-indigo-600" />
+                      <p size={16} className="mr-2 text-indigo-600">
+                        Date:{" "}
+                      </p>
                       {new Date(item.date).toLocaleDateString()}
                     </div>
                   </div>
@@ -265,7 +253,7 @@ const Home = () => {
                     href={`/items/${item.id}`}
                     className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200"
                   >
-                    View Details
+                    Claim Item
                   </a>
                 </div>
               </div>
