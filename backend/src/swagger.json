@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://dfl.memiserve.com"
+      "url": "http://localhost:5000"
     }
   ],
   "paths": {

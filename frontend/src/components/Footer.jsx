@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReportFoundItem from "./ReportFoundItem";
 import ReportLostItem from "./ReportLostItemForm";
+import { Link } from "react-router-dom";
 
 // Component to simulate react-icons
 const Icons = () => {
@@ -225,20 +226,19 @@ const Footer = () => {
               </a>
             </li>
             <li className="mb-3">
-              <a
+              <Link to={"/lost"}
                 href="/lost-items"
                 className="text-white/85 text-base hover:text-yellow-400 transition-colors duration-300 relative inline-block hover:after:content-[''] hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-full hover:after:h-px hover:after:bg-yellow-400"
               >
                 Lost Items
-              </a>
+              </Link>
             </li>
             <li className="mb-3">
-              <a
-                href="/found-items"
+              <Link to={"/found"}
                 className="text-white/85 text-base hover:text-yellow-400 transition-colors duration-300 relative inline-block hover:after:content-[''] hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-full hover:after:h-px hover:after:bg-yellow-400"
               >
                 Found Items
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -272,7 +272,7 @@ const Footer = () => {
               <MdFacebook />
             </a>
             <a
-              href="https://twitter.com"
+              href="https://X.com"
               className="flex items-center justify-center w-10 h-10 bg-white/10 rounded-full text-white hover:bg-yellow-400 hover:text-blue-900 transform hover:-translate-y-1 hover:shadow-md transition-all duration-300"
             >
               <BsTwitterX />
