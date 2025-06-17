@@ -118,7 +118,7 @@ export default function Login() {
               type="submit"
               className="bg-[#003366] text-white border-none p-3 rounded text-base cursor-pointer transition-all duration-300 hover:bg-[#004c99] mt-4"
             >
-              Login
+              Logi
             </button>
           </form>
         </div>
