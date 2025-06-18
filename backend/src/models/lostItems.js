@@ -10,6 +10,11 @@ const ItemSchema = new mongoose.Schema({
     itemSerial: { type: String, required: true },
     descrption: {type: String},
     location: { type: String, required: true },
+    status: { 
+        type: String, 
+        enum: ['lost', 'stolen'],
+        required: true 
+    },
     date: { type: Date, default: Date.now }
 });
 
