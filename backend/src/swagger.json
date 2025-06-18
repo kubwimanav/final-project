@@ -132,7 +132,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Items"
+                "$ref": "#/components/schemas/lostItems"
               }
             }
           }
@@ -188,7 +188,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Items" }
+              "schema": { "$ref": "#/components/schemas/lostItems" }
             }
           }
         },
@@ -388,6 +388,25 @@
           "date": { "type": "string", "format": "date-time" }
         },
         "required": ["ownerName", "ownerEmail", "ownerPhone", "itemName", "itemSerial", "location"]
+      },
+      "lostItems": {
+        "type": "object",
+        "properties": {
+          "ownerName": { "type": "string" },
+          "ownerEmail": { "type": "string", "format": "email" },
+          "ownerPhone": { "type": "string" },
+          "itemName": { "type": "string" },
+          "itemImage": { "type": "string", "format": "binary" },
+          "itemSerial": { "type": "string" },
+          "descrption": { "type": "string" },
+          "location": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["lost", "stolen"]
+          },
+          "date": { "type": "string", "format": "date-time" }
+        },
+        "required": ["ownerName", "ownerEmail", "ownerPhone", "itemName", "itemSerial", "location", "status"]
       }
     }
   }
