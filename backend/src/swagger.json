@@ -257,7 +257,7 @@
                   "location": { "type": "string" },
                   "date": { "type": "string", "format": "date-time" },
                   "descrption": { "type": "string" },
-                  "itemImage": { "type": "string", "format": "uri" }
+                  "itemImage": { "type": "string", "format": "binary" }
                 },
                 "required": [
                   "ownerName",
