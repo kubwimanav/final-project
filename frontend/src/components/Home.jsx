@@ -3,6 +3,8 @@ import keyboard from "../assets/keyboard.jpg";
 import comput from "../assets/comput.jpg";
 import homei from "../assets/image1.jpg";
 import { mycontext } from "../Context/ContextProvider";
+import ReportFoundItem from "./ReportFoundItem";
+import ClaimForm from "./ClaimForm";
 
 
 const Home = () => {
@@ -16,6 +18,9 @@ const Home = () => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
   };
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
 
   const stats = {
     itemsFound: 532,
@@ -196,7 +201,7 @@ const Home = () => {
 
                   {/* Action Button */}
                   <a
-                    href={`/items/${item.id}`}
+                    onClick={openReportModal}
                     className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200"
                   >
                     Claim Item
@@ -249,10 +254,7 @@ const Home = () => {
                   </div>
 
                   {/* Action Button */}
-                  <a
-                    href={`/items/${item.id}`}
-                    className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200"
-                  >
+                  <a className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
                     Claim Item
                   </a>
                 </div>
@@ -318,6 +320,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <ClaimForm isOpen={isReportModalOpen} onClose={closeReportModal} />
     </div>
   );
 };
