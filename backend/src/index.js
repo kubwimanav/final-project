@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const contactRoutes = require('./routes/contactRoute');
+const emailRoutes = require('./routes/emailRoute');
 const app = express();
 
 // Initialize database connection
@@ -35,6 +36,7 @@ const initializeApp = async () => {
         app.use('/lostItems', lostItemRoutes);
         app.use('/foundItems', foundItemRoutes);
         app.use('/contacts', contactRoutes);
+        app.use('/notify-owner', emailRoutes);
 
         app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
