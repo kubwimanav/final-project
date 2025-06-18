@@ -1,241 +1,504 @@
-import { useState } from "react";
-import { X } from "lucide-react";
-import profile from "../assets/profl.jpg";
+import { useState, useEffect } from "react";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Shield,
+  Eye,
+  EyeOff,
+  Settings,
+  Info,
+} from "lucide-react";
 
 export default function SettingsPage() {
   const [publicProfile, setPublicProfile] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "Jason Tatum",
-    gender: "male",
-    phone: "",
-    email: "jason@studio.io",
-    country: "Spain",
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
+  const [loggedUser, setLoggedUser] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAllData, setShowAllData] = useState(true);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // Load user data on component mount
+  useEffect(() => {
+    const userData = localStorage.getItem("loggedUser");
+    if (userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setLoggedUser(parsedUser);
+        setPublicProfile(parsedUser.publicProfile || false);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, []);
 
   const handleToggle = () => {
     setPublicProfile(!publicProfile);
   };
 
-  const handleSaveChanges = () => {
-    console.log("Saving changes:", formData);
-    // Implementation for saving data would go here
-  };
+  const renderUserField = (label, value, icon) => (
+    <div className="flex items-start justify-between py-3 border-b border-gray-100 last:border-b-0">
+      <div className="flex items-center min-w-0 flex-1">
+        {icon}
+        <span className="text-sm font-medium text-gray-700 ml-2 min-w-0">
+          {label}:
+        </span>
+      </div>
+      <div className="ml-4 text-right min-w-0 flex-1">
+        <span className="text-sm text-gray-900 break-words">
+          {value || "Not provided"}
+        </span>
+      </div>
+    </div>
+  );
+
+  if (!loggedUser) {
+    return (
+      <div className="max-w-5xl mx-auto p-4 bg-gray-50 min-h-screen rounded-2xl flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-sm">
+          <User className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-800 mb-2">
+            No User Logged In
+          </h3>
+          <p className="text-gray-600">Please log in to view profile details</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-5xl mx-auto p-4 bg-gray-50 min-h-screen rounded-2xl">
+    <div className="max-w-4xl mx-auto p-4 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between border-b pb-4 mb-6">
-          <span className="text-gray-800 px-1 py-1 text-lg font-medium">
-            General Setting
-          </span>
-        
-        <div className="flex items-center mt-3 md:mt-0">
-          <span className="mr-2 text-gray-800 font-medium">Public Profile</span>
-          <button
-            onClick={handleToggle}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-              publicProfile ? "bg-blue-600" : "bg-gray-200"
-            }`}
-          >
-            <span
-              className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                publicProfile ? "translate-x-6" : "translate-x-1"
+      <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between">
+          <div className="flex items-center mb-4 md:mb-0">
+            <Settings className="h-6 w-6 text-blue-600 mr-3" />
+            <h1 className="text-2xl font-bold text-gray-800">
+              User Profile Details
+            </h1>
+          </div>
+          <div className="flex items-center">
+            <span className="mr-3 text-gray-700 font-medium">
+              Public Profile
+            </span>
+            <button
+              onClick={handleToggle}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                publicProfile ? "bg-blue-600" : "bg-gray-300"
               }`}
-            />
-          </button>
+            >
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                  publicProfile ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-6">
-        {/* Profile Photo Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center  pb-2">
-          <label className="text-gray-800 font-medium mb-2 md:mb-0">
-            Photo
-          </label>
-          <div className="flex flex-col md:flex-row items-start md:items-center w-full md:w-auto">
-            <span className="text-gray-500 mb-2 md:mb-0 md:mr-4">
-              Jason Tatum{" "}
-            </span>
-            <div className="relative">
-              <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200">
-                <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                  <img src={profile} alt="" />
+      {/* Complete User Information Display */}
+      <div className="bg-white rounded-lg shadow-sm">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+              <Info className="mr-2 h-5 w-5 text-blue-600" />
+              Complete User Information
+            </h2>
+            <button
+              onClick={() => setShowAllData(!showAllData)}
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              {showAllData ? "Hide Raw Data" : "Show Raw Data"}
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6">
+          {/* Profile Picture */}
+          <div className="flex items-center mb-8">
+            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-100 mr-6">
+              {loggedUser.profilePicture ||
+              loggedUser.avatar ||
+              loggedUser.photo ? (
+                <img
+                  src={
+                    loggedUser.profilePicture ||
+                    loggedUser.avatar ||
+                    loggedUser.photo
+                  }
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-blue-100 flex items-center justify-center">
+                  <User className="h-12 w-12 text-blue-600" />
                 </div>
+              )}
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-1">
+                {loggedUser.name ||
+                  loggedUser.fullName ||
+                  loggedUser.username ||
+                  "Unknown User"}
+              </h3>
+              <p className="text-gray-600 text-lg">
+                {loggedUser.email || "No email provided"}
+              </p>
+              <p className="text-sm text-gray-500 mt-1">
+                User ID: {loggedUser.userId || loggedUser.id || "Not assigned"}
+              </p>
+            </div>
+          </div>
+
+          {/* All User Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Personal Information */}
+            <div className="space-y-1">
+              <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
+                <User className="h-5 w-5 mr-2 text-blue-600" />
+                Personal Information
+              </h4>
+
+              {renderUserField(
+                "Full Name",
+                loggedUser.name || loggedUser.fullName,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "First Name",
+                loggedUser.firstName,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Last Name",
+                loggedUser.lastName,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Username",
+                loggedUser.username,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Email",
+                loggedUser.email,
+                <Mail className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Phone",
+                loggedUser.phone || loggedUser.phoneNumber,
+                <Phone className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Gender",
+                loggedUser.gender,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Date of Birth",
+                loggedUser.dateOfBirth || loggedUser.dob,
+                <Calendar className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Age",
+                loggedUser.age,
+                <Calendar className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Bio",
+                loggedUser.bio || loggedUser.description,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+            </div>
+
+            {/* Location Information */}
+            <div className="space-y-1">
+              <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
+                <MapPin className="h-5 w-5 mr-2 text-blue-600" />
+                Location & Contact
+              </h4>
+
+              {renderUserField(
+                "Country",
+                loggedUser.country,
+                <MapPin className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "State/Province",
+                loggedUser.state || loggedUser.province,
+                <MapPin className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "City",
+                loggedUser.city,
+                <MapPin className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Address",
+                loggedUser.address,
+                <MapPin className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Postal Code",
+                loggedUser.postalCode || loggedUser.zipCode,
+                <MapPin className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Secondary Email",
+                loggedUser.secondaryEmail,
+                <Mail className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Work Phone",
+                loggedUser.workPhone,
+                <Phone className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Emergency Contact",
+                loggedUser.emergencyContact,
+                <Phone className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Website",
+                loggedUser.website,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+              {renderUserField(
+                "Social Media",
+                loggedUser.socialMedia,
+                <User className="h-4 w-4 text-gray-500" />
+              )}
+            </div>
+          </div>
+
+          {/* Account & Security Information */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
+              <Shield className="h-5 w-5 mr-2 text-blue-600" />
+              Account & Security
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                {renderUserField(
+                  "User ID",
+                  loggedUser.userId || loggedUser.id,
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Password",
+                  showPassword ? loggedUser.password : "••••••••",
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="focus:outline-none"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-gray-500" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-gray-500" />
+                    )}
+                  </button>
+                )}
+                {renderUserField(
+                  "Account Type",
+                  loggedUser.accountType || loggedUser.userType,
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Role",
+                  loggedUser.role,
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Status",
+                  loggedUser.status || loggedUser.accountStatus,
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+              </div>
+              <div className="space-y-1">
+                {renderUserField(
+                  "Verified",
+                  loggedUser.verified || loggedUser.isVerified ? "Yes" : "No",
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Premium",
+                  loggedUser.premium || loggedUser.isPremium ? "Yes" : "No",
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Two Factor Auth",
+                  loggedUser.twoFactorEnabled ? "Enabled" : "Disabled",
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Login Attempts",
+                  loggedUser.loginAttempts,
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
+                {renderUserField(
+                  "Public Profile",
+                  publicProfile ? "Yes" : "No",
+                  <Shield className="h-4 w-4 text-gray-500" />
+                )}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Personal Info Section */}
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="name"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
+          {/* Additional Fields - Any other properties in the user object */}
+          {Object.keys(loggedUser).length > 0 && (
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
+                <Info className="h-5 w-5 mr-2 text-blue-600" />
+                Additional Information
+              </h4>
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="gender"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Gender
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              value={formData.gender || ""}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            >
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  {Object.entries(loggedUser)
+                    .filter(
+                      ([key]) =>
+                        ![
+                          "name",
+                          "fullName",
+                          "firstName",
+                          "lastName",
+                          "username",
+                          "email",
+                          "phone",
+                          "phoneNumber",
+                          "gender",
+                          "dateOfBirth",
+                          "dob",
+                          "age",
+                          "bio",
+                          "description",
+                          "country",
+                          "state",
+                          "province",
+                          "city",
+                          "address",
+                          "postalCode",
+                          "zipCode",
+                          "secondaryEmail",
+                          "workPhone",
+                          "emergencyContact",
+                          "website",
+                          "socialMedia",
+                          "userId",
+                          "id",
+                          "password",
+                          "accountType",
+                          "userType",
+                          "role",
+                          "status",
+                          "accountStatus",
+                          "verified",
+                          "isVerified",
+                          "premium",
+                          "isPremium",
+                          "twoFactorEnabled",
+                          "loginAttempts",
+                          "publicProfile",
+                          "profilePicture",
+                          "avatar",
+                          "photo",
+                        ].includes(key)
+                    )
+                    .slice(0, Math.ceil(Object.keys(loggedUser).length / 2))
+                    .map(([key, value]) =>
+                      renderUserField(
+                        key.charAt(0).toUpperCase() +
+                          key.slice(1).replace(/([A-Z])/g, " $1"),
+                        typeof value === "object"
+                          ? JSON.stringify(value)
+                          : String(value),
+                        <Info className="h-4 w-4 text-gray-500" />
+                      )
+                    )}
+                </div>
+                <div className="space-y-1">
+                  {Object.entries(loggedUser)
+                    .filter(
+                      ([key]) =>
+                        ![
+                          "name",
+                          "fullName",
+                          "firstName",
+                          "lastName",
+                          "username",
+                          "email",
+                          "phone",
+                          "phoneNumber",
+                          "gender",
+                          "dateOfBirth",
+                          "dob",
+                          "age",
+                          "bio",
+                          "description",
+                          "country",
+                          "state",
+                          "province",
+                          "city",
+                          "address",
+                          "postalCode",
+                          "zipCode",
+                          "secondaryEmail",
+                          "workPhone",
+                          "emergencyContact",
+                          "website",
+                          "socialMedia",
+                          "userId",
+                          "id",
+                          "password",
+                          "accountType",
+                          "userType",
+                          "role",
+                          "status",
+                          "accountStatus",
+                          "verified",
+                          "isVerified",
+                          "premium",
+                          "isPremium",
+                          "twoFactorEnabled",
+                          "loginAttempts",
+                          "publicProfile",
+                          "profilePicture",
+                          "avatar",
+                          "photo",
+                        ].includes(key)
+                    )
+                    .slice(Math.ceil(Object.keys(loggedUser).length / 2))
+                    .map(([key, value]) =>
+                      renderUserField(
+                        key.charAt(0).toUpperCase() +
+                          key.slice(1).replace(/([A-Z])/g, " $1"),
+                        typeof value === "object"
+                          ? JSON.stringify(value)
+                          : String(value),
+                        <Info className="h-4 w-4 text-gray-500" />
+                      )
+                    )}
+                </div>
+              </div>
+            </div>
+          )}
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="phone"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Phone number
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              placeholder="Phone number"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
-
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="email"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
-
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="country"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Country
-            </label>
-            <input
-              type="text"
-              id="country"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
-        </div>
-
-        {/* Password Section */}
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="currentPassword"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Current Password
-            </label>
-            <input
-              type="password"
-              id="currentPassword"
-              name="currentPassword"
-              placeholder="Your current password"
-              value={formData.currentPassword}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
-
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="newPassword"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              New Password
-            </label>
-            <input
-              type="password"
-              id="newPassword"
-              name="newPassword"
-              placeholder="New password"
-              value={formData.newPassword}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
-
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-            <label
-              htmlFor="confirmPassword"
-              className="text-gray-800 font-medium w-32 mb-1 md:mb-0"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Confirm new password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full md:w-2/3 lg:w-3/4 p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-0"
-            />
-          </div>
-        </div>
-
-        {/* Bottom Save Button */}
-        <div className="mt-8">
-          <div className="flex justify-center sm:justify-end">
-            <button
-              type="button"
-              onClick={handleSaveChanges}
-              className="w-full sm:w-auto bg-blue-600 text-sm text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors"
-            >
-              Save Changes
-            </button>
-          </div>
+          {/* Raw Data Section */}
+          {showAllData && (
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h4 className="font-semibold text-gray-800 mb-4">
+                Complete Raw User Data (JSON)
+              </h4>
+              <div className="bg-gray-50 p-4 rounded-lg border">
+                <pre className="text-sm text-gray-700 whitespace-pre-wrap overflow-auto max-h-80">
+                  {JSON.stringify(loggedUser, null, 2)}
+                </pre>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
