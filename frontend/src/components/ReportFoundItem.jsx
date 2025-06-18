@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { toast } from "react-toastify";
 
 const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -60,6 +61,15 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Check file size before setting (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size must be less than 5MB", {
+          position: "top-right",
+          autoClose: 4000,
+        });
+        return;
+      }
+
       setFormData((prev) => ({
         ...prev,
         itemImage: file,
@@ -112,10 +122,17 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
+      toast.error("Please fill in all required fields correctly", {
+        position: "top-right",
+        autoClose: 4000,
+      });
       return;
     }
 
     setIsSubmitting(true);
+
+    // Show loading toast
+    const loadingToast = toast.loading("Submitting found item report...");
 
     try {
       const submitData = new FormData();
@@ -128,14 +145,55 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
         body: submitData,
       });
 
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+
       if (response.ok) {
+        const responseData = await response.json();
+
+        toast.success(
+          "Found item reported successfully! Thank you for helping reunite lost items with their owners.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
+
         onSubmit(submitData);
         onClose();
       } else {
-        console.error("Failed to submit form");
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage =
+          errorData.message || `Failed to submit report (${response.status})`;
+
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+
+      toast.error(
+        "Network error occurred. Please check your connection and try again.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -201,7 +259,9 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
                   placeholder="your.email@example.com"
                 />
                 {formErrors.ownerEmail && (
-                  <p className="text-red-500 text-xs">{formErrors.ownerEmail}</p>
+                  <p className="text-red-500 text-xs">
+                    {formErrors.ownerEmail}
+                  </p>
                 )}
               </div>
             </div>
@@ -260,7 +320,7 @@ const ReportFoundItem = ({ isOpen, onClose, onSubmit }) => {
 
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Location Found *
+                  Location Found
                 </label>
                 <input
                   type="text"

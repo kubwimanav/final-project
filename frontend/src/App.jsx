@@ -28,6 +28,7 @@ import UserMessage from "./UserDashboard/UserMessage";
 import UserFoundItem from "./UserDashboard/UserFoundItem";
 import UserLostItem from "./UserDashboard/UserLostItem";
 import { AppContext } from "./Context/ContextProvider";
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -41,7 +42,6 @@ function App() {
             <Route path="lost" element={<LostItems />} />
             <Route path="found" element={<FoundItem />} />
             <Route path="contact" element={<Contactus />} />
-            
           </Route>
           <Route path="/admin" element={<AdminDashboardLayout />}>
             <Route index element={<AdminDashHome />} />
@@ -65,6 +65,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Signup />} />
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </AppContext>
   );
