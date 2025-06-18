@@ -10,8 +10,9 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
     itemImage: null,
     itemSerial: "",
     location: "",
-    description: "", // fixed typo here
+    description: "",
     date: "",
+    status: "lost", // new field for lost/stolen status
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -31,6 +32,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
         location: "",
         description: "",
         date: "",
+        status: "lost",
       });
       setImagePreview(null);
       setFormErrors({});
@@ -87,7 +89,8 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
     if (!formData.ownerName.trim()) errors.ownerName = "Your name is required";
     if (!formData.itemName.trim()) errors.itemName = "Item name is required";
     if (!formData.location.trim()) errors.location = "Location is required";
-    if (!formData.date.trim()) errors.date = "Date found is required";
+    if (!formData.date.trim()) errors.date = "Date is required";
+    if (!formData.status) errors.status = "Status is required";
 
     if (!formData.ownerEmail.trim()) {
       errors.ownerEmail = "Email is required";
@@ -157,16 +160,37 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
 
         {/* Form card */}
         <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 shadow-2xl">
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-0.5 sm:space-y-1">
             {/* Header */}
             <div className="text-center mb-2 sm:mb-3">
               <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
-                Report Lost Item
+                Report {formData.status === "stolen" ? "Stolen" : "Lost"} Item
               </h4>
             </div>
 
+            {/* Status Selection */}
+            <div className="space-y-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                Item Status
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className={`w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                  formErrors.status ? "border-red-500" : "border-gray-300"
+                }`}
+              >
+                <option value="lost">Lost Item</option>
+                <option value="stolen">Stolen Item</option>
+              </select>
+              {formErrors.status && (
+                <p className="text-red-500 text-xs">{formErrors.status}</p>
+              )}
+            </div>
+
             {/* Name and Email */}
-            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+            <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
                   Your Name
@@ -201,13 +225,15 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
                   placeholder="your.email@example.com"
                 />
                 {formErrors.ownerEmail && (
-                  <p className="text-red-500 text-xs">{formErrors.ownerEmail}</p>
+                  <p className="text-red-500 text-xs">
+                    {formErrors.ownerEmail}
+                  </p>
                 )}
               </div>
             </div>
 
             {/* Phone and Item Name */}
-            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+            <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
                   Phone Number
@@ -243,7 +269,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
             </div>
 
             {/* Serial Number and Location */}
-            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+            <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
                   Serial Number
@@ -260,7 +286,10 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
 
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Location Found *
+                  {formData.status === "stolen"
+                    ? "Location Stolen From"
+                    : "Location Lost"}{" "}
+                  
                 </label>
                 <input
                   type="text"
@@ -278,11 +307,11 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
               </div>
             </div>
 
-            {/* Date Found and Image Upload */}
-            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+            {/* Date and Image Upload */}
+            <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Date Found
+                  {formData.status === "stolen" ? "Date Stolen" : "Date Lost"} *
                 </label>
                 <input
                   type="date"
@@ -334,13 +363,17 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
                 onChange={handleChange}
                 rows={2}
                 className="w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-vertical min-h-[50px]"
-                placeholder="Describe the item in detail (color, brand, condition, etc.)"
+                placeholder={`Describe the item in detail (color, brand, condition, etc.)${
+                  formData.status === "stolen"
+                    ? " and circumstances if comfortable sharing"
+                    : ""
+                }`}
               />
             </div>
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-2 pt-3 sm:pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-1 sm:pt-1.5">
             <button
               onClick={onClose}
               disabled={isSubmitting}
@@ -357,7 +390,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
                   : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
             >
-              {isSubmitting ? "Submitting..." : "Submit Form"}
+              {isSubmitting ? "Submitting..." : "Submit Report"}
             </button>
           </div>
         </div>
