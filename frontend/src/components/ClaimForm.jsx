@@ -127,7 +127,7 @@ const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
         submitData.append(key, formData[key]);
       }
 
-      const response = await fetch("/api/lostItems", {
+      const response = await fetch("/api/notify-owner", {
         method: "POST",
         body: submitData,
       });

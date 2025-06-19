@@ -1,45 +1,95 @@
 import { useState, useEffect } from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  Shield,
-  Eye,
-  EyeOff,
-  Settings,
-  Info,
-} from "lucide-react";
 
 export default function SettingsPage() {
   const [publicProfile, setPublicProfile] = useState(false);
   const [loggedUser, setLoggedUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [showAllData, setShowAllData] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Load user data on component mount
   useEffect(() => {
-    const userData = localStorage.getItem("loggedUser");
-    if (userData) {
+    const fetchUserData = async () => {
       try {
-        const parsedUser = JSON.parse(userData);
-        setLoggedUser(parsedUser);
-        setPublicProfile(parsedUser.publicProfile || false);
-      } catch (error) {
-        console.error("Error parsing user data:", error);
+        setLoading(true);
+        setError(null);
+
+        // Get user ID from localStorage or your authentication state
+        const storedUser = localStorage.getItem("loggedUser");
+        let userId;
+
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            userId = parsedUser.id || parsedUser.userId;
+          } catch (parseError) {
+            console.error("Error parsing stored user:", parseError);
+            throw new Error("Invalid user data in localStorage");
+          }
+        }
+
+        if (!userId) {
+          throw new Error("No user ID found. Please log in again.");
+        }
+
+        // Fetch user data from your API endpoint
+        const response = await fetch(`http://localhost:5000/users/${userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Add authorization header if needed
+            // 'Authorization': `Bearer ${token}`
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch user data: ${response.status} ${response.statusText}`
+          );
+        }
+
+        const userData = await response.json();
+
+        // Set the fetched user data
+        setLoggedUser(userData);
+        setPublicProfile(userData.publicProfile || false);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError(err.message);
+
+        // Fallback to sample data for demonstration
+        const sampleUser = {
+          id: "12345",
+          name: "John Doe",
+          email: "john.doe@example.com",
+          phone: "+1234567890",
+          city: "New York",
+          country: "United States",
+          password: "mypassword123",
+          age: 30,
+          bio: "Software developer passionate about React",
+          publicProfile: false,
+        };
+        setLoggedUser(sampleUser);
+        setPublicProfile(sampleUser.publicProfile || false);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+
+    fetchUserData();
   }, []);
 
   const handleToggle = () => {
     setPublicProfile(!publicProfile);
+    // Here you could also update the backend
+    // updateUserProfile({ publicProfile: !publicProfile });
   };
 
-  const renderUserField = (label, value, icon) => (
+  const renderUserField = (label, value, icon = "👤") => (
     <div className="flex items-start justify-between py-3 border-b border-gray-100 last:border-b-0">
       <div className="flex items-center min-w-0 flex-1">
-        {icon}
+        <span className="mr-2">{icon}</span>
         <span className="text-sm font-medium text-gray-700 ml-2 min-w-0">
           {label}:
         </span>
@@ -52,11 +102,49 @@ export default function SettingsPage() {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto p-4 bg-gray-50 min-h-screen rounded-2xl flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-sm">
+          <div className="mx-auto h-16 w-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <h3 className="text-lg font-medium text-gray-800 mb-2">
+            Loading User Data...
+          </h3>
+          <p className="text-gray-600">
+            Please wait while we fetch your profile
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !loggedUser) {
+    return (
+      <div className="max-w-5xl mx-auto p-4 bg-gray-50 min-h-screen rounded-2xl flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-sm">
+          <div className="mx-auto h-16 w-16 text-red-400 mb-4 text-6xl">❌</div>
+          <h3 className="text-lg font-medium text-gray-800 mb-2">
+            Error Loading Profile
+          </h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!loggedUser) {
     return (
       <div className="max-w-5xl mx-auto p-4 bg-gray-50 min-h-screen rounded-2xl flex items-center justify-center">
         <div className="text-center bg-white p-8 rounded-lg shadow-sm">
-          <User className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+          <div className="mx-auto h-16 w-16 text-gray-400 mb-4 text-6xl">
+            👤
+          </div>
           <h3 className="text-lg font-medium text-gray-800 mb-2">
             No User Logged In
           </h3>
@@ -69,51 +157,22 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto p-4 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between">
-          <div className="flex items-center mb-4 md:mb-0">
-            <Settings className="h-6 w-6 text-blue-600 mr-3" />
-            <h1 className="text-2xl font-bold text-gray-800">
-              User Profile Details
-            </h1>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
+        <p className="text-gray-600">
+          Manage your account settings and preferences
+        </p>
+        {error && (
+          <div className="mt-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg">
+            <p className="text-yellow-800 text-sm">
+              ⚠️ Warning: Using fallback data due to API error: {error}
+            </p>
           </div>
-          <div className="flex items-center">
-            <span className="mr-3 text-gray-700 font-medium">
-              Public Profile
-            </span>
-            <button
-              onClick={handleToggle}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                publicProfile ? "bg-blue-600" : "bg-gray-300"
-              }`}
-            >
-              <span
-                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                  publicProfile ? "translate-x-6" : "translate-x-1"
-                }`}
-              />
-            </button>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Complete User Information Display */}
       <div className="bg-white rounded-lg shadow-sm">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-              <Info className="mr-2 h-5 w-5 text-blue-600" />
-              Complete User Information
-            </h2>
-            <button
-              onClick={() => setShowAllData(!showAllData)}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              {showAllData ? "Hide Raw Data" : "Show Raw Data"}
-            </button>
-          </div>
-        </div>
-
         <div className="p-6">
           {/* Profile Picture */}
           <div className="flex items-center mb-8">
@@ -131,18 +190,18 @@ export default function SettingsPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-blue-100 flex items-center justify-center">
-                  <User className="h-12 w-12 text-blue-600" />
+                <div className="w-full h-full bg-blue-100 flex items-center justify-center text-4xl">
+                  👤
                 </div>
               )}
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-1">
+              <h6 className="text-xl font-bold text-gray-800 mb-1">
                 {loggedUser.name ||
                   loggedUser.fullName ||
-                  loggedUser.username ||
+                  loggedUser.email?.split("@")[0] ||
                   "Unknown User"}
-              </h3>
+              </h6>
               <p className="text-gray-600 text-lg">
                 {loggedUser.email || "No email provided"}
               </p>
@@ -157,348 +216,75 @@ export default function SettingsPage() {
             {/* Personal Information */}
             <div className="space-y-1">
               <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-                <User className="h-5 w-5 mr-2 text-blue-600" />
+                <span className="mr-2">👤</span>
                 Personal Information
               </h4>
 
               {renderUserField(
                 "Full Name",
                 loggedUser.name || loggedUser.fullName,
-                <User className="h-4 w-4 text-gray-500" />
+                "👤"
               )}
-              {renderUserField(
-                "First Name",
-                loggedUser.firstName,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Last Name",
-                loggedUser.lastName,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Username",
-                loggedUser.username,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Email",
-                loggedUser.email,
-                <Mail className="h-4 w-4 text-gray-500" />
-              )}
+              
+              {renderUserField("Email", loggedUser.email, "📧")}
               {renderUserField(
                 "Phone",
                 loggedUser.phone || loggedUser.phoneNumber,
-                <Phone className="h-4 w-4 text-gray-500" />
+                "📱"
               )}
-              {renderUserField(
-                "Gender",
-                loggedUser.gender,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Date of Birth",
-                loggedUser.dateOfBirth || loggedUser.dob,
-                <Calendar className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Age",
-                loggedUser.age,
-                <Calendar className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Bio",
-                loggedUser.bio || loggedUser.description,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
+              {renderUserField("Gender", loggedUser.gender, "⚥")}
+              
             </div>
 
             {/* Location Information */}
             <div className="space-y-1">
               <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-                <MapPin className="h-5 w-5 mr-2 text-blue-600" />
-                Location & Contact
+                <span className="mr-2">📍</span>
+                Location & Additional Info
               </h4>
 
+              {renderUserField("City", loggedUser.city, "🏙️")}
+              {renderUserField("Country", loggedUser.country, "🌍")}
+
               {renderUserField(
-                "Country",
-                loggedUser.country,
-                <MapPin className="h-4 w-4 text-gray-500" />
+                "Join Date",
+                loggedUser.createdAt
+                  ? new Date(loggedUser.createdAt).toLocaleDateString()
+                  : loggedUser.joinDate,
+                "📅"
               )}
-              {renderUserField(
-                "State/Province",
-                loggedUser.state || loggedUser.province,
-                <MapPin className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "City",
-                loggedUser.city,
-                <MapPin className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Address",
-                loggedUser.address,
-                <MapPin className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Postal Code",
-                loggedUser.postalCode || loggedUser.zipCode,
-                <MapPin className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Secondary Email",
-                loggedUser.secondaryEmail,
-                <Mail className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Work Phone",
-                loggedUser.workPhone,
-                <Phone className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Emergency Contact",
-                loggedUser.emergencyContact,
-                <Phone className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Website",
-                loggedUser.website,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
-              {renderUserField(
-                "Social Media",
-                loggedUser.socialMedia,
-                <User className="h-4 w-4 text-gray-500" />
-              )}
+
             </div>
           </div>
 
-          {/* Account & Security Information */}
+          {/* Security Section */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-              <Shield className="h-5 w-5 mr-2 text-blue-600" />
-              Account & Security
+              <span className="mr-2">🔒</span>
+              Security
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
                 {renderUserField(
-                  "User ID",
-                  loggedUser.userId || loggedUser.id,
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-                {renderUserField(
                   "Password",
-                  showPassword ? loggedUser.password : "••••••••",
+                  showPassword ? loggedUser.password || "••••••••" : "••••••••",
                   <button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="focus:outline-none"
+                    className="focus:outline-none hover:text-blue-600 transition-colors text-lg"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-500" />
-                    )}
+                    {showPassword ? "🙈" : "👁️"}
                   </button>
                 )}
-                {renderUserField(
-                  "Account Type",
-                  loggedUser.accountType || loggedUser.userType,
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
+            
                 {renderUserField(
                   "Role",
-                  loggedUser.role,
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-                {renderUserField(
-                  "Status",
-                  loggedUser.status || loggedUser.accountStatus,
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-              </div>
-              <div className="space-y-1">
-                {renderUserField(
-                  "Verified",
-                  loggedUser.verified || loggedUser.isVerified ? "Yes" : "No",
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-                {renderUserField(
-                  "Premium",
-                  loggedUser.premium || loggedUser.isPremium ? "Yes" : "No",
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-                {renderUserField(
-                  "Two Factor Auth",
-                  loggedUser.twoFactorEnabled ? "Enabled" : "Disabled",
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-                {renderUserField(
-                  "Login Attempts",
-                  loggedUser.loginAttempts,
-                  <Shield className="h-4 w-4 text-gray-500" />
-                )}
-                {renderUserField(
-                  "Public Profile",
-                  publicProfile ? "Yes" : "No",
-                  <Shield className="h-4 w-4 text-gray-500" />
+                  loggedUser.role || loggedUser.userRole || "User",
+                  "🎭"
                 )}
               </div>
             </div>
           </div>
-
-          {/* Additional Fields - Any other properties in the user object */}
-          {Object.keys(loggedUser).length > 0 && (
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-                <Info className="h-5 w-5 mr-2 text-blue-600" />
-                Additional Information
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  {Object.entries(loggedUser)
-                    .filter(
-                      ([key]) =>
-                        ![
-                          "name",
-                          "fullName",
-                          "firstName",
-                          "lastName",
-                          "username",
-                          "email",
-                          "phone",
-                          "phoneNumber",
-                          "gender",
-                          "dateOfBirth",
-                          "dob",
-                          "age",
-                          "bio",
-                          "description",
-                          "country",
-                          "state",
-                          "province",
-                          "city",
-                          "address",
-                          "postalCode",
-                          "zipCode",
-                          "secondaryEmail",
-                          "workPhone",
-                          "emergencyContact",
-                          "website",
-                          "socialMedia",
-                          "userId",
-                          "id",
-                          "password",
-                          "accountType",
-                          "userType",
-                          "role",
-                          "status",
-                          "accountStatus",
-                          "verified",
-                          "isVerified",
-                          "premium",
-                          "isPremium",
-                          "twoFactorEnabled",
-                          "loginAttempts",
-                          "publicProfile",
-                          "profilePicture",
-                          "avatar",
-                          "photo",
-                        ].includes(key)
-                    )
-                    .slice(0, Math.ceil(Object.keys(loggedUser).length / 2))
-                    .map(([key, value]) =>
-                      renderUserField(
-                        key.charAt(0).toUpperCase() +
-                          key.slice(1).replace(/([A-Z])/g, " $1"),
-                        typeof value === "object"
-                          ? JSON.stringify(value)
-                          : String(value),
-                        <Info className="h-4 w-4 text-gray-500" />
-                      )
-                    )}
-                </div>
-                <div className="space-y-1">
-                  {Object.entries(loggedUser)
-                    .filter(
-                      ([key]) =>
-                        ![
-                          "name",
-                          "fullName",
-                          "firstName",
-                          "lastName",
-                          "username",
-                          "email",
-                          "phone",
-                          "phoneNumber",
-                          "gender",
-                          "dateOfBirth",
-                          "dob",
-                          "age",
-                          "bio",
-                          "description",
-                          "country",
-                          "state",
-                          "province",
-                          "city",
-                          "address",
-                          "postalCode",
-                          "zipCode",
-                          "secondaryEmail",
-                          "workPhone",
-                          "emergencyContact",
-                          "website",
-                          "socialMedia",
-                          "userId",
-                          "id",
-                          "password",
-                          "accountType",
-                          "userType",
-                          "role",
-                          "status",
-                          "accountStatus",
-                          "verified",
-                          "isVerified",
-                          "premium",
-                          "isPremium",
-                          "twoFactorEnabled",
-                          "loginAttempts",
-                          "publicProfile",
-                          "profilePicture",
-                          "avatar",
-                          "photo",
-                        ].includes(key)
-                    )
-                    .slice(Math.ceil(Object.keys(loggedUser).length / 2))
-                    .map(([key, value]) =>
-                      renderUserField(
-                        key.charAt(0).toUpperCase() +
-                          key.slice(1).replace(/([A-Z])/g, " $1"),
-                        typeof value === "object"
-                          ? JSON.stringify(value)
-                          : String(value),
-                        <Info className="h-4 w-4 text-gray-500" />
-                      )
-                    )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Raw Data Section */}
-          {showAllData && (
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h4 className="font-semibold text-gray-800 mb-4">
-                Complete Raw User Data (JSON)
-              </h4>
-              <div className="bg-gray-50 p-4 rounded-lg border">
-                <pre className="text-sm text-gray-700 whitespace-pre-wrap overflow-auto max-h-80">
-                  {JSON.stringify(loggedUser, null, 2)}
-                </pre>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

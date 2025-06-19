@@ -89,12 +89,14 @@ function UserHome() {
           {/* Card 1 */}
           <div className="bg-white rounded-lg shadow p-3 sm:p-4 flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-xs sm:text-sm text-gray-500">Users</span>
+              <span className="text-xs sm:text-sm text-gray-500">
+                Uploaded Items
+              </span>
               <span className="text-lg sm:text-xl font-bold mt-1">
                 {booking.length}
               </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
-                +12.5% from last month
+                Total Uploaded Items
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#EFF6FF] flex items-center justify-center text-blue-400">
@@ -108,9 +110,12 @@ function UserHome() {
               <span className="text-xs sm:text-sm text-gray-500">
                 Lost Items
               </span>
-              <span className="text-lg sm:text-xl font-bold mt-1">1,427</span>
+              <span className="text-lg sm:text-xl font-bold mt-1">
+                {" "}
+                {booking.length}
+              </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
-                +5.2% from last month
+                Total Lost items
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#ECFDF5] flex items-center justify-center text-[#10B981]">
@@ -143,8 +148,8 @@ function UserHome() {
               <span className="text-lg sm:text-xl font-bold mt-1">
                 {contact.length}
               </span>
-              <span className="text-xs sm:text-sm text-red-500 mt-1">
-                +8.4% from last month
+              <span className="text-xs sm:text-sm text-green-500 mt-1">
+                 Total Messages
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#FFFBEB] flex items-center justify-center text-[#F59E0B]">
