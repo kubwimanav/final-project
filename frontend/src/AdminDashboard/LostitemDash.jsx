@@ -788,7 +788,7 @@ export default function LostItemDash() {
                         <div className="text-sm font-medium text-gray-900">
                           {item.itemName}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm w-0.5 text-gray-500">
                           {item.ownerEmail}
                         </div>
                       </div>
@@ -866,7 +866,7 @@ export default function LostItemDash() {
                           <h3 className="text-lg font-medium text-gray-900">
                             {item.itemName}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm  text-gray-500">
                             {item.ownerEmail}
                           </p>
                         </div>

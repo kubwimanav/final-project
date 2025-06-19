@@ -76,10 +76,11 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
         {/* Notification & Profile */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           <div className="relative">
-            <Bell className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
-              3
-            </span>
+            {
+              JSON.parse(localStorage.getItem("loggedUser"))?.email.split(
+                "@"
+              )[0]
+            }
           </div>
 
           {/* Profile Dropdown */}
