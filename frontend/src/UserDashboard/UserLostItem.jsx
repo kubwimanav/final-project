@@ -14,6 +14,7 @@ import {
 import { mycontext } from "../Context/ContextProvider";
 import Notiflix from "notiflix";
 import axios from "axios";
+import ReportLostItem from "../components/ReportLostItemForm";
 
 const EditModal = ({ item, isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -590,6 +591,9 @@ export default function UserLostItem() {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedItemId, setExpandedItemId] = useState(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
 
   // Modal and form state
   const [selected, setSelected] = useState({});
@@ -698,7 +702,7 @@ export default function UserLostItem() {
   return (
     <div className="w-full max-w-7xl mx-auto p-3 sm:p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-2">
-        Lost Items Dashboard
+        Lost Items User
       </h1>
 
       {/* Search and filters */}
@@ -720,7 +724,10 @@ export default function UserLostItem() {
         </div>
 
         <div className="flex flex-row gap-2 sm:gap-4">
-          <button className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button
+            onClick={openReportModal}
+            className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
             <Plus size={16} className="mr-2" />
             Add Lost Item
           </button>
@@ -791,7 +798,7 @@ export default function UserLostItem() {
                         <div className="text-sm font-medium text-gray-900">
                           {item.itemName}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm w-0.5 text-gray-500">
                           {item.ownerEmail}
                         </div>
                       </div>
@@ -1047,7 +1054,6 @@ export default function UserLostItem() {
       </div>
 
       {/* Edit Modal */}
-      {/* Edit Modal */}
       <EditModal
         item={itemToEdit}
         isOpen={showEditModal}
@@ -1057,6 +1063,8 @@ export default function UserLostItem() {
         }}
         onSave={handleSaveEdit}
       />
+      {/* Edit Modal */}
+      <ReportLostItem isOpen={isReportModalOpen} onClose={closeReportModal} />
     </div>
   );
 }

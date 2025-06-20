@@ -16,6 +16,7 @@ import { mycontext } from "../Context/ContextProvider";
 import axios from "axios";
 import Notiflix from "notiflix";
 import { useForm } from "react-hook-form";
+import ReportFoundItem from "../components/ReportFoundItem";
 
 // Edit Modal Component
 const EditModal = ({ item, isOpen, onClose, onSave }) => {
@@ -326,7 +327,7 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                 {/* Item Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Item Name *
+                    Item Name 
                   </label>
                   <input
                     type="text"
@@ -726,6 +727,9 @@ export default function UserFoundItem() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
 
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3); // Changed default to 5
@@ -886,9 +890,9 @@ export default function UserFoundItem() {
     <div className=" bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-1">
           <h1 className="text-xl font-semibold text-gray-900">
-            Found Items Administration
+            Found Items User
           </h1>
           {/* Debug info */}
           <p className="text-sm text-gray-500 mt-1">
@@ -951,7 +955,10 @@ export default function UserFoundItem() {
             </div>
 
             {/* Add New Button */}
-            <button className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button
+              onClick={openReportModal}
+              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               <Plus size={16} className="mr-2" />
               Add New Item
             </button>
@@ -1104,7 +1111,7 @@ export default function UserFoundItem() {
 
           {/* Pagination */}
           {filteredItems.length > 0 && totalPages > 1 && (
-            <div className="mt-6">
+            <div className="mt-2">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -1127,7 +1134,13 @@ export default function UserFoundItem() {
           )}
         </div>
       </main>
-
+      <ReportFoundItem
+        isOpen={isReportModalOpen}
+        onClose={closeReportModal}
+        // isOpen={isReportModalOpen}
+        // onClose={closeReportModal}
+        // onSubmit={handleReportSubmit}
+      />
       {/* Edit Modal */}
       <EditModal
         item={itemToEdit}
@@ -1200,7 +1213,6 @@ export default function UserFoundItem() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
