@@ -57,7 +57,10 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center">
           <Link to="/" className="flex items-center text-white no-underline">
-            <span className="text-2xl font-bold">DFL System</span>
+            <span className="text-xl font-bold">
+              {" "}
+              Digital Lost and Found System
+            </span>
           </Link>
         </div>
 
@@ -134,7 +137,7 @@ const Navbar = () => {
 
             {/* Auth Buttons */}
             {isLoggedIn ? (
-             <div></div>
+              <div></div>
             ) : (
               <div className="md:ml-4 mt-6 md:mt-0 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2">
                 <li>
