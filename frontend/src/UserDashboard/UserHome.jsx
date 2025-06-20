@@ -149,7 +149,7 @@ function UserHome() {
                 {contact.length}
               </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
-                 Total Messages
+                Total Messages
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#FFFBEB] flex items-center justify-center text-[#F59E0B]">
@@ -163,7 +163,7 @@ function UserHome() {
           {/* Revenue Chart */}
           <div className="bg-white rounded-lg shadow p-3 sm:p-4">
             <h3 className="text-sm sm:text-base font-medium text-gray-800 mb-2 sm:mb-4">
-              Revenue Overview
+              Lost Item Statistics 
             </h3>
             <div className="w-full h-48 sm:h-56 lg:h-50">
               <ResponsiveContainer width="100%" height="100%">
@@ -195,7 +195,7 @@ function UserHome() {
           {/* Users Chart */}
           <div className="bg-white rounded-lg shadow p-3 sm:p-4">
             <h3 className="text-sm sm:text-base font-medium text-gray-800 mb-2 sm:mb-4">
-              User Statistics
+              Found Item Statistics
             </h3>
             <div className="w-full h-48 sm:h-56 lg:h-50">
               <ResponsiveContainer width="100%" height="100%">
@@ -212,7 +212,7 @@ function UserHome() {
                   <XAxis dataKey="name" tick={{ fontSize: 12 }} interval={0} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
-                  <Bar dataKey="users" fill="#20bf6b" />
+                  <Bar dataKey="users" fill="#80ffdb" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

@@ -89,8 +89,7 @@ export default function Contactus() {
       <div className="w-full h-96 overflow-hidden mb-0">
         <iframe
           className="w-full h-full border-0"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00658865!3d40.71277585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sCity%20Hall%20Park!5e0!3m2!1sen!2sus!4v1593177301753!5m2!1sen!2sus"
-          allowFullScreen
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.487182995609!2d30.061640873592147!3d-1.9586919980235638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca5d5b9897711%3A0x34e7b1e5cded7867!2sUR%20College%20of%20Science%20and%20Technology!5e0!3m2!1sen!2srw!4v1750436683438!5m2!1sen!2srw"
           loading="lazy"
           title="Google Maps"
         ></iframe>
@@ -213,8 +212,6 @@ export default function Contactus() {
                     required
                   />
                 </div>
-
-               
 
                 <div>
                   <label

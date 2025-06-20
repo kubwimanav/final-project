@@ -65,8 +65,8 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
           {menuItems.map((item,index) => {
            
               const isActive =
-                (currentPath === "userhome" && item.path === "userhome") ||
-                (item.path !== "userhome" && currentPath.includes(item.path));
+                (currentPath === "/userhome" && item.path === "/userhome") ||
+                (item.path !== "/userhome" && currentPath.includes(item.path));
 
             return (
               <li key={index}>
