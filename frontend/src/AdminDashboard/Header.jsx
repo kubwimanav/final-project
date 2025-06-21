@@ -31,6 +31,11 @@ const Header = ({ toggleSidebar, isMobile, sidebarOpen }) => {
     setShowProfileDropdown(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "/";
+  };
+
   return (
     <>
       <header className="bg-white shadow-sm px-3 sm:px-6 py-3 flex items-center justify-between z-30 relative">
@@ -111,8 +116,7 @@ const Header = ({ toggleSidebar, isMobile, sidebarOpen }) => {
                 </Link>
                 <hr className="my-1" />
                 <Link
-                  to="/"
-                  onClick={handleLinkClick}
+                  onClick={handleLogout}
                   className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                 >
                   <LogOut className="h-4 w-4 mr-3" />

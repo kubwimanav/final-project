@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import comput from "../assets/image1.jpg";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Contactus() {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ export default function Contactus() {
       console.log(formData);
       // Use proxy endpoint instead of direct API call
       await axios.post("/api/contacts", formData);
-      alert("Message sent successfully!");
+      toast.success("Message sent successfully!");
 
       // Reset form after successful submission
       setFormData({
@@ -38,13 +39,15 @@ export default function Contactus() {
     } catch (error) {
       console.error("Error submitting form:", error);
       if (error.response) {
-        alert(
+        toast.error(
           `Error: ${error.response.data?.message || "Failed to send message"}`
         );
       } else if (error.request) {
-        alert("Network error. Please check your connection and try again.");
+        toast.error(
+          "Network error. Please check your connection and try again."
+        );
       } else {
-        alert("An unexpected error occurred. Please try again.");
+        toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setIsSubmitting(false);
