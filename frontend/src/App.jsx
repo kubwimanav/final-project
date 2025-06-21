@@ -31,12 +31,15 @@ import { AuthProvider } from "../src/components/AuthoContext";
 import ProtectedRoute from "../src/components/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScrollToTop from "./components/Scrolltotop";
 
 function App() {
   return (
     <AuthProvider>
       <AppContext>
+        
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LayoutHome />}>
