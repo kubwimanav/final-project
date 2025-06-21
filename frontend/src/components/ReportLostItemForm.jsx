@@ -151,7 +151,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
       <div className="relative w-full max-w-[320px] xs:max-w-[380px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[450px] min-h-fit my-2 sm:my-0">
         {/* Close button */}
         <button
-          className="absolute right-0 top-0 z-20 flex items-center justify-center h-8 w-8 bg-blue-700 text-white hover:bg-blue-800 transition-colors -mt-2 -mr-2 rounded-md shadow-lg"
+          className="absolute right-0 top-0 z-20 flex items-center justify-center h-8 w-8 bg-[#2aaf74] text-white hover:bg-green-800 transition-colors -mt-2 -mr-2 rounded-md shadow-lg"
           onClick={onClose}
           aria-label="Close"
         >
@@ -289,7 +289,6 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
                   {formData.status === "stolen"
                     ? "Location Stolen From"
                     : "Location Lost"}{" "}
-                  
                 </label>
                 <input
                   type="text"
@@ -377,7 +376,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
             <button
               onClick={onClose}
               disabled={isSubmitting}
-              className="w-full sm:flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-2 sm:order-1 text-sm"
+              className="w-full sm:flex-1 bg-[#a9eca2] hover:bg-gray-200 text-gray-700 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-2 sm:order-1 text-sm"
             >
               Cancel
             </button>
@@ -387,7 +386,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
               className={`w-full sm:flex-1 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-1 sm:order-2 text-sm ${
                 isSubmitting
                   ? "bg-blue-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-[#2aaf74] hover:bg-green-100 hover:text-black text-white"
               }`}
             >
               {isSubmitting ? "Submitting..." : "Submit Report"}
