@@ -1,4 +1,5 @@
 import React from "react";
+import { RiAlignItemLeftLine, RiAlignItemTopFill } from "react-icons/ri";
 import {
   LineChart,
   Line,
@@ -138,7 +139,7 @@ function UserHome() {
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#EFF6FF] flex items-center justify-center text-blue-400">
-              <Users size={16} className="sm:w-5 sm:h-5" />
+              <RiAlignItemLeftLine size={16} className="sm:w-5 sm:h-5" />
             </div>
           </div>
 
@@ -156,7 +157,7 @@ function UserHome() {
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#ECFDF5] flex items-center justify-center text-[#10B981]">
-              <UserCheck size={16} className="sm:w-5 sm:h-5" />
+              <RiAlignItemTopFill size={16} className="sm:w-5 sm:h-5" />
             </div>
           </div>
 

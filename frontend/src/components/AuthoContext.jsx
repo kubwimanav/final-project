@@ -1,184 +1,60 @@
-// utils/auth.js
-export const AuthUtils = {
-  // Set authentication data
-  setAuthData: (token, userRole, userEmail, rememberMe = false) => {
-    const storage = rememberMe ? localStorage : sessionStorage;
+// AuthContext.js - Create this file in your src folder
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-    storage.setItem("authToken", token);
-    storage.setItem("userRole", userRole);
-    storage.setItem("userEmail", userEmail);
-    storage.setItem("loginTime", new Date().getTime().toString());
-  },
-
-  // Get authentication data
-  getAuthData: () => {
-    const token =
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
-    const userRole =
-      localStorage.getItem("userRole") || sessionStorage.getItem("userRole");
-    const userEmail =
-      localStorage.getItem("userEmail") || sessionStorage.getItem("userEmail");
-    const loginTime =
-      localStorage.getItem("loginTime") || sessionStorage.getItem("loginTime");
-
-    return {
-      token,
-      userRole,
-      userEmail,
-      loginTime: loginTime ? parseInt(loginTime) : null,
-    };
-  },
-
-  // Check if user is authenticated
-  isAuthenticated: () => {
-    const { token } = AuthUtils.getAuthData();
-    return !!token;
-  },
-
-  // Check if user is admin
-  isAdmin: () => {
-    const { token, userRole } = AuthUtils.getAuthData();
-    return !!(token && userRole === "admin");
-  },
-
-  // Check if user is regular user
-  isUser: () => {
-    const { token, userRole } = AuthUtils.getAuthData();
-    return !!(token && userRole === "user");
-  },
-
-  // Clear authentication data (logout)
-  clearAuthData: () => {
-    // Clear from both localStorage and sessionStorage
-    ["authToken", "userRole", "userEmail", "loginTime"].forEach((key) => {
-      localStorage.removeItem(key);
-      sessionStorage.removeItem(key);
-    });
-  },
-
-  // Check if session is expired (24 hours)
-  isSessionExpired: () => {
-    const { loginTime } = AuthUtils.getAuthData();
-    if (!loginTime) return true;
-
-    const now = new Date().getTime();
-    const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-
-    return now - loginTime > twentyFourHours;
-  },
-
-  // Get redirect path based on user role
-  getRedirectPath: () => {
-    const { userRole } = AuthUtils.getAuthData();
-
-    if (userRole === "admin") {
-      return "/admin";
-    } else if (userRole === "user") {
-      return "/userdash";
-    }
-
-    return "/";
-  },
-
-  // Refresh auth data (extend session)
-  refreshSession: () => {
-    const { token, userRole, userEmail } = AuthUtils.getAuthData();
-
-    if (token && userRole && userEmail) {
-      // Determine storage type based on where token is currently stored
-      const useLocalStorage = !!localStorage.getItem("authToken");
-      AuthUtils.setAuthData(token, userRole, userEmail, useLocalStorage);
-      return true;
-    }
-
-    return false;
-  },
-};
-
-// Hook for using auth in React components
-import { useState, useEffect } from "react";
+const AuthContext = createContext();
 
 export const useAuth = () => {
-  const [authState, setAuthState] = useState({
-    isAuthenticated: false,
-    isAdmin: false,
-    isUser: false,
-    userEmail: null,
-    loading: true,
-  });
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
+    // Check if user is logged in on app start
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("loggedUser");
+
+    if (token && userData) {
       try {
-        const authData = AuthUtils.getAuthData();
-
-        // Check if session is expired
-        if (AuthUtils.isSessionExpired()) {
-          AuthUtils.clearAuthData();
-          setAuthState({
-            isAuthenticated: false,
-            isAdmin: false,
-            isUser: false,
-            userEmail: null,
-            loading: false,
-          });
-          return;
-        }
-
-        setAuthState({
-          isAuthenticated: AuthUtils.isAuthenticated(),
-          isAdmin: AuthUtils.isAdmin(),
-          isUser: AuthUtils.isUser(),
-          userEmail: authData.userEmail,
-          loading: false,
-        });
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
       } catch (error) {
-        console.error("Error checking authentication:", error);
-        setAuthState({
-          isAuthenticated: false,
-          isAdmin: false,
-          isUser: false,
-          userEmail: null,
-          loading: false,
-        });
+        console.error("Error parsing user data:", error);
+        localStorage.removeItem("token");
+        localStorage.removeItem("loggedUser");
       }
-    };
-
-    checkAuth();
-
-    // Optional: Set up interval to check auth status periodically
-    const interval = setInterval(checkAuth, 60000); // Check every minute
-
-    return () => clearInterval(interval);
+    }
+    setLoading(false);
   }, []);
 
-  const login = (token, userRole, userEmail, rememberMe = false) => {
-    AuthUtils.setAuthData(token, userRole, userEmail, rememberMe);
-    setAuthState({
-      isAuthenticated: true,
-      isAdmin: userRole === "admin",
-      isUser: userRole === "user",
-      userEmail: userEmail,
-      loading: false,
-    });
+  const login = (userData, token) => {
+    // This method is called after successful login
+    localStorage.setItem("token", token);
+    localStorage.setItem("loggedUser", JSON.stringify(userData));
+    setUser(userData);
   };
 
   const logout = () => {
-    AuthUtils.clearAuthData();
-    setAuthState({
-      isAuthenticated: false,
-      isAdmin: false,
-      isUser: false,
-      userEmail: null,
-      loading: false,
-    });
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedUser");
+    setUser(null);
   };
 
-  return {
-    ...authState,
+  const value = {
+    user,
     login,
     logout,
-    refreshSession: AuthUtils.refreshSession,
-    getRedirectPath: AuthUtils.getRedirectPath,
+    loading,
+    isAuthenticated: !!user,
+    isAdmin: user?.role === "admin",
+    isUser: user?.role === "user",
   };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

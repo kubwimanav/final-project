@@ -310,7 +310,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
             <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  {formData.status === "stolen" ? "Date Stolen" : "Date Lost"} *
+                  {formData.status === "stolen" ? "Date Stolen" : "Date Lost"}
                 </label>
                 <input
                   type="date"
