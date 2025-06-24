@@ -5,13 +5,14 @@
   "scripts": {
     "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
     "dev": "concurrently \"cd backend && npm run start\" \"cd frontend && npm run dev\"",
-    "build": "cd frontend && npm run build",
+    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install && NODE_ENV=production node src/index.js",
     "start": "cd backend && npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
     "jwt-decode": "^4.0.0"
   }
 }
