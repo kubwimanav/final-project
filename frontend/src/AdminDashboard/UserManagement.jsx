@@ -3,6 +3,7 @@ import { Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { mycontext } from "../Context/ContextProvider";
 import Notiflix from "notiflix";
 import axios from "axios";
+import AddUser from "./AddUser";
 
 export default function UserManagement() {
   // Fix: Destructure users and setUsers from context
@@ -11,6 +12,10 @@ export default function UserManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const usersPerPage = 3;
+
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+   const openReportModal = () => setIsReportModalOpen(true);
+   const closeReportModal = () => setIsReportModalOpen(false);
 
   // Filter users based on search term
   const filteredUsers = Array.isArray(users)
@@ -120,6 +125,7 @@ export default function UserManagement() {
 
 
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const handleConfirmDelete = async (id) => {
     Notiflix.Confirm.show(
@@ -188,7 +194,9 @@ export default function UserManagement() {
             }}
           />
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full md:w-auto text-sm">
+        <button
+          onClick={openReportModal}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full md:w-auto text-sm">
           Add New User
         </button>
       </div>
@@ -390,6 +398,11 @@ export default function UserManagement() {
           </div>
         </div>
       )}
+      <AddUser
+       isOpen={isReportModalOpen}
+       onClose={closeReportModal}
+      
+      />
     </div>
   );
 }

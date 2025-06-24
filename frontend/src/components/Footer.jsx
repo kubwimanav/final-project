@@ -122,8 +122,11 @@ const Icons = () => {
 // CTA Section Component
 const CTASection = () => {
   const [isReportLostModalOpen, setIsReportLostModalOpen] = useState(false);
+
+  const [isReportFoundModal, setIsReportFoundModal] = useState(false);
+
   const openReportLostModal = () => {
-    setIsReportModalOpen(true);
+    setIsReportLostModalOpen(true);
   };
 
   const closeReportLostModal = () => {
@@ -131,13 +134,12 @@ const CTASection = () => {
   };
 
   
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const openReportModal = () => {
-    setIsReportModalOpen(true);
+  const openReportFoundModal = () => {
+    setIsReportFoundModal(true);
   };
 
-  const closeReportModal = () => {
-    setIsReportModalOpen(false);
+  const closeReportFoundModal = () => {
+    setIsReportFoundModal(false);
   };
   return (
     <section
@@ -166,7 +168,7 @@ const CTASection = () => {
             Report Lost Item
           </a>
           <a
-            onClick={openReportModal}
+            onClick={openReportFoundModal}
             className="inline-block px-8 py-3 bg-transparent text-white border-2 border-white rounded font-semibold transition-all duration-300 min-w-40 hover:bg-white/10 transform hover:-translate-y-1 hover:shadow-md"
           >
             Report Found Item
@@ -177,7 +179,9 @@ const CTASection = () => {
         isOpen={isReportLostModalOpen}
         onClose={closeReportLostModal}
       />
-      <ReportFoundItem isOpen={isReportModalOpen} onClose={closeReportModal} />
+
+      {/* report found item */}
+      <ReportFoundItem isOpen={isReportFoundModal} onClose={closeReportFoundModal} />
     </section>
   );
 };

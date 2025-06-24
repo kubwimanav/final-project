@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import comput from "../assets/image1.jpg";
 
 const Link = ({ to, children, className }) => (
@@ -8,6 +10,7 @@ const Link = ({ to, children, className }) => (
 );
 
 export default function Signup() {
+  const navigate = useNavigate();
   const svgBackground = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2378b0a0'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E")`;
   const [formData, setFormData] = useState({
     username: "",
@@ -22,11 +25,10 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
   // Using Vite dev server proxy (recommended)
   const API_ENDPOINT = "/api/auth/signup";
-  
+
   // Fallback to direct API call (will fail due to CORS)
   // const API_ENDPOINT = "https://lostandfoundapi.onrender.com/auth/signup";
 
@@ -41,11 +43,17 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setMessage("");
 
     // Basic validation
     if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match!");
+      toast.error("Passwords do not match!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       setIsLoading(false);
       return;
     }
@@ -70,18 +78,29 @@ export default function Signup() {
       // Check if response is JSON
       const contentType = response.headers.get("content-type");
       let data;
-      
+
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
         // If not JSON, try to get text response
         const text = await response.text();
         console.error("Non-JSON response:", text);
-        throw new Error(`Server returned non-JSON response. Status: ${response.status}`);
+        throw new Error(
+          `Server returned non-JSON response. Status: ${response.status}`
+        );
       }
 
       if (response.ok) {
-        setMessage("Account created successfully!");
+        // Success toast notification
+        toast.success("Account created successfully! 🎉", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
         // Reset form
         setFormData({
           username: "",
@@ -92,19 +111,62 @@ export default function Signup() {
           password: "",
           confirmPassword: "",
         });
+
+        // Navigate to login page after 2.5 seconds
+        setTimeout(() => {
+          navigate("/login");
+        }, 2500);
       } else {
-        setMessage(data.message || "Registration failed. Please try again.");
+        // Error toast notification
+        toast.error(data.message || "Registration failed. Please try again.", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } catch (error) {
       console.error("Registration error:", error);
-      
-      // More specific error handling
-      if (error.message.includes('non-JSON response')) {
-        setMessage("Server error: Invalid response format. Please contact support.");
-      } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-        setMessage("Connection error: Please check if the server is running and try again.");
+
+      // More specific error handling with toast
+      if (error.message.includes("non-JSON response")) {
+        toast.error(
+          "Server error: Invalid response format. Please contact support.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
+      } else if (
+        error.name === "TypeError" &&
+        error.message.includes("Failed to fetch")
+      ) {
+        toast.error(
+          "Connection error: Please check if the server is running and try again.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
       } else {
-        setMessage(error.message || "Network error. Please try again.");
+        toast.error(error.message || "Network error. Please try again.", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } finally {
       setIsLoading(false);
@@ -167,18 +229,6 @@ export default function Signup() {
       <div className="flex-1 px-6 md:px-10 py-5 flex flex-col">
         <h1 className="text-3xl font-medium mb-1">Hello!</h1>
         <p className="text-gray-500 mb-1">Please signup to continue</p>
-
-        {message && (
-          <div
-            className={`mb-4 p-3 rounded ${
-              message.includes("successfully")
-                ? "bg-green-100 text-green-700 border border-green-200"
-                : "bg-red-100 text-red-700 border border-red-200"
-            }`}
-          >
-            {message}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="w-full">
           <div className="relative">

@@ -31,6 +31,11 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
     setShowProfileDropdown(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "/";
+  };
+
   return (
     <>
       <header className="bg-white shadow-sm px-3 sm:px-6 py-3 flex items-center justify-between z-30 relative">
@@ -76,10 +81,11 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
         {/* Notification & Profile */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           <div className="relative">
-            <Bell className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
-              3
-            </span>
+            {
+              JSON.parse(localStorage.getItem("loggedUser"))?.email.split(
+                "@"
+              )[0]
+            }
           </div>
 
           {/* Profile Dropdown */}
@@ -108,8 +114,7 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
                 </Link>
                 <hr className="my-1" />
                 <Link
-                  to="/"
-                  onClick={handleLinkClick}
+                  onClick={handleLogout}
                   className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                 >
                   <LogOut className="h-4 w-4 mr-3" />

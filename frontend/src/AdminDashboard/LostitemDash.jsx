@@ -14,6 +14,7 @@ import {
 import { mycontext } from "../Context/ContextProvider";
 import Notiflix from "notiflix";
 import axios from "axios";
+import ReportLostItem from "../components/ReportLostItemForm";
 
 const EditModal = ({ item, isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -616,6 +617,10 @@ export default function LostItemDash() {
   const [itemToEdit, setItemToEdit] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
+
   // Pagination handlers
   const goToFirstPage = () => setCurrentPage(1);
   const goToPreviousPage = () =>
@@ -717,7 +722,10 @@ export default function LostItemDash() {
         </div>
 
         <div className="flex flex-row gap-2 sm:gap-4">
-          <button className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button
+            onClick={openReportModal}
+            className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#55e0a3] hover:bg-[#80ffdb] hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
             <Plus size={16} className="mr-2" />
             Add Lost Item
           </button>
@@ -788,7 +796,7 @@ export default function LostItemDash() {
                         <div className="text-sm font-medium text-gray-900">
                           {item.itemName}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm w-0.5 text-gray-500">
                           {item.ownerEmail}
                         </div>
                       </div>
@@ -866,7 +874,7 @@ export default function LostItemDash() {
                           <h3 className="text-lg font-medium text-gray-900">
                             {item.itemName}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm  text-gray-500">
                             {item.ownerEmail}
                           </p>
                         </div>
@@ -1042,6 +1050,8 @@ export default function LostItemDash() {
           </div>
         </div>
       </div>
+
+      <ReportLostItem isOpen={isReportModalOpen} onClose={closeReportModal} />
 
       {/* Edit Modal */}
       {/* Edit Modal */}
