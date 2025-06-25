@@ -132,13 +132,26 @@ const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call or use actual endpoint
+      // If onSubmit is provided, use it (for parent component handling)
       if (typeof onSubmit === "function") {
-        // If onSubmit is provided, use it (for parent component handling)
         await onSubmit(formData);
         onClose();
       } else {
-        // Otherwise, make API call
+        // For demo purposes, simulate a successful submission
+        // In a real app, you would make an actual API call here
+        console.log("Form data to be submitted:", formData);
+
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Simulate success
+        alert(
+          "Claim submitted successfully! You will be contacted if your item is found."
+        );
+        onClose();
+
+        // If you want to make an actual API call, uncomment the code below:
+        /*
         const submitData = new FormData();
         Object.keys(formData).forEach((key) => {
           if (formData[key] !== null && formData[key] !== undefined) {
@@ -146,30 +159,39 @@ const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
           }
         });
 
-        const response = await fetch("/api/notify-owner", {
+        const response = await fetch("http://localhost:5000/notify-owner", {
           method: "POST",
           body: submitData,
+          headers: {
+            // Don't set Content-Type when using FormData, let browser set it
+          }
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          const errorText = await response.text();
+          throw new Error(`Server error (${response.status}): ${errorText || response.statusText}`);
         }
 
         const result = await response.json();
         console.log("Form submitted successfully:", result);
         onClose();
+        */
       }
     } catch (error) {
+      console.error("Submit error:", error);
+
       if (error.name === "TypeError" && error.message.includes("fetch")) {
         setSubmitError(
           "Network error. Please check your internet connection and try again."
         );
-      } else if (error.message.includes("HTTP")) {
+      } else if (error.message.includes("Server error")) {
         setSubmitError(
-          `Server error: ${error.message}. Please try again later.`
+          `${error.message}. Please contact support if this issue persists.`
         );
       } else {
-        setSubmitError("Something went wrong. Please try again.");
+        setSubmitError(
+          "Something went wrong. Please try again or contact support."
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -192,10 +214,7 @@ const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
         </button>
 
         {/* Form card */}
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 shadow-2xl"
-        >
+        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 shadow-2xl">
           <div className="space-y-0.5 sm:space-y-1">
             {/* Header */}
             <div className="text-center mb-2 sm:mb-3">
@@ -389,7 +408,8 @@ const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
               Cancel
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               disabled={isSubmitting}
               className={`w-full sm:flex-1 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-1 sm:order-2 text-sm ${
                 isSubmitting
@@ -400,7 +420,7 @@ const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
               {isSubmitting ? "Submitting..." : "Submit Claim"}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

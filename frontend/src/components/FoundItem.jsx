@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import comput from "../assets/image1.jpg";
 import ReportItemForm from "./ReportFoundItem";
+import ClaimForm from "./ClaimForm";
 
 // Helper function to format dates
 const formatDate = (isoString) => {
@@ -95,6 +96,7 @@ const FoundItems = () => {
   const [FoundItems, setFoundItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [searchTerm, setSearchTerm] = useState("");
@@ -144,6 +146,9 @@ const FoundItems = () => {
 
   const openReportModal = () => setIsReportModalOpen(true);
   const closeReportModal = () => setIsReportModalOpen(false);
+
+  const openClaimModal = () => setIsClaimModalOpen(true);
+  const closeClaimModal = () => setIsClaimModalOpen(false);
 
   const handleReportSubmit = (formData) => {
     console.log("Report submitted:", formData);
@@ -286,8 +291,8 @@ const FoundItems = () => {
                   Location: {item.location}
                 </p>
                 <a
-                  onClick={openReportModal}
-                  className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white cursor-pointer font-medium rounded-lg transition-colors duration-200"
+                  onClick={openClaimModal}
+                  className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#9fd3c7] hover:bg-[#4e6e74] text-black text-sm cursor-pointer font-medium rounded-lg transition-colors duration-200"
                 >
                   Claim Item
                 </a>
@@ -295,6 +300,11 @@ const FoundItems = () => {
             </div>
           ))
         )}
+        <ClaimForm
+          isOpen={isClaimModalOpen}
+          onClose={closeClaimModal}
+          onSubmit={handleReportSubmit}
+        />
       </div>
 
       {/* Pagination */}
