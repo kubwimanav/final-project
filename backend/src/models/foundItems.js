@@ -9,6 +9,11 @@ const ItemSchema = new mongoose.Schema({
     itemImage: { type: String, required: true },                       // Can be handled by Multer
     itemSerial: { type: String, required: true },
     descrption: {type: String},
+    status: { 
+        type: String, 
+        enum: ['claimed'],
+        required: false
+    },
     location: { type: String, required: true },
     date: { type: Date, default: Date.now }
 });

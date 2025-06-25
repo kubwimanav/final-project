@@ -1,12 +1,17 @@
 // File: controllers/lostItemController.js
 
 const lostItem = require('../models/lostItems');
+const foundItem = require('../models/foundItems');
 const sharp = require('sharp');
+const { sendItemFoundNotification } = require('../services/emailService');
 
 // CREATE a new lost item with compressed Base64 image
 exports.createLostItem = async (req, res) => {
     try {
         const newItem = req.body;
+        // Check if item with same serial number exists in found items
+
+
 
         if (req.file && req.file.buffer) {
             // Compress and resize image using sharp
@@ -20,6 +25,27 @@ exports.createLostItem = async (req, res) => {
         } else {
             return res.status(400).json({ message: 'Image is required.' });
         }
+        const existingFound = await foundItem.findOne({ itemSerial: newItem.itemSerial });
+        if (existingFound) {
+            // Send notification email to the owner
+            try {
+                await sendItemFoundNotification({
+                    ownerName: newItem.ownerName,
+                    ownerEmail: newItem.ownerEmail,
+                    itemName: newItem.itemName,
+                    itemSerial: newItem.itemSerial,
+                    location: existingFound.location || '',
+                    date: existingFound.date || new Date(),
+                    descrption: existingFound.descrption || '',
+                    itemImage: existingFound.itemImage || ''
+                });
+            } catch (emailError) {
+                console.error('Failed to send found notification email:', emailError);
+            }
+            const savedItem = new lostItem(newItem);
+            await savedItem.save();
+            return res.status(200).json({ message: 'A found item with this serial number already exists. Notification sent to owner if possible.' });
+        }
 
         const savedItem = new lostItem(newItem);
         await savedItem.save();
@@ -28,6 +54,23 @@ exports.createLostItem = async (req, res) => {
     } catch (error) {
         console.error('Error creating item:', error);
         res.status(400).json({ message: 'Error creating item', error });
+    }
+};
+
+// SEARCH found item by itemSerialNumber
+exports.searchFoundItemBySerial = async (req, res) => {
+    try {
+        const { itemSerialNumber } = req.query;
+        if (!itemSerialNumber) {
+            return res.status(400).json({ message: 'itemSerialNumber is required' });
+        }
+        const item = await foundItem.findOne({ itemSerialNumber });
+        if (!item) {
+            return res.status(404).json({ message: 'Found item not found' });
+        }
+        res.json(item);
+    } catch (error) {
+        res.status(500).json({ message: 'Error searching found item', error });
     }
 };
 

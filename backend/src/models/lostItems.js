@@ -12,7 +12,7 @@ const ItemSchema = new mongoose.Schema({
     location: { type: String, required: true },
     status: { 
         type: String, 
-        enum: ['lost', 'stolen'],
+        enum: ['lost', 'stolen', 'claimed'],
         required: true 
     },
     date: { type: Date, default: Date.now }

@@ -2,6 +2,8 @@
 
 const foundItem = require('../models/foundItems');
 const sharp = require('sharp');
+const lostItems = require('../models/lostItems');
+const { sendItemFoundNotification } = require('../services/emailService'); // Make sure this path is correct and the function exists
 
 // CREATE a new found item with compressed Base64 image
 exports.createFoundItem = async (req, res) => {
@@ -20,6 +22,27 @@ exports.createFoundItem = async (req, res) => {
         } else {
             return res.status(400).json({ message: 'Image is required.' });
         }
+        const existingFound = await lostItems.findOne({ itemSerial: newItem.itemSerial });
+                if (existingFound) {
+                    // Send notification email to the owner
+                    try {
+                        await sendItemFoundNotification({
+                            ownerName: newItem.ownerName,
+                            ownerEmail: newItem.ownerEmail,
+                            itemName: newItem.itemName,
+                            itemSerial: newItem.itemSerial,
+                            location: existingFound.location || '',
+                            description: existingFound.description || '',
+                            descrption: existingFound.descrption || '',
+                            itemImage: existingFound.itemImage || ''
+                        });
+                    } catch (emailError) {
+                        console.error('Failed to send found notification email:', emailError);
+                    }
+                    const savedItem = new foundItem(newItem);
+                    await savedItem.save();
+                    return res.status(200).json({ message: 'A found item with this serial number already exists. Notification sent to owner if possible.' });
+                }
 
         const savedItem = new foundItem(newItem);
         await savedItem.save();

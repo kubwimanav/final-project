@@ -37,30 +37,32 @@ const sendItemFoundNotification = async (itemDetails) => {
 
     const formattedDate = new Date(date).toLocaleDateString();
 
-    const htmlContent = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #2c3e50;">Good News, ${ownerName}!</h2>
-            <p>Your lost item has been found and is now available for pickup.</p>
+const htmlContent = `
+  <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #2c3e50; text-align: center;">🎉 Good News, ${ownerName}!</h2>
+    <p style="font-size: 16px; color: #333333; text-align: center;">We’ve located your lost item. You can now arrange for pickup.</p>
 
-            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
-                <h3>Item Details:</h3>
-                <p><strong>Item Name:</strong> ${itemName}</p>
-                <p><strong>Serial Number:</strong> ${itemSerial}</p>
-                <p><strong>Location Found:</strong> ${location}</p>
-                <p><strong>Date Found:</strong> ${formattedDate}</p>
-                ${descrption ? `<p><strong>Description:</strong> ${descrption}</p>` : ''}
-                ${itemImage ? `<img src="${itemImage}" alt="Item Image" style="max-width:100%; margin-top:10px;" />` : ''}
-            </div>
+    <div style="background-color: #f1f1f1; padding: 20px; border-radius: 8px; margin-top: 25px;">
+      <h3 style="color: #2c3e50; border-bottom: 1px solid #dcdcdc; padding-bottom: 10px;">📝 Item Details</h3>
+      <p><strong>📦 Item Name:</strong> ${itemName}</p>
+      <p><strong>🔢 Serial Number:</strong> ${itemSerial}</p>
+      <p><strong>📍 Location Found:</strong> ${location}</p>
+      <p><strong>📅 Date Found:</strong> ${formattedDate}</p>
+      ${descrption ? `<p><strong>🗒️ Description:</strong> ${descrption}</p>` : ''}
+      ${itemImage ? `<img src="${itemImage}" alt="Item Image" style="width:100%; border-radius: 8px; margin-top: 15px;" />` : ''}
+    </div>
 
-            <p>Please log into your dashboard to arrange pickup and confirm receipt:</p>
-            <a href="${process.env.FRONTEND_URL}/userdash"
-            style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-            Go to Dashboard
-            </a>
+    <div style="text-align: center; margin-top: 30px;">
+      <p style="font-size: 16px;">To confirm and schedule your pickup, please visit your dashboard:</p>
+      <a href="${process.env.FRONTEND_URL}/userdash" style="display: inline-block; background-color: #3498db; color: #ffffff; padding: 12px 25px; border-radius: 5px; font-size: 16px; text-decoration: none; margin-top: 10px;">
+        Go to Dashboard
+      </a>
+    </div>
 
-            <p style="margin-top: 20px;">Best regards,<br>Lost and Found Team</p>
-        </div>
-    `;
+    <p style="font-size: 14px; color: #777777; text-align: center; margin-top: 40px;">Best regards,<br><strong>Lost and Found Team</strong></p>
+  </div>
+`;
+
 
     const mailOptions = {
         from: process.env.EMAIL_USER,

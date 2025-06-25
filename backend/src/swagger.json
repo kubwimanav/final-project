@@ -385,6 +385,7 @@
           "itemSerial": { "type": "string" },
           "descrption": { "type": "string" },
           "location": { "type": "string" },
+          "status":{ "enum": ["claimed"] },
           "date": { "type": "string", "format": "date-time" }
         },
         "required": ["ownerName", "ownerEmail", "ownerPhone", "itemName", "itemSerial", "location"]
@@ -402,7 +403,7 @@
           "location": { "type": "string" },
           "status": {
             "type": "string",
-            "enum": ["lost", "stolen"]
+            "enum": ["lost", "stolen", "claimed"]
           },
           "date": { "type": "string", "format": "date-time" }
         },
