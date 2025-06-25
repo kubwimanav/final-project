@@ -6,7 +6,6 @@ import { mycontext } from "../Context/ContextProvider";
 import ReportFoundItem from "./ReportFoundItem";
 import ClaimForm from "./ClaimForm";
 
-
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -34,7 +33,6 @@ const Home = () => {
   const recentItems = booking.slice(0, 4);
   const Lostitems = tour.slice(0, 4);
 
-
   return (
     <div>
       {/* Hero Section */}
@@ -61,8 +59,6 @@ const Home = () => {
               location you Found or Lost item.
             </p>
           </div>
-
-          
         </div>
 
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
@@ -129,7 +125,9 @@ const Home = () => {
       <section className="py-20 px-6 bg-[#f5f7fa]">
         <div className="flex flex-col gap-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <h2 className="text-2xl font-bold text-[#003366]">Recent found Items</h2>
+            <h2 className="text-2xl font-bold text-[#003366]">
+              Recent found Items
+            </h2>
             <a
               href="/found"
               className="text-[#003366] hover:text-[#0055b3] font-medium"
@@ -143,10 +141,11 @@ const Home = () => {
               <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-white border border-gray-100">
                 {/* Status Badge */}
                 <div
-                  className={`absolute top-3 left-3 py-1 px-3 rounded-full text-xs font-semibold z-10 ${item.type === "found"
-                    ? "bg-emerald-500 text-white"
-                    : "bg-orange-500 text-white"
-                    }`}
+                  className={`absolute top-3 left-3 py-1 px-3 rounded-full text-xs font-semibold z-10 ${
+                    item.type === "found"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-orange-500 text-white"
+                  }`}
                 >
                   {item.type === "found" ? "Found" : "Found"}
                 </div>
@@ -191,7 +190,9 @@ const Home = () => {
             ))}
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <h2 className="text-2xl font-bold text-[#003366]">Recent lost Items</h2>
+            <h2 className="text-2xl font-bold text-[#003366]">
+              Recent lost Items
+            </h2>
             <a
               href="/lost"
               className="text-[#003366] hover:text-[#0055b3] font-medium"
@@ -201,14 +202,14 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {recentItems.map((item) => (
-
               <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-white border border-gray-100">
                 {/* Status Badge */}
                 <div
-                  className={`absolute top-3 left-3 py-1 px-3 rounded-full text-xs font-semibold z-10 ${item.type === "found"
-                    ? "bg-emerald-500 text-white"
-                    : "bg-orange-500 text-white"
-                    }`}
+                  className={`absolute top-3 left-3 py-1 px-3 rounded-full text-xs font-semibold z-10 ${
+                    item.type === "found"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-orange-500 text-white"
+                  }`}
                 >
                   {item.type === "found" ? "Found" : "Found"}
                 </div>

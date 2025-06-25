@@ -96,7 +96,7 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
             >
               <User className="h-5 w-5 sm:h-7 sm:w-7 text-gray-600" />
             </button>
-            
+
             {showProfileDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                 <Link

@@ -19,11 +19,6 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
   };
 
   const menuItems = [
-      {
-      name: "Home",
-      path: "adminsetting",
-      icon: <IoMdSettings className="h-5 w-5 mr-3" />,
-    },
     {
       name: "Dashboard",
       path: "userhome",
@@ -53,7 +48,6 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
       icon: <IoMdSettings className="h-5 w-5 mr-3" />,
     },
     
-
   ];
 
   const handleNavClick = (path) => {

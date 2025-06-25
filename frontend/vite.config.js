@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     host: true,
-    port: 5000,
+    port: 5173,
     allowedHosts: ['dfl.memiserve.com'],
     proxy: {
       // Handle /api routes

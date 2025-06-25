@@ -31,10 +31,11 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
             <button
               onClick={() => currentPage > 1 && paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`px-3 py-1 rounded-md ${currentPage === 1
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
+              }`}
             >
               &laquo;
             </button>
@@ -49,10 +50,11 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
                 <li key={number}>
                   <button
                     onClick={() => paginate(number)}
-                    className={`px-3 py-1 rounded-md ${currentPage === number
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === number
                         ? "bg-[#003366] text-white"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                      }`}
+                    }`}
                   >
                     {number}
                   </button>
@@ -74,10 +76,11 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
                 currentPage < totalPages && paginate(currentPage + 1)
               }
               disabled={currentPage === totalPages}
-              className={`px-3 py-1 rounded-md ${currentPage === totalPages
+              className={`px-3 py-1 rounded-md ${
+                currentPage === totalPages
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
+              }`}
             >
               &raquo;
             </button>
@@ -288,7 +291,6 @@ const LostItems = () => {
                 >
                   Claim Item
                 </a>
-
               </div>
             </div>
           ))

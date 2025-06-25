@@ -31,8 +31,9 @@ import { AuthProvider } from "../src/components/AuthoContext";
 import ProtectedRoute from "../src/components/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/Scrolltotop";
 import UserSetting from "./UserDashboard/UserSetting";
+
 function App() {
   return (
     <AuthProvider>
