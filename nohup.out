@@ -1,0 +1,5 @@
+
+> lost-and-found-app@1.0.0 dev
+> concurrently "cd backend && npm run start" "cd frontend && npm run dev"
+
+sh: 1: concurrently: not found

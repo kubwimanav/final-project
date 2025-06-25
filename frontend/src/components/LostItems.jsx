@@ -288,6 +288,7 @@ const LostItems = () => {
                 >
                   Claim Item
                 </a>
+
               </div>
             </div>
           ))

@@ -201,6 +201,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {recentItems.map((item) => (
+
               <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-white border border-gray-100">
                 {/* Status Badge */}
                 <div
@@ -209,7 +210,7 @@ const Home = () => {
                     : "bg-orange-500 text-white"
                     }`}
                 >
-                  {item.type === "found" ? "Found" : "Lost"}
+                  {item.type === "found" ? "Found" : "Found"}
                 </div>
 
                 {/* Image Container with Overlay */}
