@@ -32,6 +32,7 @@ import ProtectedRoute from "../src/components/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ScrollToTop from "./components/ScrollToTop";
+import UserSetting from "./UserDashboard/UserSetting";
 function App() {
   return (
     <AuthProvider>
@@ -81,7 +82,7 @@ function App() {
             >
               <Route index element={<UserHome />} />
               <Route path="userhome" element={<UserHome />} />
-              <Route path="usersetting" element={<SettingAdmin />} />
+              <Route path="usersetting" element={<UserSetting />} />
               <Route path="usermessage" element={<UserMessage />} />
               <Route path="userfounditem" element={<UserFoundItem />} />
               <Route path="userlostitem" element={<UserLostItem />} />
