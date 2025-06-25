@@ -12,7 +12,6 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const contactRoutes = require("./routes/contactRoute");
 const emailRoutes = require("./routes/emailRoute");
-const { execSync } = require("child_process");
 const app = express();
 
 // Initialize database connection
@@ -43,33 +42,10 @@ const initializeApp = async () => {
 
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-    // Automatically build the frontend in production mode
-    if (process.env.NODE_ENV === "production") {
-      try {
-        console.log("Building frontend...");
-        execSync("npm install", {
-          cwd: path.join(__dirname, "../../frontend"),
-          stdio: "inherit",
-        });
-        execSync("npm run build", {
-          cwd: path.join(__dirname, "../../frontend"),
-          stdio: "inherit",
-        });
-        console.log("Frontend build complete.");
-      } catch (err) {
-        console.error("Failed to build frontend:", err);
-        process.exit(1);
-      }
-      app.use(express.static(path.join(__dirname, "../../frontend/dist")));
-
-      app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
-      });
-    } else {
-      app.get("/", (req, res) => {
-        res.json({ message: "Hello from backend" });
-      });
-    }
+    // Root endpoint
+    app.get("/", (req, res) => {
+      res.json({ message: "Hello from backend API" });
+    });
 
     // Error-handling middleware
     app.use((err, req, res, next) => {
