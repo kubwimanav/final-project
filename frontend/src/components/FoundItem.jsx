@@ -285,7 +285,12 @@ const FoundItems = () => {
                 <p className="text-xs text-gray-400 mt-1">
                   Location: {item.location}
                 </p>
-              
+                <a
+                  onClick={openReportModal}
+                  className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white cursor-pointer font-medium rounded-lg transition-colors duration-200"
+                >
+                  Claim Item
+                </a>
               </div>
             </div>
           ))

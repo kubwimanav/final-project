@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function SettingsPage() {
+export default function SettingAdmin() {
   const [publicProfile, setPublicProfile] = useState(false);
   const [loggedUser, setLoggedUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -86,11 +86,31 @@ export default function SettingsPage() {
     // updateUserProfile({ publicProfile: !publicProfile });
   };
 
-  const renderUserField = (label, value, icon = "👤") => (
+  const renderUserField = (label, value, icon = null) => (
+    <div className="flex items-start justify-between py-2 border-b border-gray-100 last:border-b-0">
+      <div className="flex items-center min-w-0 flex-1">
+        {icon && <span className="mr-2">{icon}</span>}
+        <span
+          className={`text-sm font-medium text-gray-700 min-w-0 ${
+            icon ? "ml-2" : ""
+          }`}
+        >
+          {label}:
+        </span>
+      </div>
+      <div className="ml-4 text-right min-w-0 flex-1">
+        <span className="text-sm text-gray-900 break-words">
+          {value || "Not provided"}
+        </span>
+      </div>
+    </div>
+  );
+
+  // New function for personal info without icons
+  const renderPersonalField = (label, value) => (
     <div className="flex items-start justify-between py-3 border-b border-gray-100 last:border-b-0">
       <div className="flex items-center min-w-0 flex-1">
-        <span className="mr-2">{icon}</span>
-        <span className="text-sm font-medium text-gray-700 ml-2 min-w-0">
+        <span className="text-sm font-medium text-gray-700 min-w-0">
           {label}:
         </span>
       </div>
@@ -155,11 +175,11 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-gray-50 min-h-screen">
+    <div className="max-w-4xl mx-auto p-4 bg-gray-50">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
-        <p className="text-gray-600">
+      <div className="mb-4">
+        <h3 className="text-xl font-bold text-gray-900 mb-1">Settings</h3>
+        <p className="text-gray-600 text-sm">
           Manage your account settings and preferences
         </p>
         {error && (
@@ -173,10 +193,10 @@ export default function SettingsPage() {
 
       {/* Complete User Information Display */}
       <div className="bg-white rounded-lg shadow-sm">
-        <div className="p-6">
+        <div className="p-4">
           {/* Profile Picture */}
-          <div className="flex items-center mb-8">
-            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-100 mr-6">
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 rounded-full overflow-hidden border-4 border-blue-100 mr-4">
               {loggedUser.profilePicture ||
               loggedUser.avatar ||
               loggedUser.photo ? (
@@ -190,81 +210,74 @@ export default function SettingsPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-blue-100 flex items-center justify-center text-4xl">
+                <div className="w-full h-full bg-blue-100 flex items-center justify-center text-2xl">
                   👤
                 </div>
               )}
             </div>
             <div>
-              <h6 className="text-xl font-bold text-gray-800 mb-1">
+              <h6 className="text-sm font-bold text-gray-800 mb-1">
                 {loggedUser.name ||
                   loggedUser.fullName ||
                   loggedUser.email?.split("@")[0] ||
                   "Unknown User"}
               </h6>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-600 text-sm">
                 {loggedUser.email || "No email provided"}
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                User ID: {loggedUser.userId || loggedUser.id || "Not assigned"}
+                User ID: {loggedUser.userId || loggedUser._id || "Not assigned"}
               </p>
             </div>
           </div>
 
           {/* All User Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Personal Information */}
             <div className="space-y-1">
-              <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-                <span className="mr-2">👤</span>
+              <h6 className="font-semibold text-gray-800 mb-2 flex items-center text-sm">
                 Personal Information
-              </h4>
+              </h6>
 
               {renderUserField(
                 "Full Name",
-                loggedUser.name || loggedUser.fullName,
-                "👤"
+                loggedUser.name || loggedUser.fullName
               )}
-              
-              {renderUserField("Email", loggedUser.email, "📧")}
+
+              {renderUserField("Email", loggedUser.email)}
               {renderUserField(
                 "Phone",
-                loggedUser.phone || loggedUser.phoneNumber,
-                "📱"
+                loggedUser.phone || loggedUser.phoneNumber
               )}
-              {renderUserField("Gender", loggedUser.gender, "⚥")}
-              
+              {renderUserField("Gender", loggedUser.gender)}
             </div>
 
             {/* Location Information */}
             <div className="space-y-1">
-              <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-                <span className="mr-2">📍</span>
+              <h6 className="font-semibold text-gray-800 mb-2 flex items-center text-sm">
                 Location & Additional Info
-              </h4>
-
-              {renderUserField("City", loggedUser.city, "🏙️")}
-              {renderUserField("Country", loggedUser.country, "🌍")}
+              </h6>
+              <div className=" text-sm">
+                {renderUserField("City", loggedUser.city)}
+              </div>
+              {renderUserField("Country", loggedUser.country)}
 
               {renderUserField(
                 "Join Date",
                 loggedUser.createdAt
                   ? new Date(loggedUser.createdAt).toLocaleDateString()
-                  : loggedUser.joinDate,
-                "📅"
+                  : loggedUser.joinDate
               )}
-
             </div>
           </div>
 
           {/* Security Section */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <h4 className="font-semibold text-gray-800 mb-4 flex items-center text-lg">
-              <span className="mr-2">🔒</span>
+          <div className="mt-1 pt-2 border-t border-gray-200">
+            <h4 className="font-semibold text-gray-800 mb-2 flex items-center text-lg">
               Security
             </h4>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-rows-1 md:grid-rows gap-4">
               <div className="space-y-1">
                 {renderUserField(
                   "Password",
@@ -276,11 +289,9 @@ export default function SettingsPage() {
                     {showPassword ? "🙈" : "👁️"}
                   </button>
                 )}
-            
                 {renderUserField(
                   "Role",
-                  loggedUser.role || loggedUser.userRole || "User",
-                  "🎭"
+                  loggedUser.role || loggedUser.userRole || "User"
                 )}
               </div>
             </div>
