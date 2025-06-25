@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, BarChart2, FileText, Users, Settings } from "lucide-react";
+import { LogOut} from "lucide-react";
 import { IoMdClock, IoMdSettings } from "react-icons/io";
 import { FaChartLine, FaUserDoctor, FaUsers } from "react-icons/fa6";
 import {
@@ -13,6 +13,10 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
+  const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "/";
+  };
 
   const menuItems = [
     {
@@ -40,9 +44,10 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
     },
     {
       name: "Settings",
-      path: "adminsetting",
+      path: "usersetting",
       icon: <IoMdSettings className="h-5 w-5 mr-3" />,
     },
+    
   ];
 
   const handleNavClick = (path) => {
@@ -62,11 +67,10 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
     >
       <nav className="p-4 h-full overflow-y-auto">
         <ul className="space-y-2">
-          {menuItems.map((item,index) => {
-           
-              const isActive =
-                (currentPath === "/userhome" && item.path === "/userhome") ||
-                (item.path !== "/userhome" && currentPath.includes(item.path));
+          {menuItems.map((item, index) => {
+            const isActive =
+              (currentPath === "/userhome" && item.path === "/userhome") ||
+              (item.path !== "/userhome" && currentPath.includes(item.path));
 
             return (
               <li key={index}>
@@ -85,6 +89,15 @@ const UserSidebar = ({ isOpen, toggleSidebar }) => {
             );
           })}
         </ul>
+        <div className=" mt-3.5">
+          <Link
+            onClick={handleLogout}
+            className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+          >
+            <LogOut className="h-4 w-4 mr-3" />
+            Logout
+          </Link>{" "}
+        </div>
       </nav>
     </aside>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, BarChart2, FileText, Users, Settings } from "lucide-react";
+import {  LogOut } from "lucide-react";
 import { IoMdClock, IoMdSettings } from "react-icons/io";
 import { FaChartLine, FaUserDoctor, FaUsers } from "react-icons/fa6";
 import {
@@ -10,6 +10,10 @@ import {
 } from "react-icons/md";
 
 const SidebarAdmin = ({ isOpen, toggleSidebar }) => {
+  const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "/";
+  };
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -87,6 +91,15 @@ const SidebarAdmin = ({ isOpen, toggleSidebar }) => {
             );
           })}
         </ul>
+        <div className=" mt-3.5">
+          <Link
+            onClick={handleLogout}
+            className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+          >
+            <LogOut className="h-4 w-4 mr-3" />
+            Logout
+          </Link>{" "}
+        </div>
       </nav>
     </aside>
   );
