@@ -11,6 +11,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const contactRoutes = require('./routes/contactRoute');
+const emailRoutes = require('./routes/emailRoute');
+const { execSync } = require('child_process');
 const app = express();
 
 // Initialize database connection
@@ -35,11 +37,21 @@ const initializeApp = async () => {
         app.use('/lostItems', lostItemRoutes);
         app.use('/foundItems', foundItemRoutes);
         app.use('/contacts', contactRoutes);
+        app.use('/notify-owner', emailRoutes);
 
         app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-        // Serve static files from the frontend build directory in production
+        // Automatically build the frontend in production mode
         if (process.env.NODE_ENV === 'production') {
+            try {
+                console.log('Building frontend...');
+                execSync('npm install', { cwd: path.join(__dirname, '../../frontend'), stdio: 'inherit' });
+                execSync('npm run build', { cwd: path.join(__dirname, '../../frontend'), stdio: 'inherit' });
+                console.log('Frontend build complete.');
+            } catch (err) {
+                console.error('Failed to build frontend:', err);
+                process.exit(1);
+            }
             app.use(express.static(path.join(__dirname, '../../frontend/dist')));
             
             app.get('*', (req, res) => {
@@ -70,7 +82,7 @@ const initializeApp = async () => {
             });
         });
 
-        const PORT = process.env.PORT || 5000;
+        const PORT = process.env.PORT || 5173;
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port ${PORT}`);
         });
