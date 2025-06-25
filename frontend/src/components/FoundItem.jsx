@@ -31,11 +31,10 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
             <button
               onClick={() => currentPage > 1 && paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`px-3 py-1 rounded-md ${
-                currentPage === 1
+              className={`px-3 py-1 rounded-md ${currentPage === 1
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+                }`}
             >
               &laquo;
             </button>
@@ -50,11 +49,10 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
                 <li key={number}>
                   <button
                     onClick={() => paginate(number)}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === number
+                    className={`px-3 py-1 rounded-md ${currentPage === number
                         ? "bg-[#003366] text-white"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
+                      }`}
                   >
                     {number}
                   </button>
@@ -76,11 +74,10 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, paginate }) => {
                 currentPage < totalPages && paginate(currentPage + 1)
               }
               disabled={currentPage === totalPages}
-              className={`px-3 py-1 rounded-md ${
-                currentPage === totalPages
+              className={`px-3 py-1 rounded-md ${currentPage === totalPages
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+                }`}
             >
               &raquo;
             </button>
@@ -97,12 +94,15 @@ const FoundItems = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
 
   useEffect(() => {
     const fetchFoundItems = async () => {
       try {
         const response = await axios.get("/api/FoundItems");
         setFoundItems(response.data);
+        setFilteredItems(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching Found items:", error);
@@ -112,9 +112,30 @@ const FoundItems = () => {
     fetchFoundItems();
   }, []);
 
+  // Filter items based on search term
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredItems(FoundItems);
+    } else {
+      const filtered = FoundItems.filter((item) => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          item.itemName?.toLowerCase().includes(searchLower) ||
+          item.ownerName?.toLowerCase().includes(searchLower) ||
+          item.location?.toLowerCase().includes(searchLower) ||
+          item.serialNumber?.toLowerCase().includes(searchLower) ||
+          item._id?.toLowerCase().includes(searchLower) ||
+          item.description?.toLowerCase().includes(searchLower)
+        );
+      });
+      setFilteredItems(filtered);
+    }
+    setCurrentPage(1); // Reset to first page when searching
+  }, [searchTerm, FoundItems]);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = FoundItems.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -125,6 +146,10 @@ const FoundItems = () => {
     console.log("Report submitted:", formData);
     closeReportModal();
     alert("Your Found item report has been submitted successfully!");
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
   };
 
   return (
@@ -139,7 +164,7 @@ const FoundItems = () => {
         <div className="relative z-10">
           <h1 className="text-4xl font-bold mb-3">Found Items</h1>
           <p className="font-light text-lg max-w-lg mx-auto">
-            Found something? Found something? We're here to help reconnect people
+            Found something? Lost something? We're here to help reconnect people
             with their belongings.
           </p>
           <button
@@ -166,6 +191,48 @@ const FoundItems = () => {
         </div>
       </header>
 
+      {/* Search Section */}
+      <div className="max-w-[90%] mx-auto mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Search Found Items
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Search by ID, serial number, item name, owner name, or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003366] focus:border-transparent outline-none transition-all duration-200"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={clearSearch}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 whitespace-nowrap"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+          {searchTerm && (
+            <div className="mt-3 text-sm text-gray-600">
+              {filteredItems.length === 0 ? (
+                <span className="text-red-500">
+                  No items found matching "{searchTerm}"
+                </span>
+              ) : (
+                <span>
+                  Showing {filteredItems.length} result
+                  {filteredItems.length !== 1 ? "s" : ""} for "{searchTerm}"
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Items Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 max-w-[90%] mx-auto">
         {loading ? (
@@ -173,47 +240,69 @@ const FoundItems = () => {
             Loading Found items...
           </p>
         ) : currentItems.length === 0 ? (
-          <p className="text-center col-span-full text-gray-500">
-            No Found items found.
-          </p>
+          <div className="col-span-full text-center py-12">
+            {searchTerm ? (
+              <div>
+                <p className="text-gray-500 text-lg mb-4">
+                  No items found matching your search.
+                </p>
+                <button
+                  onClick={clearSearch}
+                  className="text-[#003366] hover:underline font-medium"
+                >
+                  Clear search to view all items
+                </button>
+              </div>
+            ) : (
+              <p className="text-gray-500">No Found items found.</p>
+            )}
+          </div>
         ) : (
           currentItems.map((item) => (
             <div
-            key={item._id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
-          >
-            <img
-              src={item.itemImage}
-              alt={item.itemName}
-              loading="lazy"
-              className="w-full h-48 object-cover object-center rounded-t-lg"
-            />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                {item.itemName}
-              </h3>
-              <p className="text-sm text-gray-500">
-                Reported on: {formatDate(item.date)}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">
-                Owner: {item.ownerName}
-              </p>
-              <p className="text-xs text-gray-400 mt-1">
-                Location: {item.location}
-              </p>
+              key={item._id}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"
+            >
+              <img
+                src={item.itemImage}
+                alt={item.itemName}
+                loading="lazy"
+                className="w-full h-48 object-cover object-center rounded-t-lg"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  {item.itemName}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Reported on: {formatDate(item.date)}
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Owner: {item.ownerName}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Location: {item.location}
+                </p>
+                <a
+                  onClick={openReportModal}
+                  className="mt-2 inline-flex items-center justify-center w-full py-2 px-4 bg-[#003366] hover:bg-indigo-700 text-white cursor-pointer font-medium rounded-lg transition-colors duration-200"
+                >
+                  Claim Item
+                </a>
+              </div>
             </div>
-          </div>
           ))
         )}
       </div>
 
       {/* Pagination */}
-      <Pagination
-        itemsPerPage={itemsPerPage}
-        totalItems={FoundItems.length}
-        currentPage={currentPage}
-        paginate={paginate}
-      />
+      {!loading && filteredItems.length > itemsPerPage && (
+        <Pagination
+          itemsPerPage={itemsPerPage}
+          totalItems={filteredItems.length}
+          currentPage={currentPage}
+          paginate={paginate}
+        />
+      )}
 
       {/* Modal */}
       <ReportItemForm

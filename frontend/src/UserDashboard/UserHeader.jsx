@@ -31,6 +31,11 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
     setShowProfileDropdown(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "/";
+  };
+
   return (
     <>
       <header className="bg-white shadow-sm px-3 sm:px-6 py-3 flex items-center justify-between z-30 relative">
@@ -76,26 +81,22 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
         {/* Notification & Profile */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           <div className="relative">
-            <Bell className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
-              3
-            </span>
+            {
+              JSON.parse(localStorage.getItem("loggedUser"))?.email.split(
+                "@"
+              )[0]
+            }
           </div>
 
           {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={handleProfileClick}
-              className="h-7 w-7 sm:h-9 sm:w-9 bg-gray-300 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="h-7 w-7 sm:h-9 sm:w-9 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              <img
-                src={profile}
-                alt="Profile"
-                className="h-full w-full object-cover"
-              />
+              <User className="h-5 w-5 sm:h-7 sm:w-7 text-gray-600" />
             </button>
-
-            {/* Dropdown Menu */}
+            
             {showProfileDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                 <Link
@@ -108,8 +109,7 @@ const UserHeader = ({ toggleSidebar, isMobile, sidebarOpen }) => {
                 </Link>
                 <hr className="my-1" />
                 <Link
-                  to="/"
-                  onClick={handleLinkClick}
+                  onClick={handleLogout}
                   className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                 >
                   <LogOut className="h-4 w-4 mr-3" />

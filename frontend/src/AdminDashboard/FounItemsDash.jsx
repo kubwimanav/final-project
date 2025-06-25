@@ -16,6 +16,7 @@ import { mycontext } from "../Context/ContextProvider";
 import axios from "axios";
 import Notiflix from "notiflix";
 import { useForm } from "react-hook-form";
+import ReportFoundItem from "../components/ReportFoundItem";
 
 // Edit Modal Component
 const EditModal = ({ item, isOpen, onClose, onSave }) => {
@@ -441,7 +442,7 @@ const EditModal = ({ item, isOpen, onClose, onSave }) => {
                 {/* Serial Number */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Serial Number *
+                    Serial Number 
                   </label>
                   <input
                     type="text"
@@ -722,6 +723,10 @@ export default function FoundItemDash() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const openReportModal = () => setIsReportModalOpen(true);
+    const closeReportModal = () => setIsReportModalOpen(false);
+
   // Edit modal state
   const [showEditModal, setShowEditModal] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
@@ -880,10 +885,10 @@ export default function FoundItemDash() {
     <div className=" bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-xl font-semibold text-gray-900">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-2 ">
+          <h3 className="text-xl font-semibold text-gray-900">
             Found Items Administration
-          </h1>
+          </h3>
           {/* Debug info */}
           <p className="text-sm text-gray-500 mt-1">
             Total items: {booking.length} | Filtered: {filteredItems.length}
@@ -945,7 +950,10 @@ export default function FoundItemDash() {
             </div>
 
             {/* Add New Button */}
-            <button className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button
+              onClick={openReportModal}
+              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#6ba083] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               <Plus size={16} className="mr-2" />
               Add New Item
             </button>
@@ -1098,7 +1106,7 @@ export default function FoundItemDash() {
 
           {/* Pagination */}
           {filteredItems.length > 0 && totalPages > 1 && (
-            <div className="mt-6">
+            <div className="mt-1">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
@@ -1121,6 +1129,8 @@ export default function FoundItemDash() {
           )}
         </div>
       </main>
+
+      <ReportFoundItem isOpen={isReportModalOpen} onClose={closeReportModal} />
 
       {/* Edit Modal */}
       <EditModal

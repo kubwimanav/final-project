@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
-const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
+const ClaimForm = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     ownerName: "",
     ownerEmail: "",
-    ownerPhone: "",
     itemName: "",
     itemImage: null,
     itemSerial: "",
     location: "",
     description: "",
     date: "",
-    status: "lost", // new field for lost/stolen status
+    status: "lost",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   // Reset form when modal closes
   useEffect(() => {
@@ -25,7 +25,6 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
       setFormData({
         ownerName: "",
         ownerEmail: "",
-        ownerPhone: "",
         itemName: "",
         itemImage: null,
         itemSerial: "",
@@ -37,6 +36,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
       setImagePreview(null);
       setFormErrors({});
       setIsSubmitting(false);
+      setSubmitError(null);
     }
   }, [isOpen]);
 
@@ -55,6 +55,11 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
         ...prev,
         [name]: null,
       }));
+    }
+
+    // Clear submit error when user makes changes
+    if (submitError) {
+      setSubmitError(null);
     }
   };
 
@@ -88,9 +93,10 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
     const errors = {};
     if (!formData.ownerName.trim()) errors.ownerName = "Your name is required";
     if (!formData.itemName.trim()) errors.itemName = "Item name is required";
+    if (!formData.itemSerial.trim())
+      errors.itemSerial = "Serial/id number is required";
     if (!formData.location.trim()) errors.location = "Location is required";
     if (!formData.date.trim()) errors.date = "Date is required";
-    if (!formData.status) errors.status = "Status is required";
 
     if (!formData.ownerEmail.trim()) {
       errors.ownerEmail = "Email is required";
@@ -110,8 +116,13 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isSubmitting) return; // Prevent multiple submits
+    if (isSubmitting) return;
 
+    // Clear previous errors
+    setSubmitError(null);
+    setFormErrors({});
+
+    // Validate form
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -121,24 +132,45 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
     setIsSubmitting(true);
 
     try {
-      const submitData = new FormData();
-      for (const key in formData) {
-        submitData.append(key, formData[key]);
-      }
-
-      const response = await fetch("/api/lostItems", {
-        method: "POST",
-        body: submitData,
-      });
-
-      if (response.ok) {
-        onSubmit(submitData);
+      // Simulate API call or use actual endpoint
+      if (typeof onSubmit === "function") {
+        // If onSubmit is provided, use it (for parent component handling)
+        await onSubmit(formData);
         onClose();
       } else {
-        console.error("Failed to submit form");
+        // Otherwise, make API call
+        const submitData = new FormData();
+        Object.keys(formData).forEach((key) => {
+          if (formData[key] !== null && formData[key] !== undefined) {
+            submitData.append(key, formData[key]);
+          }
+        });
+
+        const response = await fetch("/api/notify-owner", {
+          method: "POST",
+          body: submitData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log("Form submitted successfully:", result);
+        onClose();
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
+        setSubmitError(
+          "Network error. Please check your internet connection and try again."
+        );
+      } else if (error.message.includes("HTTP")) {
+        setSubmitError(
+          `Server error: ${error.message}. Please try again later.`
+        );
+      } else {
+        setSubmitError("Something went wrong. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -151,7 +183,8 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
       <div className="relative w-full max-w-[320px] xs:max-w-[380px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[450px] min-h-fit my-2 sm:my-0">
         {/* Close button */}
         <button
-          className="absolute right-0 top-0 z-20 flex items-center justify-center h-8 w-8 bg-[#2aaf74] text-white hover:bg-green-800 transition-colors -mt-2 -mr-2 rounded-md shadow-lg"
+          type="button"
+          className="absolute right-0 top-0 z-20 flex items-center justify-center h-8 w-8 bg-[#53d397] text-white hover:bg-blue-800 transition-colors -mt-2 -mr-2 rounded-md shadow-lg"
           onClick={onClose}
           aria-label="Close"
         >
@@ -159,41 +192,30 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
         </button>
 
         {/* Form card */}
-        <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 shadow-2xl">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 shadow-2xl"
+        >
           <div className="space-y-0.5 sm:space-y-1">
             {/* Header */}
             <div className="text-center mb-2 sm:mb-3">
               <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
-                Report {formData.status === "stolen" ? "Stolen" : "Lost"} Item
+                Claim Your Item
               </h4>
             </div>
 
-            {/* Status Selection */}
-            <div className="space-y-1">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                Item Status
-              </label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className={`w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                  formErrors.status ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="lost">Lost Item</option>
-                <option value="stolen">Stolen Item</option>
-              </select>
-              {formErrors.status && (
-                <p className="text-red-500 text-xs">{formErrors.status}</p>
-              )}
-            </div>
+            {/* Submit Error Message */}
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md mb-3">
+                <p className="text-sm">{submitError}</p>
+              </div>
+            )}
 
             {/* Name and Email */}
             <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Your Name
+                  Your Name *
                 </label>
                 <input
                   type="text"
@@ -212,7 +234,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
 
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Email Address
+                  Email Address *
                 </label>
                 <input
                   type="email"
@@ -232,63 +254,52 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
               </div>
             </div>
 
-            {/* Phone and Item Name */}
-            <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
-              <div className="flex-1 space-y-1">
-                <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="ownerPhone"
-                  value={formData.ownerPhone}
-                  onChange={handleChange}
-                  className="w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="0789488837"
-                />
-              </div>
-
-              <div className="flex-1 space-y-1">
-                <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Item Name
-                </label>
-                <input
-                  type="text"
-                  name="itemName"
-                  value={formData.itemName}
-                  onChange={handleChange}
-                  className={`w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                    formErrors.itemName ? "border-red-500" : "border-gray-300"
-                  }`}
-                  placeholder="iPhone"
-                />
-                {formErrors.itemName && (
-                  <p className="text-red-500 text-xs">{formErrors.itemName}</p>
-                )}
-              </div>
+            {/* Item Name */}
+            <div className="space-y-1">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                Item Name *
+              </label>
+              <input
+                type="text"
+                name="itemName"
+                value={formData.itemName}
+                onChange={handleChange}
+                className={`w-full px-1.5 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                  formErrors.itemName ? "border-red-500" : "border-gray-300"
+                }`}
+                placeholder="iPhone"
+              />
+              {formErrors.itemName && (
+                <p className="text-red-500 text-xs">{formErrors.itemName}</p>
+              )}
             </div>
 
             {/* Serial Number and Location */}
             <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Serial Number
+                  Serial Number/ID Number *
                 </label>
                 <input
                   type="text"
                   name="itemSerial"
                   value={formData.itemSerial}
                   onChange={handleChange}
-                  className="w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className={`w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                    formErrors.itemSerial ? "border-red-500" : "border-gray-300"
+                  }`}
                   placeholder="Serial number or unique identifier"
                 />
+                {formErrors.itemSerial && (
+                  <p className="text-red-500 text-xs">
+                    {formErrors.itemSerial}
+                  </p>
+                )}
               </div>
 
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  {formData.status === "stolen"
-                    ? "Location Stolen From"
-                    : "Location Lost"}{" "}
+                  Location Lost *
                 </label>
                 <input
                   type="text"
@@ -310,7 +321,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
             <div className="flex flex-col md:flex-row gap-0.5 md:gap-1">
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  {formData.status === "stolen" ? "Date Stolen" : "Date Lost"}
+                  Date Lost *
                 </label>
                 <input
                   type="date"
@@ -328,7 +339,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
 
               <div className="flex-1 space-y-1">
                 <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                  Upload Image
+                  Upload Image (Optional)
                 </label>
                 <input
                   type="file"
@@ -354,7 +365,7 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
             {/* Description */}
             <div className="space-y-1">
               <label className="block text-xs sm:text-sm font-medium text-gray-700">
-                Description
+                Description (Optional)
               </label>
               <textarea
                 name="description"
@@ -362,40 +373,37 @@ const ReportLostItem = ({ isOpen, onClose, onSubmit }) => {
                 onChange={handleChange}
                 rows={2}
                 className="w-full px-2 py-1.5 sm:px-2 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-vertical min-h-[50px]"
-                placeholder={`Describe the item in detail (color, brand, condition, etc.)${
-                  formData.status === "stolen"
-                    ? " and circumstances if comfortable sharing"
-                    : ""
-                }`}
+                placeholder="Describe the item in detail (color, brand, condition, etc.)"
               />
             </div>
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-2 pt-1 sm:pt-1.5">
+          <div className="flex flex-col sm:flex-row gap-2 pt-3 mt-4">
             <button
+              type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="w-full sm:flex-1 bg-[#a9eca2] hover:bg-gray-200 text-gray-700 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-2 sm:order-1 text-sm"
+              className="w-full sm:flex-1 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-2 sm:order-1 text-sm"
             >
               Cancel
             </button>
             <button
-              onClick={handleSubmit}
+              type="submit"
               disabled={isSubmitting}
               className={`w-full sm:flex-1 font-medium py-2 sm:py-2.5 px-2 rounded-lg transition-colors order-1 sm:order-2 text-sm ${
                 isSubmitting
-                  ? "bg-blue-400 cursor-not-allowed"
-                  : "bg-[#2aaf74] hover:bg-green-100 hover:text-black text-white"
+                  ? "bg-blue-400 cursor-not-allowed text-white"
+                  : "bg-[#53d397] hover:bg-[#51eaea] hover:text-black text-white"
               }`}
             >
-              {isSubmitting ? "Submitting..." : "Submit Report"}
+              {isSubmitting ? "Submitting..." : "Submit Claim"}
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
 };
 
-export default ReportLostItem;
+export default ClaimForm;

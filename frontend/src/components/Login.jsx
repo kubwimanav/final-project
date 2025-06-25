@@ -1,48 +1,91 @@
 import { useState } from "react";
-import axios from "axios"; // Add this import
+import axios from "axios";
 import comput from "../assets/image1.jpg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
+import { useAuth } from "./AuthoContext";
 
 export default function Login() {
-
   const [formData, setFormData] = useState({
-    email: '',  
-    password: '',
-    role: ''
+    email: "",
+    password: "",
   });
-  
+
+  const { login, isAuthenticated, isAdmin, isUser } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the intended destination
+  const from = location.state?.from?.pathname;
+
+  // Redirect if already logged in
+  if (isAuthenticated) {
+    if (from) {
+      return <Navigate to={from} replace />;
+    }
+    return <Navigate to={isAdmin ? "/admin" : "/userdash"} replace />;
+  }
+
   const svgBackground = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2378b0a0'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E")`;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value, });
+    setFormData({ ...formData, [name]: value });
   };
-  const navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const loadingToast = toast.loading("Logging in...");
+
     try {
       const res = await axios.post("/api/auth/login", formData);
       const token = res.data.token;
-      const decoded = jwtDecode(token); // decode the token to get role
-      localStorage.setItem("token", token);
-      localStorage.setItem("loggedUser", JSON.stringify(decoded));
+      const decoded = jwtDecode(token);
 
-    setTimeout(() => {
-      if (decoded.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/userdash');
-      }
-    }, 100);
-  } catch (error) {
-    console.log(error);
-    alert(error?.response?.data?.message || error.message || 'Login failed');
-  }
-};
+      // Update auth context
+      login(decoded, token);
 
-  
+      toast.dismiss(loadingToast);
+      toast.success("Login successful! Redirecting...", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      setTimeout(() => {
+        if (from) {
+          navigate(from, { replace: true });
+        } else {
+          if (decoded.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/userdash");
+          }
+        }
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+
+      toast.dismiss(loadingToast);
+      toast.error(
+        error?.response?.data?.message || error.message || "Login failed",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    }
+  };
+
   const Link = ({ to, children, className }) => (
     <a href={to} className={className}>
       {children}
@@ -63,7 +106,7 @@ export default function Login() {
             <div
               className="w-[60px] h-[60px] bg-contain bg-no-repeat bg-center"
               style={{ backgroundImage: svgBackground }}
-            ></div>{" "}
+            ></div>
             <h3 className="mt-4 text-2xl font-semibold">
               Digital Lost and Found System
             </h3>

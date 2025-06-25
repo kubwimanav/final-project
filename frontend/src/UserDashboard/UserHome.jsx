@@ -1,4 +1,5 @@
 import React from "react";
+import { RiAlignItemLeftLine, RiAlignItemTopFill } from "react-icons/ri";
 import {
   LineChart,
   Line,
@@ -10,11 +11,64 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  AreaChart,
+  Area,
 } from "recharts";
 import { DollarSign, Users, UserCheck, FileText } from "lucide-react";
-import { mycontext } from "../Context/ContextProvider";
+import { Link } from "react-router-dom";
 
 function UserHome() {
+  // Mock context data to prevent errors
+  const booking = [
+    {
+      id: 1,
+      itemName: "Silver Watch",
+      ownerName: "John Doe",
+      descrption: "Found at Computer Lab 3",
+      location: "FTSM Building",
+      date: "2023-05-08",
+      ownerEmail: "john@ukm.edu.my",
+      ownerPhone: "+60123456789",
+      itemImage:
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&crop=center",
+    },
+    {
+      id: 2,
+      itemName: "Laptop",
+      ownerName: "Sarah Lee",
+      descrption: "Calculus textbook found under seat",
+      location: "Lecture Hall A",
+      date: "2023-05-05",
+      ownerEmail: "sarah@ukm.edu.my",
+      ownerPhone: "+60123456788",
+      itemImage:
+        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&h=100&fit=crop&crop=center",
+    },
+    {
+      id: 3,
+      itemName: "iPhone 17 Pro",
+      ownerName: "Mei Ling",
+      descrption: "Found near basketball court",
+      location: "Sports Complex",
+      date: "2023-05-03",
+      ownerEmail: "mei@ukm.edu.my",
+      ownerPhone: "+60123456787",
+      itemImage:
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100&h=100&fit=crop&crop=center",
+    },
+  ];
+
+  const contact = [
+    { id: 1, message: "Test message 1" },
+    { id: 2, message: "Test message 2" },
+  ];
+
+  const tour = [
+    { id: 1, name: "Tour 1" },
+    { id: 2, name: "Tour 2" },
+    { id: 3, name: "Tour 3" },
+  ];
+
   // Sample data for charts
   const revenueData = [
     { name: "Jan", revenue: 18500 },
@@ -34,52 +88,37 @@ function UserHome() {
     { name: "Jun", users: 1100 },
   ];
 
-  // Sample data for activity table with placeholder images
-  const activities = [
-    {
-      id: 1,
-      itemName: "Silver Watch",
-      category: "Documents",
-      location: "FTSM Building",
-      dateFound: "2023-05-08",
-      description: "Found at Computer Lab 3",
-      foundBy: "John Doe",
-      contact: "john@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop&crop=center",
-    },
-  
+  // Custom Tooltip Component
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white border border-gray-300 rounded-lg px-3 py-2 shadow-lg">
+          <p className="text-gray-700 text-sm font-medium">{`${label}`}</p>
+          <p className="text-blue-600 font-bold">
+            {`${payload[0].value.toLocaleString()}`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
-    {
-      id: 4,
-      itemName: "Laptop",
-      category: "Books",
-      location: "Lecture Hall A",
-      dateFound: "2023-05-05",
-      description: "Calculus textbook found under seat",
-      foundBy: "Sarah Lee",
-      contact: "sarah@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&h=100&fit=crop&crop=center",
-    },
-   
-    {
-      id: 6,
-      itemName: "iPhone 17 Pro",
-      category: "Personal Items",
-      location: "Sports Complex",
-      dateFound: "2023-05-03",
-      description: "Found near basketball court",
-      foundBy: "Mei Ling",
-      contact: "mei@ukm.edu.my",
-      image:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100&h=100&fit=crop&crop=center",
-    },
- 
-  ];
+  // Custom Dot Component
+  const CustomDot = (props) => {
+    const { cx, cy } = props;
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={3}
+        fill="#10b981"
+        stroke="#065f46"
+        strokeWidth={2}
+      />
+    );
+  };
 
-  const { booking, contact, tour } = mycontext();
-  const firstFiveBookings = booking?.slice(0, 3);
+  const firstFiveBookings = booking.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4 lg:p-6">
@@ -89,16 +128,18 @@ function UserHome() {
           {/* Card 1 */}
           <div className="bg-white rounded-lg shadow p-3 sm:p-4 flex justify-between items-center">
             <div className="flex flex-col">
-              <span className="text-xs sm:text-sm text-gray-500">Users</span>
+              <span className="text-xs sm:text-sm text-gray-500">
+                Uploaded Items
+              </span>
               <span className="text-lg sm:text-xl font-bold mt-1">
                 {booking.length}
               </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
-                +12.5% from last month
+                Total Uploaded Items
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#EFF6FF] flex items-center justify-center text-blue-400">
-              <Users size={16} className="sm:w-5 sm:h-5" />
+              <RiAlignItemLeftLine size={16} className="sm:w-5 sm:h-5" />
             </div>
           </div>
 
@@ -108,13 +149,15 @@ function UserHome() {
               <span className="text-xs sm:text-sm text-gray-500">
                 Lost Items
               </span>
-              <span className="text-lg sm:text-xl font-bold mt-1">1,427</span>
+              <span className="text-lg sm:text-xl font-bold mt-1">
+                {booking.length}
+              </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
-                +5.2% from last month
+                Total Lost items
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#ECFDF5] flex items-center justify-center text-[#10B981]">
-              <UserCheck size={16} className="sm:w-5 sm:h-5" />
+              <RiAlignItemTopFill size={16} className="sm:w-5 sm:h-5" />
             </div>
           </div>
 
@@ -128,7 +171,7 @@ function UserHome() {
                 {tour.length}
               </span>
               <span className="text-xs sm:text-sm text-green-500 mt-1">
-                12 completed
+                Total Found Items
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#F5F3FF] flex items-center justify-center text-[#8B5CF6]">
@@ -143,8 +186,8 @@ function UserHome() {
               <span className="text-lg sm:text-xl font-bold mt-1">
                 {contact.length}
               </span>
-              <span className="text-xs sm:text-sm text-red-500 mt-1">
-                +8.4% from last month
+              <span className="text-xs sm:text-sm text-green-500 mt-1">
+                Total Messages
               </span>
             </div>
             <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-sm bg-[#FFFBEB] flex items-center justify-center text-[#F59E0B]">
@@ -158,31 +201,62 @@ function UserHome() {
           {/* Revenue Chart */}
           <div className="bg-white rounded-lg shadow p-3 sm:p-4">
             <h3 className="text-sm sm:text-base font-medium text-gray-800 mb-2 sm:mb-4">
-              Revenue Overview
+              Lost Item Statistics
             </h3>
-            <div className="w-full h-48 sm:h-56 lg:h-50">
+            <div className="w-full h-48 sm:h-56 lg:h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart
+                <AreaChart
                   data={revenueData}
                   margin={{
-                    top: 5,
-                    right: 10,
-                    left: 10,
-                    bottom: 5,
+                    top: 20,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" tick={{ fontSize: 12 }} interval={0} />
-                  <YAxis tick={{ fontSize: 12 }} />
-                  <Tooltip />
-                  <Line
+                  <defs>
+                    <linearGradient
+                      id="revenueGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    strokeOpacity={0.5}
+                  />
+
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 12, fill: "#6b7280" }}
+                    axisLine={{ stroke: "#d1d5db" }}
+                    tickLine={{ stroke: "#d1d5db" }}
+                  />
+
+                  <YAxis
+                    tick={{ fontSize: 12, fill: "#6b7280" }}
+                    axisLine={{ stroke: "#d1d5db" }}
+                    tickLine={{ stroke: "#d1d5db" }}
+                    tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+                  />
+
+                  <Tooltip content={<CustomTooltip />} />
+
+                  <Area
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#4b7bec"
+                    stroke="#10b981"
                     strokeWidth={2}
-                    activeDot={{ r: 4 }}
+                    fill="url(#revenueGradient)"
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
@@ -190,9 +264,9 @@ function UserHome() {
           {/* Users Chart */}
           <div className="bg-white rounded-lg shadow p-3 sm:p-4">
             <h3 className="text-sm sm:text-base font-medium text-gray-800 mb-2 sm:mb-4">
-              User Statistics
+              Found Item Statistics
             </h3>
-            <div className="w-full h-48 sm:h-56 lg:h-50">
+            <div className="w-full h-48 sm:h-56 lg:h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={usersData}
@@ -203,11 +277,11 @@ function UserHome() {
                     bottom: 5,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis dataKey="name" tick={{ fontSize: 12 }} interval={0} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
-                  <Bar dataKey="users" fill="#20bf6b" />
+                  <Bar dataKey="users" fill="#80ffdb" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -218,14 +292,14 @@ function UserHome() {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-3 sm:p-4 flex justify-between items-center border-b border-gray-200">
             <h3 className="text-sm sm:text-base font-medium text-gray-800">
-              Recent Activity
+              Recent Items
             </h3>
-            <a
-              href="#"
+            <Link
+              to="/userdash/userfounditem"
               className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
             >
               View All
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Table */}
